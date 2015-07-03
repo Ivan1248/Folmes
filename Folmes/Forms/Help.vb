@@ -1,0 +1,8 @@
+﻿Public Class Help
+
+    Private Sub Help_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.Owner = Box
+
+    End Sub
+
+End Class

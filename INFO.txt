@@ -1,0 +1,24 @@
+BUGOVI
+
+ako budem mijenjao framework, trebat æe promijeniti 2.0.0.0/4.0.0.0 u App.configu u 4.0.0.0/nešto drugo
+
+    NeZaboraviti: optimizirati javascript
+    NeZaboraviti: Box - owner za sve ?
+    NeZaboraviti: ikone na svim prozorima
+    NeZaboraviti: standardizirati boje i simbole
+
+    'TODO: efikasnija alternativa za my.settings
+    'ToDo: linkovi na datoteke koje veæ jesu u Dropboxu bez kopiranja
+    'TODO: thumbanils za urlove i druge vrste datoteka
+    'TODO: INSERT (link s drugaèijim tekstom, emotikoni)
+    'TODO: u GetFiles popraviti datume
+    'TODO: podrška za više mapa
+    'ToDo: zamijeniti dugmad panelima
+    'ToDo: File i my.computer.filesystem zamijeniti javnim funkcijama
+    'TODO: /ping komanda za chatbox
+    'TODO: zamijeniti msgboxove s messagebox.showovima
+    'TODO: APPlicationFunctions i BoxShared pretvoriti u klase
+
+    'BUG: kod Dropboxa prvo FSW created pa onda changed
+    'BUG: fleša kad se "ulogira korisnik"
+    '*BUG: višestruko CHANGED - ne mogu riješiti *riješeno valjda

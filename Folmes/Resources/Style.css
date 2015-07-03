@@ -1,0 +1,30 @@
+body { background-color:#1e1e1e; color:#a9a9a9; font-family:"Segoe UI",Arial,sans-serif; margin:0; overflow:hidden; padding-top:2px; word-wrap:break-word; }
+img { cursor:pointer; display:block; max-width:100%; }
+
+::selection { background:rgba(255,255,255,0.1); color:#ddd; }
+a:link,a:visited,.url { color:#48b; cursor:pointer; text-decoration:none; transition:color .1s ease; }
+a:hover,.url:hover { color:#5ad; cursor:pointer; }
+a:active { color:#48b; }
+
+.file { background-color:#333; border:inset 1px solid #333; cursor:pointer; padding:0 2px 0 2px; text-decoration:none; transition:background .1s ease; }
+.file:hover { background-color:#444; cursor:pointer; }
+.file:active { background-color:#333; }
+
+.item { cursor:pointer;}
+.message,.item { border-bottom:0px #333 solid; margin:0; padding:3px 4px 4px 6px; }
+	.message:hover, .item.hover { background-color:#222; }
+	.name { display:inline; font-weight:600; height:100%; vertical-align:top; }
+	.content { display:block; max-width:100%; vertical-align:top; }
+	.time { font-size:10px; line-height:1; margin:-3px 0 0 0; opacity:0; padding:0 2px 1px 2px; position:absolute; right:0; transition:opacity .1s linear; }
+	.message:hover .time { opacity:1; }
+	
+#scrollertrack { bottom:0; height:100%; user-select:none; position:fixed; right:0; width:16px; z-index:1; }
+#scrollertrack:hover, #scroller:hover + #scrollertrack, #scroller:active + #scrollertrack { background-color:#222; }
+#scroller { background-color:#333; bottom:0; height:0px; user-select:none; position:fixed; right:0px; width:16px; z-index:2; }
+#scroller:hover { background-color:#444; }
+#scroller:active { background-color:#555; }
+
+#container { margin:0 16px 0 0; position:relative; width:auto; }
+
+#copybtn { background:#222; border:2px solid #222; cursor:default; display:none; outline:1px solid #444; padding:1px 3px 3px 3px; position:fixed; }
+#copybtn:hover { background:#333; }

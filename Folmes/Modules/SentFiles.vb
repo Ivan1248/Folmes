@@ -18,12 +18,11 @@ Module SentFiles
     Public Sub MakeFileThumbnail(imgPath As String, thumbName As String)
         Dim callback As New Image.GetThumbnailImageAbort(Function() True)
         Dim img As Image = New Bitmap(imgPath)
-        Dim format As ImageFormat = ParseFormat(Path.GetExtension(imgPath))
         MakeDir(ThumbnailDir)
         If img.Height > MaxImageHeight Then
             img = img.GetThumbnailImage(MaxImageHeight * img.Width \ img.Height, MaxImageHeight, callback, New IntPtr())
         End If
-        img.Save(Path.Combine(ThumbnailDir, thumbName), format)
+        img.Save(Path.Combine(ThumbnailDir, thumbName), StringToImageFormat(Path.GetExtension(imgPath)))
     End Sub
 
     Public Function CopyFiles(fileObj As String) As Boolean
@@ -67,10 +66,10 @@ Module SentFiles
     End Function
 
     Public Function IsImage(fpath As String) As Boolean
-        Return {"jpg", "png", "bmp", "jpeg", "gif", "tiff"}.Any(Function(e) Path.GetExtension(fpath) = e)
+        Return {".jpg", ".png", ".bmp", ".jpeg", ".gif", ".tiff"}.Contains(Path.GetExtension(fpath).ToLower())
     End Function
 
-    Public Function ParseFormat(ext As String) As ImageFormat
+    Public Function StringToImageFormat(ext As String) As ImageFormat
         Select Case ext.ToLower()
             Case "jpg", "jpeg" : Return ImageFormat.Jpeg
             Case "png" : Return ImageFormat.Png

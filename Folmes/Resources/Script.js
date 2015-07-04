@@ -10,11 +10,11 @@ function getSelectedText() {
 
 function clickO(inp) {
     var body = document.body;
-    body.setAttribute('data-click', inp);
-    setTimeout(function () {body.setAttribute('data-click', ''); }, 100); //ako se poslije klika u prazno
+    body.setAttribute("data-click", inp);
+    setTimeout(function () {body.setAttribute("data-click", ""); }, 100); //ako se poslije klika u prazno
 }
 
-document.onmouseup = function () { document.body.setAttribute('data-sel', getSelectedText()); };
+document.onmouseup = function () { document.body.setAttribute("data-sel", getSelectedText()); };
 
 function removeFirst() {
     document.getElementById("container").firstChild.removeNode(true);

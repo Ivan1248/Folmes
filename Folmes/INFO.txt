@@ -7,6 +7,7 @@ ako budem mijenjao framework, trebat æe promijeniti 2.0.0.0/4.0.0.0 u App.config
     NeZaboraviti: ikone na svim prozorima
     NeZaboraviti: standardizirati boje i simbole
 
+	'TODO: optimizirati javascript (loadscroller)
 	'TODO: Provjeriti duljinu poruke
     'TODO: efikasnija alternativa za my.settings
     'ToDo: linkovi na datoteke koje veæ jesu u Dropboxu bez kopiranja

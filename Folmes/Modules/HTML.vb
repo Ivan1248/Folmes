@@ -41,9 +41,9 @@ Module Html
     ' 2 točke ili protokol i jedna točka do prvog razmaka (/s ili /n ili /r ili kraj)
     ' {x}.{x}.{x} ili {x}://{x}.{x}
     ' {x} smije sadržavati znakove 33-122 /34,60,62,92 ("<>\)
-    Private Function IsInvalidUrlChar(c As Char) As Boolean
-        Return c = """" OrElse c = "<" OrElse c = ">" OrElse c = "\" OrElse Asc(c) < 33 OrElse Asc(c) > 122
-    End Function
+    '    Private Function IsInvalidUrlChar(c As Char) As Boolean
+    '        Return c = """" OrElse c = "<" OrElse c = ">" OrElse c = "\" OrElse Asc(c) < 33 OrElse Asc(c) > 122
+    '    End Function
 
     Public Function HtmlizeMessageContent(content As String) As String 'NEDOSTAJU JOŠ SLIKE
         Dim sb As New StringBuilder(244) 'kapacitet
@@ -65,9 +65,13 @@ Module Html
                     sb.Append(content, lastEnd + 1, start - lastEnd - 1)
                 End If
                 lastEnd = urlSpan.Item2
+                Dim uri As String = content.Substring(start, lastEnd - start + 1)
+
                 sb.Append("<span class=""url"" OnClick=""clickO('")
-                sb.Append(content, start, lastEnd - start + 1).Append("')"">")
-                sb.Append(content, start, lastEnd - start + 1)
+                sb.Append(uri).Append("')"">")
+                If IsImage(uri) Then sb.Append("<img src =""")
+                sb.Append(uri)
+                If IsImage(uri) Then sb.Append("""></img>")
                 sb.Append("</span>") 'SLIKA !!!
                 i = lastEnd + 1
             Else

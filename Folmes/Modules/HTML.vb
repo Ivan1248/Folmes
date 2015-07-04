@@ -4,6 +4,8 @@ Module Html
 
     Public Const DefaultHtml As String = "<html><head></head><body style=""background-color:#222""></body></html>"
 
+    Const SpaceChars As String = " "c & vbCr & vbLf & vbTab
+
     Public Sub LoadBaseHtml(callerOutput As WebBrowser, scripts As String())
         With New StringBuilder() 'kapacitet
             'HTML start
@@ -43,77 +45,43 @@ Module Html
         Return c = """" OrElse c = "<" OrElse c = ">" OrElse c = "\" OrElse Asc(c) < 33 OrElse Asc(c) > 122
     End Function
 
-    Public Function HtmlizeMessageContent(content As String) As String 'NEDOSTAJU JOŠ SLIKE, POPRAVITI URL
-        ' *://*.*/...
-
-        Const spaceChars As String = " "c & vbCr & vbLf & vbTab
+    Public Function HtmlizeMessageContent(content As String) As String 'NEDOSTAJU JOŠ SLIKE
         Dim sb As New StringBuilder(244) 'kapacitet
-        Dim dots As Integer   ' broj '://' i '.' - 1
-        Dim replac As String
         Dim start As Integer = 0
         Dim lastEnd As Integer = -1
-        Dim i, j As Integer
-        For i = 0 To content.Length - 1
-            If content(i) = "."c And i > 0 Then
-                dots = 0
-                j = i - 1
-                While (j > 0) ' lookbehind
-                    If IsInvalidUrlChar(content(j)) Then
-                        Continue For
-                    End If ' nije URI
-                    If j > 2 AndAlso content(j) = "/"c AndAlso content(j - 1) = "/"c AndAlso content(j - 2) = ":"c Then ' ://
-                        j -= 2
-                        dots += 1
-                    ElseIf spaceChars.Contains(content(j)) Then
-                        Exit While
-                    End If
-                    j -= 1
-                End While
-                start = j
-                j = i
-                While (j < content.Length - 1) ' lookahead
-                    j += 1
-                    If IsInvalidUrlChar(content(j)) Then
-                        Continue For
-                    End If ' nije URI
-                    If content(j) = "."c Then : dots += 1
-                    ElseIf spaceChars.Contains(content(j)) Then : Exit While
-                    End If
-                End While
-                i = j - 1
+        Dim canBeUri As Boolean = True
 
-                If dots = 0 Then
+        For i As Integer = 0 To content.Length - 1
+            If SpaceChars.Contains(content(i)) Then
+                canBeUri = True
+            ElseIf canBeUri And content(i) = "."c And i > 0 Then
+                Dim urlSpan As Tuple(Of Integer, Integer) = DetectUrlAroundDot(content, i)
+                start = urlSpan.Item1
+                If start = -1 Then
+                    canBeUri = False
                     Continue For
                 End If
-
                 If lastEnd < start - 1 Then
                     sb.Append(content, lastEnd + 1, start - lastEnd - 1)
                 End If
+                lastEnd = urlSpan.Item2
                 sb.Append("<span class=""url"" OnClick=""clickO('")
-                sb.Append(content, start, j - start + 1).Append("')"">")
-                sb.Append(content, start, j - start + 1)
+                sb.Append(content, start, lastEnd - start + 1).Append("')"">")
+                sb.Append(content, start, lastEnd - start + 1)
                 sb.Append("</span>") 'SLIKA !!!
-                If content(j) = Chr(13) OrElse content(j) = Chr(10) Then
-                    If content(j + 1) = Chr(10) Then
-                        i = j
-                        j += 1
-                    End If
-                    sb.Append("<br>")
-                End If
-                lastEnd = j
+                i = lastEnd + 1
             Else
+                Dim esc As String
                 Select Case content(i)
-                    Case "&"c : replac = "&amp;"
-                    Case """"c : replac = "&quot;"
-                    Case "<"c : replac = "&lt;"
-                    Case ">"c : replac = "&gt;"
-                    Case Chr(13), Chr(10) : replac = "<br>" 'CR/LF
+                    Case "&"c : esc = "&amp;"
+                    Case """"c : esc = "&quot;"
+                    Case "<"c : esc = "&lt;"
+                    Case ">"c : esc = "&gt;"
+                    Case Chr(13) : esc = String.Empty
+                    Case Chr(10) : esc = "<br>"
                     Case Else : Continue For
                 End Select
-                If lastEnd < start - 1 Then
-                    sb.Append(content, lastEnd + 1, i - lastEnd - 1)
-                End If
-                sb.Append(replac)
+                sb.Append(esc)
                 lastEnd = i
             End If
         Next
@@ -122,4 +90,43 @@ Module Html
         End If
         Return sb.ToString
     End Function
+
+    Private Function DetectUrlAroundDot(str As String, dotIndex As Integer) As Tuple(Of Integer, Integer)
+        Dim erroret As Tuple(Of Integer, Integer) = New Tuple(Of Integer, Integer)(0, 0)
+        Dim l As Integer = dotIndex - 1
+        Dim r As Integer = dotIndex + 1
+
+        If l < 0 OrElse r >= str.Length OrElse Not IsAsciiLetter(str(l)) OrElse Not IsAsciiLetter(str(r)) Then
+            Return erroret
+        End If
+        l -= 1
+        While (True)
+            If l < 0 OrElse spaceChars.Contains(str(l)) Then
+                l += 1
+                Exit While
+            End If
+            If IsAsciiLetter(str(l)) Then : l -= 1
+            ElseIf l - 3 > 0 AndAlso str(l - 2) = ":"c AndAlso str(l - 1) = "/"c AndAlso str(l) = "/"c Then : l -= 3
+            Else : Return erroret
+            End If
+        End While
+        r += 1
+        While (True)
+            If r >= str.Length OrElse spaceChars.Contains(str(r)) Then
+                r -= 1
+                Exit While
+            End If
+            If IsAsciiLetter(str(r)) OrElse Char.IsDigit(str(r)) OrElse "-_.~!*'();:@&=+$,/?%#[]".Contains(str(r)) Then : r += 1
+            ElseIf str(r) = "."c AndAlso Not "/.".Contains(str(r - 1)) Then : r += 1
+            ElseIf str(r) = "/"c AndAlso str(r - 1) <> "/"c Then : r += 1
+            Else : Return erroret
+            End If
+        End While
+        Return New Tuple(Of Integer, Integer)(l, r)
+    End Function
+
+    Private Function IsAsciiLetter(c As Char) As Boolean
+        Return (c >= "A"c AndAlso c <= "Z"c) OrElse (c >= "a"c AndAlso c <= "z"c)
+    End Function
+
 End Module

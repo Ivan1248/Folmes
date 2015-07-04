@@ -302,33 +302,33 @@ Partial Class Box
         '
         Me.TSOptions.ForeColor = System.Drawing.Color.DarkGray
         Me.TSOptions.Name = "TSOptions"
-        Me.TSOptions.Size = New System.Drawing.Size(152, 22)
+        Me.TSOptions.Size = New System.Drawing.Size(116, 22)
         Me.TSOptions.Text = "Settings"
         '
         'TSCleaner
         '
         Me.TSCleaner.ForeColor = System.Drawing.Color.DarkGray
         Me.TSCleaner.Name = "TSCleaner"
-        Me.TSCleaner.Size = New System.Drawing.Size(152, 22)
+        Me.TSCleaner.Size = New System.Drawing.Size(116, 22)
         Me.TSCleaner.Text = "Cleaner"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(113, 6)
         '
         'TSHelp
         '
         Me.TSHelp.ForeColor = System.Drawing.Color.DarkGray
         Me.TSHelp.Name = "TSHelp"
-        Me.TSHelp.Size = New System.Drawing.Size(152, 22)
+        Me.TSHelp.Size = New System.Drawing.Size(116, 22)
         Me.TSHelp.Text = "Help"
         '
         'TSAbout
         '
         Me.TSAbout.ForeColor = System.Drawing.Color.DarkGray
         Me.TSAbout.Name = "TSAbout"
-        Me.TSAbout.Size = New System.Drawing.Size(152, 22)
+        Me.TSAbout.Size = New System.Drawing.Size(116, 22)
         Me.TSAbout.Text = "About"
         '
         'TSChannels

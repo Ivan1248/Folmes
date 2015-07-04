@@ -47,7 +47,7 @@ Public NotInheritable Class Box
                 .Document.Write(DefaultHtml)
                 .Visible = True
                 '.BringToFront() 'da ne bude iza gornje trake
-                LoadBaseHtml(Me)
+                LoadBaseHtml(Me.Output, {})
             End With
             MessageFiles.GetCommon()
             MessageFiles.SelectedIngoing = MessageFiles.IngoingCommon
@@ -381,4 +381,5 @@ Public NotInheritable Class Box
     End Sub
 
 #End Region
+
 End Class

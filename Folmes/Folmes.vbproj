@@ -143,7 +143,6 @@
     <Compile Include="Main Modules\OutputHTMLMessages.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OtherModules\NativeMethods.vb" />
     <Compile Include="Forms\AboutBox.Designer.vb">
       <DependentUpon>AboutBox.vb</DependentUpon>
     </Compile>
@@ -196,9 +195,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="OtherModules\Connection.Designer.vb">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Special\Dropbox.vb" />
   </ItemGroup>
@@ -280,6 +276,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="obj\x86\Debug\" />
+    <Folder Include="OtherModules\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\X.png" />

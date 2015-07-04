@@ -11,7 +11,7 @@ Public Class Cleaner
     Private Sub Cleaner_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Owner = Box
         Skin()
-        HTML.LoadBaseHTML(Me)
+        Html.LoadBaseHtml(Me.Output, {My.Resources.CleanerScripts})
         AddHandler Output.DocumentCompleted, AddressOf LoadList
     End Sub
 

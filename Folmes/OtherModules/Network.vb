@@ -7,11 +7,10 @@ Imports System.ComponentModel
 Imports NATUPNPLib
 
 Module Connection
-
 #Region "Addresses"
     ReadOnly MyAddressInfo As New List(Of String)
 
-    Private Sub LoadAddresses() 'DOVRŠITI
+    Public Sub LoadAddresses() 'DOVRŠITI
         MyAddressInfo.Clear()
         For Each ni As NetworkInterface In NetworkInterface.GetAllNetworkInterfaces()
             Dim gatewayAddrs As GatewayIPAddressInformationCollection = ni.GetIPProperties.GatewayAddresses
@@ -104,18 +103,18 @@ Module Connection
 
         If state Then
             Try
-                _publicIpAddress = mappings.Item(Port, "TCP").ExternalIPAddress
+                _publicIpAddress = mappings.Item(PORT, "TCP").ExternalIPAddress
             Catch
                 Try
-                    mappings.Add(Port, "TCP", Port, MyAddressInfo(2), True, "Folmes")
-                    _publicIpAddress = mappings.Item(Port, "TCP").ExternalIPAddress
+                    mappings.Add(PORT, "TCP", PORT, MyAddressInfo(2), True, "Folmes")
+                    _publicIpAddress = mappings.Item(PORT, "TCP").ExternalIPAddress
                 Catch ex As Exception
                     Return False
                 End Try
             End Try
         Else
             Try
-                mappings.Remove(Port, "TCP")
+                mappings.Remove(PORT, "TCP")
             Catch
             End Try
         End If

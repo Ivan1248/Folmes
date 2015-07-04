@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Runtime.InteropServices
 
 Module Directories
 
@@ -29,4 +30,9 @@ Module Directories
         If filecheck.Exists Then filecheck.Delete()
         Directory.CreateDirectory(dirpath)
     End Sub
+
+    <DllImport("kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False)>
+    Public Function MoveFile(src As String, dest As String) As Boolean
+    End Function
+
 End Module

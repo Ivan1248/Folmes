@@ -5,10 +5,6 @@ Imports System.Runtime.InteropServices
 
 Module NativeMethods
 
-    <DllImport("kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False)>
-    Public Function MoveFile(src As String, dest As String) As Boolean
-    End Function
-
     Friend NotInheritable Class IPHelper
         Private Sub New()
         End Sub

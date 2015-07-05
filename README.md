@@ -1,2 +1,2 @@
 # Folmes
-A program for messaging using shared folders.
+A program for messaging through shared folders.

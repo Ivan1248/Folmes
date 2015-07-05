@@ -2,10 +2,9 @@ var scrollerRelMouseY;
 var pageLuft;
 var scrollerLuft;
 var dragging = false;
-var doc = document;
 
-function setScrollerPos(Y) {
-    document.getElementById('scroller').style.top = (Y < 0 ? "0" : Y < scrollerLuft ? Y : scrollerLuft) + "px";
+function setScrollerPos(y) {
+    document.getElementById("scroller").style.top = (y < 0 ? "0" : y < scrollerLuft ? y : scrollerLuft) + "px";
 }
 
 function dragNscroll(e) {
@@ -47,15 +46,17 @@ function wheelScroll(e) {
 }
 window.onmousewheel = wheelScroll;
 
+// called from outside
 function scrollDown(e) {
     window.scrollTo(0, document.documentElement.scrollHeight - e);
 }
 
+// called from outside
 function loadScroller() {
     dragging = false;
 
     var doc = document,
-        scroller = doc.getElementById('scroller'),
+        scroller = doc.getElementById("scroller"),
         docHeight = doc.documentElement.scrollHeight,
         windowHeight = window.innerHeight,
         scrollerSize = windowHeight * windowHeight / docHeight,
@@ -67,7 +68,7 @@ function loadScroller() {
     scrollerStyle.height = Math.round(scrollerSize) + "px";
     scrollerStyle.top = scrollerLuft + "px";
 
-    scroller.onmousemove = function () { if (!dragging) { scrollerRelMouseY = event.clientY - parseInt(doc.getElementById('scroller').style.top, 10); } };
+    scroller.onmousemove = function () { if (!dragging) { scrollerRelMouseY = event.clientY - parseInt(doc.getElementById("scroller").style.top, 10); } };
     scroller.onmousedown = function () { dragging = true; doc.onmousemove = dragNscroll; document.onselectstart = function () { return false } };
 
     updateScrollerPos();

@@ -16,6 +16,7 @@ function clickO(inp) {
 
 document.onmouseup = function () { document.body.setAttribute("data-sel", getSelectedText()); };
 
+// called from outside
 function removeFirst() {
     document.getElementById("container").firstChild.removeNode(true);
 }

@@ -66,7 +66,7 @@ Public NotInheritable Class Box
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
                 OutputHtmlMessages.LoadMessageToOutput(
-                    New Message With {.Type = Message.MessageType.Declaration, .Content = errorMessage})
+                    New Message With {.Type = Message.MessageType.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
             End Try

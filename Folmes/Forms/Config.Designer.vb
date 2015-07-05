@@ -770,7 +770,7 @@ Partial Class Config
         '
         'C1
         '
-        Me.C1.BackColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(129, Byte), Integer), CType(CType(104, Byte), Integer))
+        Me.C1.BackColor = System.Drawing.Color.FromArgb(CType(CType(171, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
         Me.C1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.C1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(129, Byte), Integer), CType(CType(104, Byte), Integer))
         Me.C1.ImeMode = System.Windows.Forms.ImeMode.NoControl
@@ -854,7 +854,7 @@ Partial Class Config
         '
         'C7
         '
-        Me.C7.BackColor = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(162, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.C7.BackColor = System.Drawing.Color.FromArgb(CType(CType(12, Byte), Integer), CType(CType(90, Byte), Integer), CType(CType(253, Byte), Integer))
         Me.C7.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.C7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(162, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.C7.ImeMode = System.Windows.Forms.ImeMode.NoControl
@@ -868,7 +868,7 @@ Partial Class Config
         '
         'C8
         '
-        Me.C8.BackColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(143, Byte), Integer), CType(CType(200, Byte), Integer))
+        Me.C8.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(12, Byte), Integer), CType(CType(251, Byte), Integer))
         Me.C8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.C8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(143, Byte), Integer), CType(CType(200, Byte), Integer))
         Me.C8.ImeMode = System.Windows.Forms.ImeMode.NoControl

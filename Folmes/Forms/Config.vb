@@ -65,19 +65,19 @@ Public Class Config
             My.Settings.Username = name
 
             Dim FolderPath As String = Path.Combine(MessagesDir, oldusername)
-            Dim PubMsgPath As String = FolderPath & ".fmsg"
+            Dim PubMsgPath As String = FolderPath & Files.Extension.Message
             If Directory.Exists(FolderPath) Then
                 My.Computer.FileSystem.RenameDirectory(FolderPath, name)
             End If
             If File.Exists(PubMsgPath) Then
-                My.Computer.FileSystem.RenameFile(PubMsgPath, name & ".fmsg")
+                My.Computer.FileSystem.RenameFile(PubMsgPath, name & Files.Extension.Message)
             End If
 
             Dim PrivateDirs As String() = GetUserDirs()
             For Each dir As String In PrivateDirs
-                Dim PrivMsgPath As String = dir + "\" & oldusername & ".fmsg"
+                Dim PrivMsgPath As String = dir + "\" & oldusername & Files.Extension.Message
                 If File.Exists(PrivMsgPath) Then
-                    My.Computer.FileSystem.RenameFile(PrivMsgPath, name & ".fmsg")
+                    My.Computer.FileSystem.RenameFile(PrivMsgPath, name & Files.Extension.Message)
                 End If
             Next
             'Box.SendMessage(MessageFile.MessageType.Declaration, oldusername & " is now known as " & name & ".")

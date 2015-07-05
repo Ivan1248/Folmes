@@ -12,18 +12,18 @@ Partial Class Box
         Friend Shared SelectedOutgoing As MessageFile = Nothing
 
         Shared Sub GetCommon()
-            OutgoingCommon = New MessageFile(Path.Combine(MessagesDir, My.Settings.Username & ".fmsg"), True, My.Settings.Username)
-            Dim msgFiles As String() = Directory.GetFiles(MessagesDir, "*.fmsg")
+            OutgoingCommon = New MessageFile(Path.Combine(MessagesDir, My.Settings.Username & Files.Extension.Message), True, My.Settings.Username)
+            Dim msgFiles As String() = Directory.GetFiles(MessagesDir, "*" & Files.Extension.Message)
             For Each file As String In msgFiles
                 If Path.GetFileNameWithoutExtension(file) <> My.Settings.Username Then _
                     IngoingCommon.Add(New MessageFile(file, False, Path.GetFileNameWithoutExtension(file), String.Empty))
             Next
         End Sub
         Shared Sub GetIngoingPrivate()
-            Dim Files As String() = Directory.GetFiles(Path.Combine(MessagesDir, My.Settings.Username), "*.fmsg")
+            Dim MFiles As String() = Directory.GetFiles(Path.Combine(MessagesDir, My.Settings.Username), Files.Extension.Message)
             Dim Name As String
             Dim NewFile As MessageFile
-            For Each File As String In Files
+            For Each File As String In MFiles
                 Name = Path.GetFileNameWithoutExtension(File)
                 NewFile = New MessageFile(File, False, Name, My.Settings.Username)
                 IngoingPrivate.Add(NewFile)
@@ -41,7 +41,7 @@ Partial Class Box
                     End If
                 Next
             End If
-            fpath = Path.Combine(MessagesDir, My.Settings.Username, channelName & ".fmsg")
+            fpath = Path.Combine(MessagesDir, My.Settings.Username, channelName & Files.Extension.Message)
             If File.Exists(fpath) Then
                 MsgFile = New MessageFile(fpath, False, channelName, My.Settings.Username)
                 IngoingPrivate.Add(MsgFile)
@@ -52,7 +52,7 @@ havei:          SelectedIngoing.Add(MsgFile)
                     GoTo haveo
                 End If
             Next
-            fpath = Path.Combine(MessagesDir, channelName, My.Settings.Username & ".fmsg")
+            fpath = Path.Combine(MessagesDir, channelName, My.Settings.Username & Files.Extension.Message)
             MsgFile = New MessageFile(fpath, True, My.Settings.Username, channelName)
             OutgoingPrivate.Add(MsgFile)
 haveo:      SelectedOutgoing = MsgFile

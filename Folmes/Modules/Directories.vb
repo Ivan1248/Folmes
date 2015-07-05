@@ -6,6 +6,7 @@ Module Directories
     Public RootPath As String = Application.StartupPath
     Public FolmesDir As String = RootPath & "\.Folmes"
     Public MessagesDir As String = FolmesDir & "\Messages"
+    Public UsersDir As String = FolmesDir & "\Users"
     Public FilesDir As String = FolmesDir & "\Files"
     Public ThumbnailDir As String = FilesDir & "\thumbnails"
 
@@ -15,6 +16,7 @@ Module Directories
             HideFolmesFolder(True)
         End If
         MakeDir(MessagesDir)
+        MakeDir(UsersDir)
     End Sub
 
     Public Sub HideFolmesFolder(hide As Boolean)
@@ -30,9 +32,5 @@ Module Directories
         If filecheck.Exists Then filecheck.Delete()
         Directory.CreateDirectory(dirpath)
     End Sub
-
-    <DllImport("kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False)>
-    Public Function MoveFile(src As String, dest As String) As Boolean
-    End Function
 
 End Module

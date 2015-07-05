@@ -15,9 +15,9 @@ Public Class Cleaner
         AddHandler Output.DocumentCompleted, AddressOf LoadList
     End Sub
 
-    Private Const Files As Boolean = True
-    Private Const Users As Boolean = False
-    Private Selected As Boolean = Files
+    Private Const FilesCleaner As Boolean = True
+    Private Const UsersCleaner As Boolean = False
+    Private Selected As Boolean = FilesCleaner
 
     Private Sub Skin()
         Dim t As ToolstripColorTable = New ToolstripColorTable
@@ -33,7 +33,7 @@ Public Class Cleaner
                 Dim FilesOrUsers As String() = list.Split("|"c)
                 For Each currentFileOrUser As String In FilesOrUsers
                     If currentFileOrUser <> Nothing Then
-                        If Selected = Files Then  'ako je datoteka, nije korisnik
+                        If Selected = FilesCleaner Then  'ako je datoteka, nije korisnik
                             DeleteFile(currentFileOrUser) 'brisanje datoteke
                         Else
                             DeleteUser(currentFileOrUser) 'brisanje korisnika
@@ -52,15 +52,15 @@ Public Class Cleaner
     Public Sub DeleteUser(ByVal username As String)
         Dim userPth As String = Path.Combine(MessagesDir, username)
         Directory.Delete(userPth, True)
-        File.Delete(userPth & ".fmsg")
+        File.Delete(userPth & Files.Extension.Message)
         For Each dir As String In GetUserDirs()
-            File.Delete(dir + "\" & username & ".fmsg")
+            File.Delete(dir + "\" & username & Files.Extension.Message)
         Next
     End Sub
 
     Private Sub Toggel_Click(sender As Object, e As EventArgs) Handles Toggle.Click
         Selected = Not Selected
-        If Selected = Files Then
+        If Selected = FilesCleaner Then
             CType(sender, ToolStripButton).Text = "Files"
         Else
             CType(sender, ToolStripButton).Text = "Users"
@@ -73,7 +73,7 @@ Public Class Cleaner
     End Sub
     Private Sub LoadList()
         With New StringBuilder()    'kapacitet
-            If Me.Selected = Files Then
+            If Me.Selected = FilesCleaner Then
                 For Each file_date As String() In GetFilesWithDates()
                     .Append("<div class=""item message""><div class=""time"">")
                     .Append(file_date(1)).Append("</div><span class=""file"" onclick=""clickO('")

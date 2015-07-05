@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="Classes\OtherClasses.vb" />
     <Compile Include="Modules\Channels.vb" />
+    <Compile Include="Modules\Files.vb" />
     <Compile Include="Modules\Notifications.vb" />
     <Compile Include="Modules\SentFiles.vb" />
     <Compile Include="Modules\Directories.vb" />

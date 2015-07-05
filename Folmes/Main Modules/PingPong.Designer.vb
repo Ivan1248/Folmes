@@ -10,7 +10,7 @@ Partial Class Box
             Return False
         End If
         If Box.UserInfoFiles.IsOnline(userName) Then
-            File.Create(Path.Combine(MessagesDir, userName, My.Settings.Username & ".ping"))
+            File.Create(Path.Combine(MessagesDir, userName, My.Settings.Username & Files.Extension.Ping))
             PingTime = DateTime.Now.Ticks \ 10000
             Return True
         Else

@@ -12,8 +12,7 @@ Module Html
             .Append("<!DOCTYPE html>" &
                     "<html>" &
                     "<head>" &
-                    "<title>Folmes</title>" &
-                    "<meta name=""viewport"" content=""user-scalable=no,initial-scale=1"">" &
+                    "<meta name=""viewport"" content=""user-scalable=no, initial-scale=1"">" &
                     "<meta http-equiv=""X-UA-Compatible"" content=""IE=edge"">" &
                     "<style type=""text/css"">")
             '       style
@@ -23,7 +22,7 @@ Module Html
             .Append(My.Resources.Style)
             .Append("</style><script>")
             '       script
-            .Append(My.Resources.ScrollScript).Append(My.Resources.Script)
+            .Append(My.Resources.ScrollScript).Append(vbNewLine).Append(My.Resources.Script)
             For Each scr As String In scripts
                 .Append(scr)
             Next
@@ -33,7 +32,7 @@ Module Html
                     "<div id=""container"">")
             '' U ELEMENTU ID = "container" NALAZE SE PORUKE ''
             .Append(
-                "</div><div id=""scroller"" onload = ""loadScroller()"" ></div><div id=""scrollertrack""></div><div id=""copybtn"">Copy</div></body></html>")
+                "</div><div id=""scroller""></div><div id=""scrollertrack""></div><div id=""copybtn"">Copy</div></body></html>")
             callerOutput.DocumentText = .ToString()
         End With
     End Sub
@@ -105,7 +104,7 @@ Module Html
         End If
         l -= 1
         While (True)
-            If l < 0 OrElse spaceChars.Contains(str(l)) Then
+            If l < 0 OrElse SpaceChars.Contains(str(l)) Then
                 l += 1
                 Exit While
             End If
@@ -116,7 +115,7 @@ Module Html
         End While
         r += 1
         While (True)
-            If r >= str.Length OrElse spaceChars.Contains(str(r)) Then
+            If r >= str.Length OrElse SpaceChars.Contains(str(r)) Then
                 r -= 1
                 Exit While
             End If

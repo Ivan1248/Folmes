@@ -178,7 +178,7 @@ Public NotInheritable Class Box
             If InputBGPanel.Height + 80 > Me.ClientSize.Height Then
                 InputBGPanel.Height = Me.ClientSize.Height - 80
             End If
-            UpdateOutputScroll()
+            RefreshScroller()
         End If
     End Sub
 
@@ -186,7 +186,7 @@ Public NotInheritable Class Box
         Dim modul As Integer = 8 - InputBGPanel.Height Mod 15
         InputBGPanel.Height += modul
         Cursor.Position = New Point(Cursor.Position.X, Cursor.Position.Y - modul)
-        UpdateOutputScroll()
+        RefreshScroller()
         My.Settings.InputHeight = InputBGPanel.Height '!!!!!!!!!!!!!!!!!!!!!!
     End Sub
 
@@ -264,12 +264,8 @@ Public NotInheritable Class Box
                 Case Is < 23 : InputBGPanel.Height = 23
                 Case Is < Me.ClientSize.Height - 80 : InputBGPanel.Height = h
             End Select
-            UpdateOutputScroll()
+            RefreshScroller()
         End If
-    End Sub
-
-    Private Sub UpdateOutputScroll()
-        Output.Document.InvokeScript("loadScroller")
     End Sub
 
 #End Region

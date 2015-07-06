@@ -83,7 +83,7 @@ Partial Class Box
         Shared Sub LoadMessageToOutput(message As Message)
             Dim doc As HtmlDocument = Box.Output.Document
             While Count >= My.Settings.NofMsgs
-                doc.InvokeScript("removeFirst")
+                Box.RemoveOldestHTMLMessage()
                 Count -= 1
                 If HtmlMessages.Count = My.Settings.NofMsgs Then
                     HtmlMessages.RemoveOldest()
@@ -107,11 +107,24 @@ Partial Class Box
                 .InnerHtml = message.Content
             End With
             HtmlMessages.InsertElement(MessageElement, message.Time, doc.GetElementById("container"))
-            doc.InvokeScript("scrollDown", {0})
-            doc.InvokeScript("loadScroller") '= UpdateOutputScroll()
+            Box.ScrollDown()
+            Box.RefreshScroller()
             Count += 1
         End Sub
     End Class
+
+#Region "Script"
+    Private Sub RefreshScroller()
+        Output.Document.InvokeScript("refreshScroller")
+    End Sub
+    Private Sub ScrollDown()
+        Output.Document.InvokeScript("scrollDown", {0})
+    End Sub
+    Private Sub RemoveOldestHTMLMessage()
+        Output.Document.InvokeScript("refreshScroller")
+    End Sub
+#End Region
+
 End Class
 
 Public Class HtmlMessageList
@@ -169,4 +182,5 @@ Public Class HtmlMessageList
             Me.Time = time
         End Sub
     End Class
+
 End Class

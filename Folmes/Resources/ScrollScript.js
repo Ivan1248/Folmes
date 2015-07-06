@@ -20,6 +20,7 @@ function updateScrollerPos() {
 
 var scrollTarget = 0;
 var scrolling = false;
+
 function smoothScroll() {
     if (scrollTarget < 0) {
         scrollTarget = -5;
@@ -44,6 +45,7 @@ function wheelScroll(e) {
         scrolling = true;
     }
 }
+
 window.onmousewheel = wheelScroll;
 
 // called from outside
@@ -52,9 +54,7 @@ function scrollDown(e) {
 }
 
 // called from outside
-function loadScroller() {
-    dragging = false;
-
+function refreshScroller() {
     var doc = document,
         scroller = doc.getElementById("scroller"),
         docHeight = doc.documentElement.scrollHeight,
@@ -68,12 +68,33 @@ function loadScroller() {
     scrollerStyle.height = Math.round(scrollerSize) + "px";
     scrollerStyle.top = scrollerLuft + "px";
 
-    scroller.onmousemove = function () { if (!dragging) { scrollerRelMouseY = event.clientY - parseInt(doc.getElementById("scroller").style.top, 10); } };
-    scroller.onmousedown = function () { dragging = true; doc.onmousemove = dragNscroll; document.onselectstart = function () { return false } };
-
     updateScrollerPos();
 }
 
-//document.addEventListener("animationstart", refreshScroller, false);
+function loadScroller() {
+    dragging = false;
 
-window.onmouseup = function () { document.onmousemove = null; dragging = false; document.onselectstart = null; };
+    var doc = document,
+        scroller = doc.getElementById("scroller");
+
+    refreshScroller();
+
+    scroller.onmousemove = function() {
+        if (!dragging) {
+            scrollerRelMouseY = event.clientY - parseInt(scroller.style.top, 10);
+        }
+    };
+    scroller.onmousedown = function() {
+        dragging = true;
+        doc.onmousemove = dragNscroll;
+        doc.onselectstart = function() { return false; }
+    };
+}
+
+window.onload = loadScroller;
+
+window.onmouseup = function() {
+    document.onmousemove = null;
+    dragging = false;
+    document.onselectstart = null;
+};

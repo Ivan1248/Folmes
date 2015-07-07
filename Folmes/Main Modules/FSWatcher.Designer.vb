@@ -8,7 +8,7 @@ Partial Class Box
     Private Sub LoadFSWatchers()
         MessagesWatcher = New FileSystemWatcher(MessagesDir, "*.*") With {
             .IncludeSubdirectories = True,
-            .NotifyFilter = NotifyFilters.FileName Or NotifyFilters.LastWrite
+            .NotifyFilter = NotifyFilters.LastWrite
         }
         DirectoriesWatcher = New FileSystemWatcher(MessagesDir, "*.*") With {
             .IncludeSubdirectories = False,
@@ -23,7 +23,9 @@ Partial Class Box
             fsw.EnableRaisingEvents = True
         Next
     End Sub
-    Private Sub MessagesWatcher_ChangedOrCreated(sender As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Changed, MessagesWatcher.Created
+    Private Sub MessagesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Changed
+        MessagesWatcher.EnableRaisingEvents = False
+
         Dim Name As String = Path.GetFileNameWithoutExtension(e.Name)
         Dim DirPath As String = Path.GetDirectoryName(e.FullPath)
         Dim DirName As String = Path.GetFileName(DirPath)
@@ -64,9 +66,11 @@ Partial Class Box
                     File.Delete(e.FullPath)
                 End If
         End Select
+
+        MessagesWatcher.EnableRaisingEvents = True
     End Sub
 
-    Private Sub UserFilesWatcher_ChangedOrCreateda(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Changed, UserFilesWatcher.Created
+    Private Sub UserFilesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Changed
         Dim Name As String = Path.GetFileNameWithoutExtension(e.Name)
 
         If Path.GetExtension(e.FullPath) <> Files.Extension.UserInfo Then Exit Sub

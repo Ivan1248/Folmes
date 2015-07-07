@@ -19,7 +19,7 @@ Namespace Classes
         Private _file As FileStream
         Public Path As String
         Public Name As String
-        Public Online As Boolean
+        Public Online As Boolean = False
 
 #End Region
 
@@ -77,5 +77,6 @@ Namespace Classes
         End Sub
 
 #End Region
+
     End Class
 End Namespace

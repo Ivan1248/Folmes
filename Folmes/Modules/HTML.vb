@@ -95,7 +95,7 @@ Module Html
     End Function
 
     Private Function DetectUrlAroundDot(str As String, dotIndex As Integer) As Tuple(Of Integer, Integer)
-        Dim erroret As Tuple(Of Integer, Integer) = New Tuple(Of Integer, Integer)(0, 0)
+        Dim erroret As Tuple(Of Integer, Integer) = New Tuple(Of Integer, Integer)(-1, -1)
         Dim l As Integer = dotIndex - 1
         Dim r As Integer = dotIndex + 1
 

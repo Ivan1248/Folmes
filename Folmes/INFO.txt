@@ -2,6 +2,9 @@ BUGOVI
 
 ako budem mijenjao framework, trebat æe promijeniti 2.0.0.0/4.0.0.0 u App.configu u 4.0.0.0/nešto drugo
 
+	BUG: ne može otvoriti userinfo datoteku kada se osvježava
+	BUG: dugaèka poruka
+
     NeZaboraviti: optimizirati javascript
     NeZaboraviti: Box - owner za sve ?
     NeZaboraviti: ikone na svim prozorima
@@ -23,8 +26,102 @@ ako budem mijenjao framework, trebat æe promijeniti 2.0.0.0/4.0.0.0 u App.config
     'TODO: zamijeniti msgboxove s messagebox.showovima
     'TODO: APPlicationFunctions i BoxShared pretvoriti u klase
 
-    'BUG: kod Dropboxa prvo FSW created pa onda changed
-    'BUG: fleša kad se "ulogira korisnik"
-    '*BUG: višestruko CHANGED - ne mogu riješiti *riješeno valjda
-
 	    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+
+
+
+
+		See the end of this message for details on invoking 
+just-in-time (JIT) debugging instead of this dialog box.
+
+************** Exception Text **************
+System.IO.IOException: The process cannot access the file 'D:\Dropbox\Iva-Ivan\.Folmes\Users\Iva.info' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize)
+   at Folmes.Classes.UserInfoFile.OpenFile()
+   at Folmes.Classes.UserInfoFile.Refresh()
+   at Folmes.Box.UserFilesWatcher_ChangedOrCreateda(Object sender, FileSystemEventArgs e)
+
+
+************** Loaded Assemblies **************
+mscorlib
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.5.27.0 built by: FX453PREVIEWREL
+    CodeBase: file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/mscorlib.dll
+----------------------------------------
+Folmes
+    Assembly Version: 1.0.0.0
+    Win32 Version: 1.0.0.0
+    CodeBase: file:///D:/Dropbox/Iva-Ivan/Folmes.exe
+----------------------------------------
+Microsoft.VisualBasic
+    Assembly Version: 10.0.0.0
+    Win32 Version: 12.0.52242.36242 built by: FX452RTMLDR
+    CodeBase: file:///C:/Windows/Microsoft.Net/assembly/GAC_MSIL/Microsoft.VisualBasic/v4.0_10.0.0.0__b03f5f7f11d50a3a/Microsoft.VisualBasic.dll
+----------------------------------------
+System
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.5.27.0 built by: FX453PREVIEWREL
+    CodeBase: file:///C:/Windows/Microsoft.Net/assembly/GAC_MSIL/System/v4.0_4.0.0.0__b77a5c561934e089/System.dll
+----------------------------------------
+System.Core
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.5.27.0 built by: FX453PREVIEWREL
+    CodeBase: file:///C:/Windows/Microsoft.Net/assembly/GAC_MSIL/System.Core/v4.0_4.0.0.0__b77a5c561934e089/System.Core.dll
+----------------------------------------
+System.Windows.Forms
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.5.27.0 built by: FX453PREVIEWREL
+    CodeBase: file:///C:/Windows/Microsoft.Net/assembly/GAC_MSIL/System.Windows.Forms/v4.0_4.0.0.0__b77a5c561934e089/System.Windows.Forms.dll
+----------------------------------------
+System.Drawing
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.5.27.0 built by: FX453PREVIEWREL
+    CodeBase: file:///C:/Windows/Microsoft.Net/assembly/GAC_MSIL/System.Drawing/v4.0_4.0.0.0__b03f5f7f11d50a3a/System.Drawing.dll
+----------------------------------------
+System.Configuration
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.5.27.0 built by: FX453PREVIEWREL
+    CodeBase: file:///C:/Windows/Microsoft.Net/assembly/GAC_MSIL/System.Configuration/v4.0_4.0.0.0__b03f5f7f11d50a3a/System.Configuration.dll
+----------------------------------------
+System.Xml
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.5.27.0 built by: FX453PREVIEWREL
+    CodeBase: file:///C:/Windows/Microsoft.Net/assembly/GAC_MSIL/System.Xml/v4.0_4.0.0.0__b77a5c561934e089/System.Xml.dll
+----------------------------------------
+System.Runtime.Remoting
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.5.27.0 built by: FX453PREVIEWREL
+    CodeBase: file:///C:/Windows/Microsoft.Net/assembly/GAC_MSIL/System.Runtime.Remoting/v4.0_4.0.0.0__b77a5c561934e089/System.Runtime.Remoting.dll
+----------------------------------------
+Microsoft.mshtml
+    Assembly Version: 7.0.3300.0
+    Win32 Version: 7.0.3300.0
+    CodeBase: file:///C:/Windows/assembly/GAC/Microsoft.mshtml/7.0.3300.0__b03f5f7f11d50a3a/Microsoft.mshtml.dll
+----------------------------------------
+FolmesFunc
+    Assembly Version: 1.0.0.0
+    Win32 Version: 1.0.0.0
+    CodeBase: file:///D:/Dropbox/Iva-Ivan/FolmesFunc.DLL
+----------------------------------------
+
+************** JIT Debugging **************
+To enable just-in-time (JIT) debugging, the .config file for this
+application or computer (machine.config) must have the
+jitDebugging value set in the system.windows.forms section.
+The application must also be compiled with debugging
+enabled.
+
+For example:
+
+<configuration>
+    <system.windows.forms jitDebugging="true" />
+</configuration>
+
+When JIT debugging is enabled, any unhandled exception
+will be sent to the JIT debugger registered on the computer
+rather than be handled by this dialog box.
+
+
+

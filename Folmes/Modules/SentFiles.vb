@@ -25,7 +25,7 @@ Module SentFiles
         img.Save(Path.Combine(ThumbnailDir, thumbName), StringToImageFormat(Path.GetExtension(imgPath)))
     End Sub
 
-    Public Function CopyFiles(fileObj As String) As Boolean
+    Public Function DetectAndCopyFiles(fileObj As String) As Boolean
         Directory.CreateDirectory(FilesDir)
         Dim a As Integer
         Dim filename, filepath As String

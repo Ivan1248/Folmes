@@ -135,7 +135,7 @@ Public NotInheritable Class Box
     End Sub
 
     Friend Function SendMessage(messageType As Message.MessageType) As Boolean
-        If Not CopyFiles(Input.Text) Then Return False
+        If Not DetectAndCopyFiles(Input.Text) Then Return False
         Dim msg As _
                 New Message() _
                 With {.Sender = My.Settings.Username, .Type = messageType, .Time = DateTime.UtcNow.ToBinary()}

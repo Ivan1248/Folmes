@@ -108,7 +108,10 @@ Namespace Classes
             End If
             _file.Seek(0, SeekOrigin.Begin)
             If _file.Length <> N * B Then
-                _file.SetLength(N * B)
+                ' _file.SetLength(N * B) -izaziva grešku kod drugih procesa
+                For i As Integer = 0 To N * B - 1
+                    _file.WriteByte(0)
+                Next
                 _file.Flush()
             Else
                 ReadAll()
@@ -138,15 +141,15 @@ Namespace Classes
         '''     Učitava sve podatke i stavlja ih u OldQueue
         ''' </summary>
         Private Sub ReadAll()
-            Dim I As Integer = 0
+            Dim I As Integer = _newestIndex
             Dim currTime As Long
 
             _file.Seek(0, SeekOrigin.Begin)
             _file.Read(_memFile, 0, N * B)
 
-            _nextUnreadOldTime = 0
-            currTime = GetTime(0)
-            If currTime = 0 Then Exit Sub ' NEMA PORUKA => izlaz
+            If GetTime(0) = 0 Then Exit Sub ' NEMA PORUKA => izlaz
+
+            currTime = 0
             Do
                 I = Incr(I)
                 _nextUnreadOldTime = currTime
@@ -222,7 +225,7 @@ Namespace Classes
             ByteConverter.GetBytes(msg.Time, _memFile, _newestIndex)
             ByteConverter.GetBytes(msg.Type, _memFile, _newestIndex + TypeInd)
             Dim contLen As Integer = Encoding.UTF8.GetBytes(msg.Content, 0, msg.Content.Length, _memFile,
-                                                            _newestIndex + ContInd) _
+                                                            _newestIndex + ContInd)
             'TU JE GREŠKA
             ByteConverter.GetBytes(CShort(contLen), _memFile, _newestIndex + LenInd)
             _memFile(_newestIndex + ContInd + contLen) = 0

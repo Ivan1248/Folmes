@@ -34,8 +34,9 @@ Namespace Classes
 
 
     ''' <summary>
-    '''     NextDate = 0 označava da nema novih poruka
-    ''' </summary>
+    '''     OLD - was in the file at the moment of opening
+    '''     NEW - appeared in the file after it has been opened 
+    ''' </summary
     Public Class MessageFile
         Implements IDisposable
 
@@ -43,7 +44,7 @@ Namespace Classes
 
         Const B As Integer = 512
         Const N As Integer = 8          ' 32
-        'Const DateInd As Integer = 0       ' DateIndex
+        Const DateInd As Integer = 0       ' DateIndex
         Const TypeInd As Integer = 8       ' TypeIndex
         Const LenInd As Integer = 10      ' LengthIndex
         Const ContInd As Integer = 12      ' ContentIndex
@@ -57,15 +58,16 @@ Namespace Classes
         Public ReadOnly Path As String
         Public ReadOnly Sender As String
         Public ReadOnly Recipient As String
-        'OldQueue
-        Private _oldQueueLength As Integer = 0    ' 0 za novu datoteku
-        Private _nextUnreadOldIndex As Integer
-        Private _nextUnreadOldTime As Long
-        'NewQueue
-        Private _newQueueLength As Integer = 0    ' 0 za novu datoteku
-        Private _newestIndex As Integer = -B     ' indeks trenutno najnovije poruke: -B za novu datoteku
-        Private _nextUnreadNewIndex As Integer = 0     ' 0 za novu datoteku
+        ' OldQueue
+        Private _oldQueueLength As Integer
+        Private _nextNewestUnreadOldIndex As Integer    ' the newest unread old message
+        Private _nextNewestUnreadOldTime As Long
+        ' NewQueue
+        Private _newQueueLength As Integer = 0
+        Private _nextUnreadNewIndex As Integer = 0      ' the oldest unread new message
         Private _nextUnreadNewTime As Long
+        'Newest message
+        Private _newestIndex As Integer                 ' the absolutely newest message
         'Passed Old I New
         Private _passedLength As Integer = 0     ' 0 za novu datoteku
 
@@ -77,7 +79,7 @@ Namespace Classes
 
         ReadOnly Property NextUnreadOldTime() As Long
             Get
-                Return _nextUnreadOldTime
+                Return _nextNewestUnreadOldTime
             End Get
         End Property
 
@@ -108,7 +110,7 @@ Namespace Classes
             End If
             _file.Seek(0, SeekOrigin.Begin)
             If _file.Length <> N * B Then
-                ' _file.SetLength(N * B) -izaziva grešku kod drugih procesa
+                ' _file.SetLength(N * B) - izaziva grešku kod drugih procesa
                 For i As Integer = 0 To N * B - 1
                     _file.WriteByte(0)
                 Next
@@ -141,32 +143,28 @@ Namespace Classes
         '''     Učitava sve podatke i stavlja ih u OldQueue
         ''' </summary>
         Private Sub ReadAll()
-            Dim I As Integer = _newestIndex
-            Dim currTime As Long
+            Dim I As Integer = 0
+            Dim currTime As Long = 0
 
             _file.Seek(0, SeekOrigin.Begin)
-            _file.Read(_memFile, 0, N * B)
+            _file.Read(_memFile, 0, N * B)  ' Load the whole file
 
-            If GetTime(0) = 0 Then Exit Sub ' NEMA PORUKA => izlaz
-
-            currTime = 0
-            Do
+            currTime = GetTime(I)
+            If currTime = 0 Then
+                _newestIndex = -B
+                Exit Sub
+            End If
+            Do ' Find the newest message
+                _nextNewestUnreadOldTime = currTime
                 I = Incr(I)
-                _nextUnreadOldTime = currTime
                 currTime = GetTime(I)
-            Loop While currTime > _nextUnreadOldTime ' traženje najnovije poruke
+            Loop While currTime > _nextNewestUnreadOldTime
 
-            _nextUnreadNewIndex = I
-            I = Decr(I)
-            _newestIndex = I
-            _nextUnreadOldIndex = I
-            _nextUnreadOldTime = GetTime(_nextUnreadOldIndex)
+            _nextUnreadNewIndex = I '
+            _newestIndex = Decr(I)
+            _nextNewestUnreadOldIndex = _newestIndex
 
-            Do ' najstarija poruka, preskakanje praznog ako ima
-                _oldQueueLength += 1
-                I = Decr(I)
-                currTime = GetTime(I)
-            Loop While currTime < _nextUnreadOldTime AndAlso currTime > 0
+            _oldQueueLength = If(GetTime(I) = 0, I \ B, N * B)
         End Sub
 
         ''' <summary>
@@ -205,7 +203,7 @@ Namespace Classes
                 _passedLength = N - _newQueueLength
                 _oldQueueLength = 0
             ElseIf _newQueueLength > N - (_passedLength + _oldQueueLength) Then _
-'neke nove su zapisane na mjesto nesvih startih
+                'neke nove su zapisane na mjesto nesvih startih
                 _oldQueueLength = N - (_passedLength + _newQueueLength)
             End If
 
@@ -224,8 +222,8 @@ Namespace Classes
             _file.Seek(_newestIndex, SeekOrigin.Begin)
             ByteConverter.GetBytes(msg.Time, _memFile, _newestIndex)
             ByteConverter.GetBytes(msg.Type, _memFile, _newestIndex + TypeInd)
-            Dim contLen As Integer = Encoding.UTF8.GetBytes(msg.Content, 0, msg.Content.Length, _memFile,
-                                                            _newestIndex + ContInd)
+            Dim contLen As Integer =
+                    Encoding.UTF8.GetBytes(msg.Content, 0, msg.Content.Length, _memFile, _newestIndex + ContInd)
             'TU JE GREŠKA
             ByteConverter.GetBytes(CShort(contLen), _memFile, _newestIndex + LenInd)
             _memFile(_newestIndex + ContInd + contLen) = 0
@@ -243,13 +241,13 @@ Namespace Classes
         Public Function GetNextOlder() As Message
             GetNextOlder = New Message With {
                 .Sender = Sender,
-                .Content = GetString(_nextUnreadOldIndex),
-                .Time = _nextUnreadOldTime,
-                .Type = GetMessageType(_nextUnreadOldIndex)
+                .Content = GetString(_nextNewestUnreadOldIndex),
+                .Time = _nextNewestUnreadOldTime,
+                .Type = GetMessageType(_nextNewestUnreadOldIndex)
                 }
             _oldQueueLength -= 1
-            _nextUnreadOldIndex = Decr(_nextUnreadOldIndex)
-            If _oldQueueLength > 0 Then _nextUnreadOldTime = GetTime(_nextUnreadOldIndex)
+            _nextNewestUnreadOldIndex = Decr(_nextNewestUnreadOldIndex)
+            If _oldQueueLength > 0 Then _nextNewestUnreadOldTime = GetTime(_nextNewestUnreadOldIndex)
             _passedLength += 1
         End Function
 
@@ -286,7 +284,7 @@ Namespace Classes
         End Function
 
         Private Function GetTime(index As Integer) As Long
-            Return ByteConverter.ToInt64(_memFile, index)
+            Return ByteConverter.ToInt64(_memFile, index + DateInd)
         End Function
 
         Private Function GetMessageType(index As Integer) As Message.MessageType

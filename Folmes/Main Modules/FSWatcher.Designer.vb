@@ -91,6 +91,15 @@ Partial Class Box
         End If
     End Sub
 
+    Private Sub UserFilesWatcher_Deleted(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Deleted
+        Dim Name As String = Path.GetFileNameWithoutExtension(e.Name)
+        UserInfoFiles.Others.Remove(UserInfoFiles.Others.Find(Function(x) x.Name = Name))
+        MessageFiles.OutgoingPrivate.Remove(MessageFiles.OutgoingPrivate.Find(Function(x) x.Sender = Name))
+        MessageFiles.IngoingPrivate.Remove(MessageFiles.IngoingPrivate.Find(Function(x) x.Sender = Name))
+
+        If Channels.Current = Name Then SwitchChannel(Channels.PublicChannel)
+    End Sub
+
     Private Sub DirectoriesWatcher_Renamed(sender As Object, e As RenamedEventArgs) Handles DirectoriesWatcher.Renamed
         If Channels.Current = e.OldName Then SwitchChannel(Path.GetFileName(e.FullPath))
     End Sub

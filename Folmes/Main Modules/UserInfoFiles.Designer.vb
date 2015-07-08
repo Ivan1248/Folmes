@@ -9,11 +9,9 @@ Partial Class Box
 
         Shared Sub GetAll()
             Dim UIFiles As String() = Directory.GetFiles(UsersDir, "*" & Files.Extension.UserInfo)
-            Dim Username As String
-            Dim NewFile As UserInfoFile
             For Each File As String In UIFiles
-                Username = Path.GetFileNameWithoutExtension(File)
-                NewFile = New UserInfoFile(File) With {.Name = Username}
+                Dim Username As String = Path.GetFileNameWithoutExtension(File)
+                Dim NewFile As UserInfoFile = New UserInfoFile(File) With {.Name = Username}
                 If Username <> My.Settings.Username Then
                     Others.Add(NewFile)
                 ElseIf Mine Is Nothing Then

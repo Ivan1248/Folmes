@@ -34,7 +34,6 @@ Public NotInheritable Class Box
             Me.Text &= " - " & My.Settings.Username
             CleanPing()
             MakeDir(Path.Combine(MessagesDir, My.Settings.Username))
-            LoadPrivateChannelsToMenu()
 
             'Učitavanje datoteka i poruka
             With Output

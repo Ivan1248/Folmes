@@ -12,7 +12,7 @@ Partial Public Class Box
         Return msgFile.NewQueueLength > 0 OrElse msgFile.NextUnreadOldTime > last.Time
     End Function
 
-    Private Sub LoadChannelsToMenu()
+    Private Sub LoadPrivateChannelsToMenu()
         While TSChannels.DropDownItems.Count > 2
             TSChannels.DropDownItems.Item(2).Dispose()
         End While
@@ -65,7 +65,7 @@ Partial Public Class Box
     End Sub
 
     Private Sub TSChannels_Opening(sender As Object, e As EventArgs) Handles TSChannels.DropDownOpening
-        LoadChannelsToMenu()
+        'LoadPrivateChannelsToMenu()
     End Sub
 
     Private Sub Channel_Click(sender As Object, e As EventArgs) _

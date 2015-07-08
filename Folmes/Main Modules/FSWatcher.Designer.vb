@@ -73,6 +73,8 @@ Partial Class Box
     Private Sub UserFilesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Changed
         Dim Name As String = Path.GetFileNameWithoutExtension(e.Name)
 
+        If Name = My.Settings.Username Then Exit Sub
+
         If Path.GetExtension(e.FullPath) <> Files.Extension.UserInfo Then Exit Sub
 
         Dim Foo As UserInfoFile = UserInfoFiles.Others.Find(Function(x) x.Name = Name)

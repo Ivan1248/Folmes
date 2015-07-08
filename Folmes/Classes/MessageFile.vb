@@ -60,14 +60,14 @@ Namespace Classes
         Public ReadOnly Recipient As String
         ' OldQueue
         Private _oldQueueLength As Integer
-        Private _nextNewestUnreadOldIndex As Integer    ' the newest unread old message
+        Private _nextUnreadOldIndex As Integer    ' the newest unread old message
         Private _nextNewestUnreadOldTime As Long
         ' NewQueue
         Private _newQueueLength As Integer = 0
         Private _nextUnreadNewIndex As Integer = 0      ' the oldest unread new message
         Private _nextUnreadNewTime As Long
         'Newest message
-        Private _newestIndex As Integer                 ' the absolutely newest message
+        Private _newestIndex As Integer = -B              ' the absolutely newest message
         'Passed Old I New
         Private _passedLength As Integer = 0     ' 0 za novu datoteku
 
@@ -109,14 +109,14 @@ Namespace Classes
                                        FileOptions.SequentialScan)
             End If
             _file.Seek(0, SeekOrigin.Begin)
-            If _file.Length <> N * B Then
+            If _file.Length = N * B Then
+                ReadAll()
+            Else
                 ' _file.SetLength(N * B) - izaziva grešku kod drugih procesa
                 For i As Integer = 0 To N * B - 1
                     _file.WriteByte(0)
                 Next
                 _file.Flush()
-            Else
-                ReadAll()
             End If
             Me.Sender = sender
             Me.Recipient = recipient
@@ -144,25 +144,24 @@ Namespace Classes
         ''' </summary>
         Private Sub ReadAll()
             Dim I As Integer = 0
-            Dim currTime As Long = 0
+            Dim currTime As Long
 
             _file.Seek(0, SeekOrigin.Begin)
             _file.Read(_memFile, 0, N * B)  ' Load the whole file
 
             currTime = GetTime(I)
-            If currTime = 0 Then
-                _newestIndex = -B
-                Exit Sub
-            End If
+
+            If currTime = 0 Then Exit Sub
+
             Do ' Find the newest message
                 _nextNewestUnreadOldTime = currTime
                 I = Incr(I)
                 currTime = GetTime(I)
             Loop While currTime > _nextNewestUnreadOldTime
 
-            _nextUnreadNewIndex = I '
+            _nextUnreadNewIndex = I
             _newestIndex = Decr(I)
-            _nextNewestUnreadOldIndex = _newestIndex
+            _nextUnreadOldIndex = _newestIndex
 
             _oldQueueLength = If(GetTime(I) = 0, I \ B, N * B)
         End Sub
@@ -241,13 +240,13 @@ Namespace Classes
         Public Function GetNextOlder() As Message
             GetNextOlder = New Message With {
                 .Sender = Sender,
-                .Content = GetString(_nextNewestUnreadOldIndex),
+                .Content = GetString(_nextUnreadOldIndex),
                 .Time = _nextNewestUnreadOldTime,
-                .Type = GetMessageType(_nextNewestUnreadOldIndex)
+                .Type = GetMessageType(_nextUnreadOldIndex)
                 }
             _oldQueueLength -= 1
-            _nextNewestUnreadOldIndex = Decr(_nextNewestUnreadOldIndex)
-            If _oldQueueLength > 0 Then _nextNewestUnreadOldTime = GetTime(_nextNewestUnreadOldIndex)
+            _nextUnreadOldIndex = Decr(_nextUnreadOldIndex)
+            If _oldQueueLength > 0 Then _nextNewestUnreadOldTime = GetTime(_nextUnreadOldIndex)
             _passedLength += 1
         End Function
 

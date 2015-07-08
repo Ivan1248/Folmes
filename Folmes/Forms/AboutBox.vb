@@ -1,6 +1,6 @@
 ﻿Public NotInheritable Class AboutBox
 
-    Private Sub AboutBox1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub AboutBox1_Load(sender As System.Object, e As EventArgs) Handles MyBase.Load
         PictureBox1.Image = New Icon(My.Resources.DBM, New Size(48, 48)).ToBitmap
         Me.Owner = Box
         ' Initialize all of the text displayed on the About Box.

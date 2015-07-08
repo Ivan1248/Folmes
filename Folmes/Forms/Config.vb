@@ -2,21 +2,20 @@
 
 Public Class Config
 
-    Dim usernameIsValid As Boolean = True
-    Dim UsernameColor As Color = System.Drawing.ColorTranslator.FromHtml(My.Settings.UsernameColor)
-    Dim NotifChkBoxes() As CheckBox
-    Dim StartupRegKey As Microsoft.Win32.RegistryKey = My.Computer.Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+    ReadOnly _usernameColor As Color = ColorTranslator.FromHtml(My.Settings.UsernameColor)
+    Dim _notifChkBoxes() As CheckBox
+    ReadOnly _startupRegKey As Microsoft.Win32.RegistryKey = My.Computer.Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
 
-    Public Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Public Sub Form1_Load(sender As System.Object, e As EventArgs) Handles MyBase.Load
         Me.Owner = Box
 
         'General
         Username.Text = My.Settings.Username
-        Username.ForeColor = UsernameColor
+        Username.ForeColor = _usernameColor
 
         MinimizeToNotificationArea.Checked = My.Settings.MinimizeToTray
         StartMinimized.Checked = My.Settings.StartMinimized
-        LaunchOnStartup.Checked = Not StartupRegKey.GetValue(Application.ProductName) Is Nothing
+        LaunchOnStartup.Checked = Not _startupRegKey.GetValue(Application.ProductName) Is Nothing
         'MsgBox(StartupRegKey.GetValue(Application.ProductName))
         HideFolderCB.Checked = IsFolderHidden()
 
@@ -31,10 +30,10 @@ Public Class Config
         nOfMsgsLabel.Text = CStr(My.Settings.NofMsgs)
 
         'Notifications
-        NotifChkBoxes = {ncb1, ncb2, ncb3, ncb4, ncb5, ncb6, ncb7, ncb8}
+        _notifChkBoxes = {ncb1, ncb2, ncb3, ncb4, ncb5, ncb6, ncb7, ncb8}
         Dim bits As New BitArray(New Integer() {My.Settings.Notifications})
         For i As Integer = 0 To 7
-            NotifChkBoxes(i).Checked = bits(i)
+            _notifChkBoxes(i).Checked = bits(i)
         Next
     End Sub
     Public Function IsFolderHidden() As Boolean
@@ -50,10 +49,10 @@ Public Class Config
 
     'General
     Public Sub RunOnStartup(ByVal enable As Boolean)
-        With StartupRegKey
+        With _startupRegKey
             If enable Then
                 .SetValue(Application.ProductName, Application.ExecutablePath)
-            ElseIf Not StartupRegKey.GetValue(Application.ProductName) Is Nothing Then
+            ElseIf Not _startupRegKey.GetValue(Application.ProductName) Is Nothing Then
                 .DeleteValue(Application.ProductName)
             End If
         End With
@@ -96,11 +95,11 @@ Public Class Config
 
 #Region "Notifications"
     Private Function NotificationCheckboxesValue() As Integer
-        Dim result As Integer = NotifChkBoxes(0).CheckState
+        Dim result As Integer = _notifChkBoxes(0).CheckState
         Dim b As Integer = 1
-        For i As Integer = 1 To NotifChkBoxes.Length - 1
+        For i As Integer = 1 To _notifChkBoxes.Length - 1
             b *= 2
-            result = result Or NotifChkBoxes(i).CheckState * b
+            result = result Or _notifChkBoxes(i).CheckState * b
         Next
         Return result
     End Function

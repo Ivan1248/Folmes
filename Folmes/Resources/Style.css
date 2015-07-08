@@ -6,7 +6,7 @@ a:link,a:visited,.url { color:#48b; cursor:pointer; text-decoration:none; transi
 a:hover,.url:hover { color:#5ad; cursor:pointer; }
 a:active { color:#48b; }
 
-.file { background-color:#333; border:inset 1px solid #333; cursor:pointer; padding:0 2px 0 2px; text-decoration:none; transition:background .1s ease; }
+.file { background-color:#333; border:inset 1px #333; cursor:pointer; padding:0 2px 0 2px; text-decoration:none; transition:background .1s ease; }
 .file:hover { background-color:#444; cursor:pointer; }
 .file:active { background-color:#333; }
 

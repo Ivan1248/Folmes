@@ -235,23 +235,22 @@ Public NotInheritable Class Box
     End Sub
 
     Private Sub ClickOCm(sender As Object, e As EventArgs) 'ClickO za kontekstni izbornik, dinamičko dodavanje handlera
-        Dim data As String = Output.Document.Body.GetAttribute("data-sel")
         If Output.Document.Body.GetAttribute("data-sel") <> String.Empty Then
             CopyContMenu.Show(Me, Me.PointToClient(MousePosition))
         End If
     End Sub
 
-    Protected Function GetScrollPos() As Integer
-        Try
-            With Output
-                Return _
-                    .Document.Body.ScrollRectangle.Height - .Height -
-                    .Document.GetElementsByTagName("HTML")(0).ScrollTop
-            End With
-        Catch
-            Return 0
-        End Try
-    End Function
+    '    Protected Function GetScrollPos() As Integer
+    '        Try
+    '            With Output
+    '                Return _
+    '                    .Document.Body.ScrollRectangle.Height - .Height -
+    '                    .Document.GetElementsByTagName("HTML")(0).ScrollTop
+    '            End With
+    '        Catch
+    '            Return 0
+    '        End Try
+    '    End Function
 
 #End Region
 

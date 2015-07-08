@@ -716,6 +716,7 @@ Partial Class Config
         '
         'Username
         '
+        Me.Username.Enabled = False
         Me.Username.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.Username.Location = New System.Drawing.Point(3, 19)
         Me.Username.MaxLength = 16

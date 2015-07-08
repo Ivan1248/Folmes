@@ -44,46 +44,9 @@ Public Class Config
 #Region "General"
 
     'Username
-    Private Sub Username_TextChanged(sender As Object, e As EventArgs) Handles Username.TextChanged
-        With Username
-            If (.Text = My.Settings.Username OrElse Not UserExists(.Text)) AndAlso FirstRun.NameValid(.Text) Then
-                usernameIsValid = True
-                .ForeColor = UsernameColor
-            Else
-                usernameIsValid = False
-                .ForeColor = Color.FromArgb(192, 0, 0)
-            End If
-        End With
-    End Sub
     Private Sub Color_Click(sender As Object, e As EventArgs) Handles C0.Click, C1.Click, C2.Click, C3.Click, C4.Click, C5.Click, C6.Click, C7.Click, C8.Click, C9.Click
         Username.ForeColor = CType(sender, Button).BackColor
     End Sub
-    Public Sub RenameUser(ByVal name As String)
-        Dim oldusername As String = My.Settings.Username
-
-        If oldusername <> name Then
-            My.Settings.Username = name
-
-            Dim FolderPath As String = Path.Combine(MessagesDir, oldusername)
-            Dim PubMsgPath As String = FolderPath & Files.Extension.Message
-            If Directory.Exists(FolderPath) Then
-                My.Computer.FileSystem.RenameDirectory(FolderPath, name)
-            End If
-            If File.Exists(PubMsgPath) Then
-                My.Computer.FileSystem.RenameFile(PubMsgPath, name & Files.Extension.Message)
-            End If
-
-            Dim PrivateDirs As String() = GetUserDirs()
-            For Each dir As String In PrivateDirs
-                Dim PrivMsgPath As String = dir + "\" & oldusername & Files.Extension.Message
-                If File.Exists(PrivMsgPath) Then
-                    My.Computer.FileSystem.RenameFile(PrivMsgPath, name & Files.Extension.Message)
-                End If
-            Next
-            'Box.SendMessage(MessageFile.MessageType.Declaration, oldusername & " is now known as " & name & ".")
-        End If
-    End Sub '*
-
 
     'General
     Public Sub RunOnStartup(ByVal enable As Boolean)
@@ -146,7 +109,6 @@ Public Class Config
     Public Sub Apply()
         With My.Settings
             'General
-            RenameUser(Username.Text)
             .UsernameColor = System.Drawing.ColorTranslator.ToHtml(Username.ForeColor)
             .MinimizeToTray = MinimizeToNotificationArea.Checked
             .StartMinimized = StartMinimized.Checked
@@ -171,22 +133,12 @@ Public Class Config
 #Region "Donja dugmad"
 
     Private Sub OKButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OKButton.Click
-        If usernameIsValid Then
-            Apply()
-            Me.Close()
-            Box.Focus()
-        Else
-            If UserExists(Username.Text) Then
-                MessageBox.Show("This username is taken." & vbNewLine & "If it is your old username, you will have to reset this program to factory settings in the 'Advanced' tab in 'Options' in order to use this username.", "Username taken", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
-            Else
-                MessageBox.Show("The username must contain at least 2 characters and may not include any of the following characters: \/:*?""<>!", "Invalid username", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
-            End If
-        End If
+        Apply()
+        Me.Close()
     End Sub
 
     Private Sub CancelButton_Click(sender As Object, e As EventArgs) Handles CancButton.Click
         Me.Close()
-        Box.Focus()
     End Sub
 
     Private Sub ApplyButton_Click(sender As Object, e As EventArgs) Handles ApplyButton.Click

@@ -34,14 +34,16 @@ Partial Class MainGUI
                 Dim NotificationType As Notifications.Notifications
                 Dim Files As List(Of MessageFile)
                 If DirPath = MessagesDir Then
-                    If Name = My.Settings.Username Then Exit Sub
+                    If Name = My.Settings.Username Then
+                        GoTo exits
+                    End If
                     NotificationType = Notifications.Notifications.PublicMessage
                     Files = MessageFiles.IngoingCommon
                 ElseIf DirName = My.Settings.Username Then
                     NotificationType = Notifications.Notifications.PrivateMessage
                     Files = MessageFiles.IngoingPrivate
                 Else
-                    Exit Sub
+                    GoTo exits
                 End If
                 Dim File As MessageFile = Files.Find(Function(fi) fi.Sender = Name)
                 If File Is Nothing Then 'ako nema
@@ -67,7 +69,7 @@ Partial Class MainGUI
                 End If
         End Select
 
-        MessagesWatcher.EnableRaisingEvents = True
+exits:  MessagesWatcher.EnableRaisingEvents = True
     End Sub
 
     Private Sub UserFilesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Changed

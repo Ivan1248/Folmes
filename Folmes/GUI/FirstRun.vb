@@ -1,10 +1,12 @@
-﻿Public Class FirstRun
+﻿Imports System.IO
+
+Public Class FirstRun
 
     Dim usernameIsValid As Boolean = False
 
     Private Sub OKButton_Click(sender As Object, e As EventArgs) Handles OKButton.Click
         If usernameIsValid Then
-            If Not UserExists(Username.Text) OrElse MessageBox.Show("The username '" & Username.Text & "' is already registered." & vbNewLine & "Is this your old username?", "Username exists", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) = Windows.Forms.DialogResult.Yes Then
+            If Not Directory.Exists(Path.Combine(MessagesDir, Name)) OrElse MessageBox.Show("The username '" & Username.Text & "' is already registered." & vbNewLine & "Is this your old username?", "Username exists", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) = Windows.Forms.DialogResult.Yes Then
                 My.Settings.Username = Username.Text
                 Me.DialogResult = Windows.Forms.DialogResult.OK
             End If

@@ -1,13 +1,13 @@
 ﻿Imports System.IO
 
-Public Class Config
+Public Class Settings
 
     ReadOnly _usernameColor As Color = ColorTranslator.FromHtml(My.Settings.UsernameColor)
     Dim _notifChkBoxes() As CheckBox
     ReadOnly _startupRegKey As Microsoft.Win32.RegistryKey = My.Computer.Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
 
     Public Sub Form1_Load(sender As System.Object, e As EventArgs) Handles MyBase.Load
-        Me.Owner = Box
+        Me.Owner = MainGUI
 
         'General
         Username.Text = My.Settings.Username
@@ -116,7 +116,7 @@ Public Class Config
 
             'Interface
             .FontSize = FontSize.Value
-            Box.Input.Font = New Font("Arial", FontSize.Value, FontStyle.Regular, GraphicsUnit.Pixel)
+            MainGUI.Input.Font = New Font("Arial", FontSize.Value, FontStyle.Regular, GraphicsUnit.Pixel)
             .ThumbnailHeight = ThumbnailHeight.Value * 20
             .NofMsgs = nOfMsgs.Value * 5
 
@@ -148,9 +148,9 @@ Public Class Config
 
     Private Sub ResetButton_Click(sender As Object, e As EventArgs) Handles ResetButton.Click
         My.Settings.Reset()
-        Box.UserInfoFiles.Mine.SetOnlineStatus(False)
+        MainGUI.UserInfoFiles.Mine.SetOnlineStatus(False)
         RunOnStartup(False)
-        Box.Close()
+        MainGUI.Close()
     End Sub
 
 

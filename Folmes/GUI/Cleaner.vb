@@ -4,7 +4,7 @@ Imports System.Text
 Public Class Cleaner
 
     Private Sub Cleaner_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.Owner = Box
+        Me.Owner = MainGUI
         Skin()
         Html.LoadBaseHtml(Me.Output, {My.Resources.CleanerScripts})
         AddHandler Output.DocumentCompleted, AddressOf LoadList

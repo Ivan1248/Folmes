@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 
-Partial Class Box
+Partial Class MainGUI
 #Region "Ping-pong (round-trip-time)"
     Private PingTime As Long = 0
 
@@ -9,7 +9,7 @@ Partial Class Box
             MsgBox("Already waiting for a pong.")
             Return False
         End If
-        If Box.UserInfoFiles.IsOnline(userName) Then
+        If MainGUI.UserInfoFiles.IsOnline(userName) Then
             File.Create(Path.Combine(MessagesDir, userName, My.Settings.Username & Files.Extension.Ping))
             PingTime = DateTime.Now.Ticks \ 10000
             Return True

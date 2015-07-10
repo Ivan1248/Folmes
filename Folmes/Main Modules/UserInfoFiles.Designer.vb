@@ -2,7 +2,7 @@
 Imports System.IO
 Imports Folmes.Classes
 
-Partial Class Box
+Partial Class MainGUI
     Protected Friend MustInherit Class UserInfoFiles
         Friend Shared Others As New List(Of UserInfoFile)
         Friend Shared Mine As UserInfoFile
@@ -23,8 +23,9 @@ Partial Class Box
             End If
         End Sub
         Shared Function IsOnline(userName As String) As Boolean
-            Dim Foo As UserInfoFile = Others.Find(Function(x) x.Name = userName)
-            Return If(Foo IsNot Nothing, Foo.Online, False)
+            Dim UIFile As UserInfoFile = Others.Find(Function(x) x.Name = userName)
+            Return If(UIFile IsNot Nothing, UIFile.Online, False)
         End Function
+
     End Class
 End Class

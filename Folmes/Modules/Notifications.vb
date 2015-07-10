@@ -12,7 +12,7 @@ Public Module Notifications
 
     Public Sub Notify(kind As Notifications, msg As String)
         FlashIcon()
-        If GetActiveWindow <> Box.Handle Then
+        If GetActiveWindow <> MainGUI.Handle Then
             Dim notifs As New BitArray(New Integer() {My.Settings.Notifications})
             Dim sound As New Audio
             Select Case kind
@@ -38,7 +38,7 @@ Public Module Notifications
                         sound.Play("C:\Windows\Media\Speech On.wav")
                     End If
                 Case Notifications.LoggedOut 'odjava   
-                    If notifs(6) And Box.WindowState = FormWindowState.Minimized Then
+                    If notifs(6) And MainGUI.WindowState = FormWindowState.Minimized Then
                         ShowNotification("User logged out", " " & msg & " logged out from Dropbox Messenger")
                     End If '
                     If notifs(7) Then
@@ -55,7 +55,7 @@ Public Module Notifications
     End Sub
 
     Private Sub ShowNotification(title As String, text As String)
-        Box.NotifyIcon.ShowBalloonTip(1000, title, text, ToolTipIcon.None)
+        MainGUI.NotifyIcon.ShowBalloonTip(1000, title, text, ToolTipIcon.None)
     End Sub
 
     '<DllImport("user32.dll", CharSet:=CharSet.Auto, ExactSpelling:=)>
@@ -79,7 +79,7 @@ Public Module Notifications
         Dim flash As New FLASHWINFO
         With flash
             .CbSize = Marshal.SizeOf(flash) '/// size of structure in bytes
-            .Hwnd = Box.Handle '/// Handle to the window to be flashed
+            .Hwnd = MainGUI.Handle '/// Handle to the window to be flashed
             .DwFlags = &H2 '/// to flash both the tray , &H1 for caption (&H2 or &H1) for both
             .UCount = 3 '/// the number of flashes
         End With

@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports Folmes.Classes
 
-Partial Class Box
+Partial Class MainGUI
     Private MustInherit Class MessageFiles
         Friend Shared IngoingCommon As New List(Of MessageFile)
         Friend Shared IngoingPrivate As New List(Of MessageFile)
@@ -20,7 +20,7 @@ Partial Class Box
             Next
         End Sub
         Shared Sub GetIngoingPrivate()
-            Dim MFiles As String() = Directory.GetFiles(Path.Combine(MessagesDir, My.Settings.Username), Files.Extension.Message)
+            Dim MFiles As String() = Directory.GetFiles(Path.Combine(MessagesDir, My.Settings.Username), "*" & Files.Extension.Message)
             Dim Name As String
             Dim NewFile As MessageFile
             For Each File As String In MFiles
@@ -29,10 +29,8 @@ Partial Class Box
                 IngoingPrivate.Add(NewFile)
             Next
         End Sub
-
         Shared Sub SwitchPrivateChannel(ByVal channelName As String)
             SelectedIngoing = New List(Of MessageFile)
-            Dim fpath As String
             Dim MsgFile As MessageFile
             If IngoingPrivate IsNot Nothing Then
                 For Each MsgFile In IngoingPrivate
@@ -41,7 +39,7 @@ Partial Class Box
                     End If
                 Next
             End If
-            fpath = Path.Combine(MessagesDir, My.Settings.Username, channelName & Files.Extension.Message)
+            Dim fpath As String= Path.Combine(MessagesDir, My.Settings.Username, channelName & Files.Extension.Message)
             If File.Exists(fpath) Then
                 MsgFile = New MessageFile(fpath, False, channelName, My.Settings.Username)
                 IngoingPrivate.Add(MsgFile)

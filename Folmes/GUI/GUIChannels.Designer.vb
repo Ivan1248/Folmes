@@ -1,8 +1,6 @@
 ﻿Imports Folmes.Classes
 
-Partial Public Class Box
-
-#Region "Prebacivanje i spremanje kanala, Toolstrip"
+Partial Public Class MainGUI
 
     Public Function AnyNewMessages(channel As String) As Boolean
         Dim last As ChannelLastReadTime = My.Settings.LastReadTimes.Find(Function(e) e.Channel = channel)
@@ -59,7 +57,9 @@ Partial Public Class Box
                 End If
                 .Text = channel
             End With
-            OutputHtmlMessages.LoadCachedChannelHtml()
+            If Not OutputHtmlMessages.LoadCachedChannelHtml() Then
+                OutputHtmlMessages.LoadInitial_Once()
+            End If
             OutputHtmlMessages.LoadNew()
         End If
     End Sub
@@ -68,8 +68,7 @@ Partial Public Class Box
         ReloadPrivateChannelsToMenu()
     End Sub
 
-    Private Sub Channel_Click(sender As Object, e As EventArgs) _
-        Handles PublicChannel.Click, ChannelMenuItem.Click
+    Private Sub Channel_Click(sender As Object, e As EventArgs) Handles PublicChannel.Click
         SwitchChannel(DirectCast(sender, ToolStripMenuItem).Text)
     End Sub
 
@@ -85,8 +84,5 @@ Partial Public Class Box
         My.Settings.LastReadTimes.Add(
             New ChannelLastReadTime With {.Channel = Channels.Current, .Time = DateTime.UtcNow.ToBinary})
     End Sub
-
-
-#End Region
 
 End Class

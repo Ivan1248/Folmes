@@ -3,6 +3,10 @@ Imports System.IO
 Imports System.Text
 
 Module SentFiles
+
+    Public Const MaxPath As Integer = 512
+    Public Const MaxImageHeight As Integer = 2
+
     Public Function GetFilesWithDates() As List(Of String()) 'zastarjelo
         GetFilesWithDates = New List(Of String())
         For Each fl As FileInfo In New DirectoryInfo(FilesDir).GetFiles()

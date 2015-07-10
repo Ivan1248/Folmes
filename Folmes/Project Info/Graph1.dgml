@@ -1,33 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DirectedGraph Layout="Sugiyama" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
-    <Node Id="ChannelsMenu" Bounds="246.458333333333,111.871274183721,98.8166666666666,25.96" Label="ChannelsMenu" />
-    <Node Id="FSWatcher1" Bounds="201.666666666667,167.831274183721,76.4000000000001,25.96" Label="FSWatcher" />
-    <Node Id="FileSystem" Bounds="201.915,279.751274183721,75.9033333333333,25.96" />
-    <Node Id="GUI" Bounds="270.866666666667,0,50,25.96" />
-    <Node Id="HTML" Bounds="120.25,167.831274183721,51.2333333333333,25.96" />
-    <Node Id="Input" Bounds="15.5414613216186,56.3765783801344,58.6504106900961,25.0781174234521" Label="Input" />
-    <Node Id="MessageFile" Bounds="0,167.831274183721,89.7333333333333,25.96" Label="MessageFiles" />
-    <Node Id="MessageFile1" Bounds="124.546666666667,223.791274183721,84.64,25.96" Label="MessageFile" />
-    <Node Id="Notifications" Bounds="375.276666666667,111.871274183721,87.18,25.96" />
-    <Node Id="Output" Bounds="206.91931055967,55.96,57.8947122139938,25.9112741837209" Label="Output" />
-    <Node Id="OutputHTMLMessages" Bounds="75.4516666666667,111.871274183721,140.83,25.96" />
+    <Node Id="ChannelsMenu" Bounds="226.591666666667,111.871274183721,98.8166666666666,25.96" Label="ChannelsMenu" />
+    <Node Id="FSWatcher1" Bounds="237.8,167.831274183721,76.4000000000001,25.96" Label="FSWatcher" />
+    <Node Id="FileSystem" Bounds="206.048333333333,335.711274183721,75.9033333333334,25.96" />
+    <Node Id="GUI" Bounds="251,0,50,25.96" />
+    <Node Id="HTML" Bounds="156.383333333333,167.831274183721,51.2333333333333,25.96" />
+    <Node Id="Input" Bounds="0,167.831274183721,50,25.96" Label="Input" />
+    <Node Id="MessageFile" Bounds="80.1333333333333,223.791274183721,89.7333333333333,25.96" Label="MessageFiles" />
+    <Node Id="MessageFile1" Bounds="87.7036239612451,279.751274206827,84.5927520775098,25.9599999537891" Label="MessageFile" />
+    <Node Id="Notifications" Bounds="355.41,111.871274183721,87.1800000000001,25.96" />
+    <Node Id="Output" Bounds="187.052643893003,55.96,57.8947122139938,25.9112741837209" Label="Output" />
+    <Node Id="OutputHTMLMessages" Bounds="55.5849999999999,111.871274183721,140.83,25.96" />
+    <Node Id="UserInfoFile" Bounds="202.746666666667,279.751274183721,82.5066666666667,25.96" />
+    <Node Id="UserInfoFiles" Bounds="200.2,223.791274183721,87.6,25.96" />
   </Nodes>
   <Links>
-    <Link Source="ChannelsMenu" Target="FSWatcher1" Bounds="259.22216796875,137.831268310547,23.6552124023438,23.6383209228516" />
-    <Link Source="FSWatcher1" Target="FileSystem" Bounds="239.866668701172,193.791275024414,0,76.9600067138672" />
-    <Link Source="GUI" Target="ChannelsMenu" Bounds="295.866668701172,25.9599990844727,0,76.9112777709961" />
-    <Link Source="GUI" Target="Input" Bounds="82.9763870239258,18.5512790679932,187.890281677246,41.8715648651123" />
-    <Link Source="GUI" Target="Notifications" Bounds="310.137878417969,25.9599990844727,87.7995300292969,79.8556442260742" />
-    <Link Source="GUI" Target="Output" Bounds="256.346710205078,25.9599990844727,25.5968017578125,23.8629112243652" />
-    <Link Source="Input" Target="MessageFile" Bounds="44.8666648864746,81.4546966552734,0,77.3765716552734" />
-    <Link Source="MessageFile" Target="MessageFile1" Bounds="73.1647338867188,193.791275024414,57.2233734130859,26.2477111816406" />
-    <Link Source="MessageFile1" Target="FileSystem" Bounds="183.799118041992,249.751281738281,31.9923248291016,24.5245056152344" />
-    <Link Source="Notifications" Target="FSWatcher1" Bounds="286.071929931641,137.75325012207,91.5249938964844,28.6130676269531" />
-    <Link Source="Output" Target="OutputHTMLMessages" Bounds="174.39533996582,81.8712768554688,40.6258087158203,25.2492218017578" />
-    <Link Source="OutputHTMLMessages" Target="FSWatcher1" Bounds="167.670104980469,137.831268310547,42.6597747802734,25.3961944580078" />
-    <Link Source="OutputHTMLMessages" Target="HTML" Bounds="145.866668701172,137.831268310547,0,21" />
-    <Link Source="OutputHTMLMessages" Target="MessageFile" Bounds="76.1661682128906,137.831268310547,46.2734069824219,25.6382293701172" />
+    <Link Source="ChannelsMenu" Target="FSWatcher1" Bounds="276,137.831268310547,0,21" />
+    <Link Source="FSWatcher1" Target="MessageFile" Bounds="168.463775634766,193.791275024414,72.5115661621094,26.8724975585938" />
+    <Link Source="FSWatcher1" Target="UserInfoFiles" Bounds="255.890106201172,193.791275024414,12.6874389648438,22.1871795654297" />
+    <Link Source="GUI" Target="ChannelsMenu" Bounds="276,25.9599990844727,0,76.9112777709961" />
+    <Link Source="GUI" Target="Input" Bounds="25,18.5512790679932,226,140.279989242554" />
+    <Link Source="GUI" Target="Notifications" Bounds="290.271209716797,25.9599990844727,87.7995300292969,79.8556442260742" />
+    <Link Source="GUI" Target="Output" Bounds="236.480026245117,25.9599990844727,25.5968170166016,23.8629112243652" />
+    <Link Source="Input" Target="MessageFile" Bounds="47.9306564331055,193.643264770508,46.0203094482422,25.7529754638672" />
+    <Link Source="MessageFile" Target="MessageFile1" Bounds="126.159759521484,249.751281738281,1.87953186035156,21.0357055664063" />
+    <Link Source="MessageFile1" Target="FileSystem" Bounds="156.442459106445,305.711273193359,53.0359649658203,26.0341491699219" />
+    <Link Source="Notifications" Target="FSWatcher1" Bounds="312.722045898438,137.831268310547,57.7479248046875,26.2729644775391" />
+    <Link Source="Output" Target="OutputHTMLMessages" Bounds="154.528671264648,81.8712768554688,40.6258087158203,25.2492218017578" />
+    <Link Source="OutputHTMLMessages" Target="FSWatcher1" Bounds="160.792709350586,137.831268310547,71.9822692871094,26.8541870117188" />
+    <Link Source="OutputHTMLMessages" Target="HTML" Bounds="138.989273071289,137.831268310547,23.6552124023438,23.6383209228516" />
+    <Link Source="OutputHTMLMessages" Target="MessageFile" Bounds="125,137.831268310547,0.768051147460938,76.9600067138672" />
+    <Link Source="UserInfoFile" Target="FileSystem" Bounds="244,305.711273193359,0,21" />
+    <Link Source="UserInfoFiles" Target="UserInfoFile" Bounds="244,249.751281738281,0,21" />
   </Links>
   <Properties>
     <Property Id="Bounds" DataType="System.Windows.Rect" />

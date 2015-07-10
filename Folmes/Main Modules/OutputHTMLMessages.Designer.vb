@@ -2,7 +2,7 @@
 Imports System.Runtime.CompilerServices
 Imports Folmes.Classes
 
-Partial Class Box
+Partial Class MainGUI
     Private Class OutputHtmlMessages
         Public Structure CachedChannelHtml
             Dim Channel As String
@@ -14,35 +14,36 @@ Partial Class Box
             If CachedChannelHtmls IsNot Nothing Then
                 For Each C As CachedChannelHtml In CachedChannelHtmls
                     If C.Channel = Channels.Current Then
-                        C.HtmlContents = Box.Output.Document.GetElementById("container").InnerHtml
+                        C.HtmlContents = MainGUI.Output.Document.GetElementById("container").InnerHtml
                         C.Count = Count
                         Exit Sub
                     End If
                 Next
             End If
-            Dim a As HtmlDocument = Box.Output.Document
-            CachedChannelHtmls.Add(New CachedChannelHtml With {.Channel = Channels.Current, .HtmlContents = Box.Output.Document.GetElementById("container").InnerHtml, .Count = Count})
+            Dim a As HtmlDocument = MainGUI.Output.Document
+            CachedChannelHtmls.Add(New CachedChannelHtml With {.Channel = Channels.Current, .HtmlContents = MainGUI.Output.Document.GetElementById("container").InnerHtml, .Count = Count})
         End Sub
-        Shared Sub LoadCachedChannelHtml()
+        Shared Function LoadCachedChannelHtml() As Boolean
             If CachedChannelHtmls IsNot Nothing Then
                 For Each C As CachedChannelHtml In CachedChannelHtmls
                     If C.Channel = Channels.Current Then
-                        Box.Output.Document.GetElementById("container").InnerHtml = C.HtmlContents
+                        MainGUI.Output.Document.GetElementById("container").InnerHtml = C.HtmlContents
                         Count = C.Count
                         'HTMLMessages = C.List
                         HtmlMessages = New HtmlMessageList
-                        Exit Sub
+                        Return True
                     End If
                 Next
             End If
-            Box.Output.Document.GetElementById("container").InnerHtml = String.Empty
+            MainGUI.Output.Document.GetElementById("container").InnerHtml = String.Empty
             HtmlMessages = New HtmlMessageList
             Count = 0
-        End Sub
+            Return False
+        End Function
 
         Private Shared HtmlMessages As New HtmlMessageList  'For inserting ordered by datetime
         Friend Shared Count As Integer = 0
-        Public Shared Sub LoadInitial_Once() ' učitava stare poruke do najnovije
+        Public Shared Sub LoadInitial_Once() ' učitava stare poruke do najnovije prije otvaranja
             Dim NextFile As MessageFile = Nothing
             Dim CurrTime As Long
             For i As Integer = 0 To My.Settings.NofMsgs
@@ -61,7 +62,7 @@ Partial Class Box
                 LoadMessageToOutput(NextFile.GetNextOlder)
             Next
         End Sub
-        Shared Sub LoadNew() ' učitava sve nove poruke od najstarije
+        Shared Sub LoadNew() ' učitava sve nove poruke od najstarije poslije otvaranja
             Dim NextFile As MessageFile = Nothing
             Dim CurrTime As Long
             While True
@@ -81,9 +82,9 @@ Partial Class Box
             End While
         End Sub
         Shared Sub LoadMessageToOutput(message As Message)
-            Dim doc As HtmlDocument = Box.Output.Document
+            Dim doc As HtmlDocument = MainGUI.Output.Document
             While Count >= My.Settings.NofMsgs
-                Box.RemoveOldestHTMLMessage()
+                MainGUI.RemoveOldestHTMLMessage()
                 Count -= 1
                 If HtmlMessages.Count = My.Settings.NofMsgs Then
                     HtmlMessages.RemoveOldest()
@@ -107,8 +108,8 @@ Partial Class Box
                 .InnerHtml = message.Content
             End With
             HtmlMessages.InsertElement(MessageElement, message.Time, doc.GetElementById("container"))
-            Box.ScrollDown()
-            Box.RefreshScroller()
+            MainGUI.ScrollDown()
+            MainGUI.RefreshScroller()
             Count += 1
         End Sub
     End Class

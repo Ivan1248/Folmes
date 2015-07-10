@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports Folmes.Classes
 
-Partial Class Box
+Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
     Private WithEvents UserFilesWatcher As FileSystemWatcher
     Private WithEvents DirectoriesWatcher As FileSystemWatcher

@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Box
+Partial Class MainGUI
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class Box
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Box))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainGUI))
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.InputBGPanel = New System.Windows.Forms.Panel()
@@ -46,7 +46,6 @@ Partial Class Box
         Me.CMOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMExit = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ChannelMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TS = New System.Windows.Forms.ToolStrip()
         Me.TSTools = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TSOptions = New System.Windows.Forms.ToolStripMenuItem()
@@ -261,12 +260,6 @@ Partial Class Box
         Me.CMExit.Size = New System.Drawing.Size(139, 22)
         Me.CMExit.Text = "Exit"
         '
-        'ChannelMenuItem
-        '
-        Me.ChannelMenuItem.Name = "ChannelMenuItem"
-        Me.ChannelMenuItem.Size = New System.Drawing.Size(118, 22)
-        Me.ChannelMenuItem.Text = "Channel"
-        '
         'TS
         '
         Me.TS.AutoSize = False
@@ -369,7 +362,7 @@ Partial Class Box
         Me.TSChat.Size = New System.Drawing.Size(24, 24)
         Me.TSChat.Text = "Chat"
         '
-        'Box
+        'MainGUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -383,7 +376,7 @@ Partial Class Box
         Me.KeyPreview = True
         Me.Margin = New System.Windows.Forms.Padding(2, 3, 2, 3)
         Me.MinimumSize = New System.Drawing.Size(200, 200)
-        Me.Name = "Box"
+        Me.Name = "MainGUI"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Folmes"
@@ -418,7 +411,6 @@ Partial Class Box
     Private WithEvents CMOpenFolder As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Private WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Private WithEvents ChannelMenuItem As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents TS As System.Windows.Forms.ToolStrip
     Private WithEvents TSTools As System.Windows.Forms.ToolStripDropDownButton
     Private WithEvents TSChannels As System.Windows.Forms.ToolStripDropDownButton

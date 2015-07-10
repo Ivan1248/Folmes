@@ -8,7 +8,7 @@ Imports Folmes.Classes
 
 #End Region
 
-Public NotInheritable Class Box
+Public NotInheritable Class MainGUI
     'public = common (synonyms)
 
     '//////// Učitavanje i zatvaranje, prijava i odjava /////////////////////////////////////
@@ -36,24 +36,23 @@ Public NotInheritable Class Box
             MakeDir(Path.Combine(MessagesDir, My.Settings.Username))
 
             'Učitavanje datoteka i poruka
-            With Output
-                Dim messagesLoad As WebBrowserDocumentCompletedEventHandler =
-                        Sub()
-                            OutputHtmlMessages.LoadInitial_Once()
-                            RemoveHandler Output.DocumentCompleted, messagesLoad
-                        End Sub
-                AddHandler .DocumentCompleted, messagesLoad
-                .Document.Write(DefaultHtml)
-                .Visible = True
-                '.BringToFront() 'da ne bude iza gornje trake
-                LoadBaseHtml(Me.Output, {})
-            End With
             MessageFiles.GetCommon()
             MessageFiles.SelectedIngoing = MessageFiles.IngoingCommon
             MessageFiles.SelectedOutgoing = MessageFiles.OutgoingCommon
             MessageFiles.GetIngoingPrivate() 'potrebno za pronalazak novih poruka
             UserInfoFiles.GetAll()
             UserInfoFiles.Mine.SetOnlineStatus(True)
+            With Output
+                Dim messagesLoad As WebBrowserDocumentCompletedEventHandler =
+                        Sub()
+                            RemoveHandler Output.DocumentCompleted, messagesLoad
+                            OutputHtmlMessages.LoadInitial_Once()
+                        End Sub
+                AddHandler .DocumentCompleted, messagesLoad ' BUG: FIRES TWICE
+                .Document.Write(DefaultHtml)
+                .Visible = True
+                LoadBaseHtml(Me.Output, {})
+            End With
 
             'Sučelje
             AddHandler Panel2.MouseUp, AddressOf Panel2_MouseUp
@@ -305,7 +304,7 @@ Public NotInheritable Class Box
 #End Region
 
     Private Sub TSCMOptions_Click(sender As Object, e As EventArgs) Handles TSOptions.Click, CMOptions.Click
-        Config.Show()
+        Settings.Show()
     End Sub
 
     Private Sub TSCleaner_Click(sender As Object, e As EventArgs) Handles TSCleaner.Click

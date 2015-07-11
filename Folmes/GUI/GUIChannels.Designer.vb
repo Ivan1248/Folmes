@@ -17,10 +17,10 @@ Partial Public Class MainGUI
         Dim showSeparator As Boolean = False
         For Each userFile As UserInfoFile In UserInfoFiles.Others
             showSeparator = True
-            Dim channelTsMenuItem As New ToolStripMenuItem(userFile.Name) With {.ForeColor = Color.FromArgb(176, 176, 176)}
+            Dim channelTsMenuItem As New ToolStripMenuItem(userFile.Username) With {.ForeColor = Color.FromArgb(176, 176, 176)}
             Dim status As Integer = 0
             If userFile.Online Then status = 1
-            If Channels.Current <> userFile.Name AndAlso AnyNewMessages(userFile.Name) Then status = status Or 2
+            If Channels.Current <> userFile.Username AndAlso AnyNewMessages(userFile.Username) Then status = status Or 2
             With channelTsMenuItem
                 Select Case status
                     Case 0 : .Image = Nothing

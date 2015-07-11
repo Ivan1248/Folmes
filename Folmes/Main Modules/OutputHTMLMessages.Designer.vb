@@ -59,9 +59,16 @@ Partial Class MainGUI
                     NextFile = MessageFiles.SelectedOutgoing
                 End If
                 If CurrTime = 0 Then Exit For
-                LoadMessageToOutput(NextFile.GetNextOlder)
+                LoadMessageToOutput(NextFile.GetNextOlder())
             Next
         End Sub
+
+        Shared Sub LoadNew_File(msgFile As MessageFile)
+            While msgFile.NewQueueLength > 0
+                LoadMessageToOutput(msgFile.GetNextNewer())
+            End While
+        End Sub
+
         Shared Sub LoadNew() ' učitava sve nove poruke od najstarije poslije otvaranja
             Dim NextFile As MessageFile = Nothing
             Dim CurrTime As Long

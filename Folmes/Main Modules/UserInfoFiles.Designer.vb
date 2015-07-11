@@ -11,7 +11,7 @@ Partial Class MainGUI
             Dim UIFiles As String() = Directory.GetFiles(UsersDir, "*" & Files.Extension.UserInfo)
             For Each File As String In UIFiles
                 Dim Username As String = Path.GetFileNameWithoutExtension(File)
-                Dim NewFile As UserInfoFile = New UserInfoFile(File) With {.Name = Username}
+                Dim NewFile As UserInfoFile = New UserInfoFile(File) With {.Username = Username}
                 If Username <> My.Settings.Username Then
                     Others.Add(NewFile)
                 ElseIf Mine Is Nothing Then
@@ -19,11 +19,11 @@ Partial Class MainGUI
                 End If
             Next
             If Mine Is Nothing Then
-                Mine = New UserInfoFile(Path.Combine(UsersDir, My.Settings.Username & Files.Extension.UserInfo)) With {.Name = My.Settings.Username}
+                Mine = New UserInfoFile(Path.Combine(UsersDir, My.Settings.Username & Files.Extension.UserInfo)) With {.Username = My.Settings.Username}
             End If
         End Sub
         Shared Function IsOnline(userName As String) As Boolean
-            Dim UIFile As UserInfoFile = Others.Find(Function(x) x.Name = userName)
+            Dim UIFile As UserInfoFile = Others.Find(Function(x) x.Username = userName)
             Return If(UIFile IsNot Nothing, UIFile.Online, False)
         End Function
 

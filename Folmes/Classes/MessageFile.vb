@@ -36,7 +36,7 @@ Namespace Classes
     ''' <summary>
     '''     OLD - was in the file at the moment of opening
     '''     NEW - appeared in the file after it has been opened 
-    ''' </summary
+    ''' </summary>
     Public Class MessageFile
         Implements IDisposable
 
@@ -59,39 +59,40 @@ Namespace Classes
         Public ReadOnly Sender As String
         Public ReadOnly Recipient As String
         ' OldQueue
-        Private _oldQueueLength As Integer
-        Private _nextUnreadOldIndex As Integer    ' the newest unread old message
-        Private _nextNewestUnreadOldTime As Long
+        Private _oldQueue_Length As Integer
+        Private _oldQueue_NextIndex As Integer    ' the newest unread old message
+        Private _oldQueue_NextTime As Long
         ' NewQueue
-        Private _newQueueLength As Integer = 0
-        Private _nextUnreadNewIndex As Integer = 0      ' the oldest unread new message
-        Private _nextUnreadNewTime As Long
+        Private _newQueue_Length As Integer = 0
+        Private _newQueue_NextIndex As Integer = 0      ' the oldest unread new message
+        Private _newQueue_NextTime As Long
         'Newest message
-        Private _newestIndex As Integer = -B              ' the absolutely newest message
+        Private _newestIndex As Integer = Decr(0)              ' the absolutely newest message
+        Private _newestTime As Long = 0
         'Passed Old I New
         Private _passedLength As Integer = 0     ' 0 za novu datoteku
 
         ReadOnly Property OldQueueLength() As Integer
             Get
-                Return _oldQueueLength
+                Return _oldQueue_Length
             End Get
         End Property
 
         ReadOnly Property NextUnreadOldTime() As Long
             Get
-                Return _nextNewestUnreadOldTime
+                Return _oldQueue_NextTime
             End Get
         End Property
 
         ReadOnly Property NewQueueLength() As Integer
             Get
-                Return _newQueueLength
+                Return _newQueue_Length
             End Get
         End Property
 
         ReadOnly Property NextUnreadNewTime() As Long
             Get
-                Return _nextUnreadNewTime
+                Return _newQueue_NextTime
             End Get
         End Property
 
@@ -154,16 +155,17 @@ Namespace Classes
             If currTime = 0 Then Exit Sub
 
             Do ' Find the newest message
-                _nextNewestUnreadOldTime = currTime
+                _oldQueue_NextTime = currTime
                 I = Incr(I)
                 currTime = GetTime(I)
-            Loop While currTime > _nextNewestUnreadOldTime
+            Loop While currTime > _oldQueue_NextTime
 
-            _nextUnreadNewIndex = I
+            _newQueue_NextIndex = I
             _newestIndex = Decr(I)
-            _nextUnreadOldIndex = _newestIndex
+            _newestTime = GetTime(_newestIndex)
+            _oldQueue_NextIndex = _newestIndex
 
-            _oldQueueLength = If(GetTime(I) = 0, I \ B, N * B)
+            _oldQueue_Length = If(GetTime(I) = 0, I \ B, N * B)
         End Sub
 
         ''' <summary>
@@ -171,42 +173,51 @@ Namespace Classes
         '''     Mijenja OldQueue i Passed ako je potrebno.
         ''' </summary>
         Public Sub ReadNew()
-            Static newestTime As Long = 0
+            Dim lastTime As Long = _newestTime
             Dim I As Integer = _newestIndex
             Dim currTime As Long
 
-            I = Incr(I)
-            ReadBlock(I)
+            I = Incr(I) : ReadBlock(I)
             currTime = GetTime(I)
 
-            If currTime < newestTime Then Exit Sub
+            If currTime < lastTime Then Exit Sub ' case: no new messages
 
-            If _newQueueLength = 0 Then _nextUnreadNewTime = currTime 'ako je NewQueueLength dosad bilo jednako 0
-
+            If _newQueue_Length = 0 Then _newQueue_NextTime = currTime
             Do
-                _newQueueLength += 1             'amortizacija, nije potrebno kasnije smanjiti
-                newestTime = currTime
-                I = Incr(I)
-                ReadBlock(I)
+                _newQueue_Length += 1             'amortizacija, nije potrebno kasnije smanjiti
+                lastTime = currTime
+                I = Incr(I) : ReadBlock(I)
                 currTime = GetTime(I)
-            Loop While currTime > newestTime
+            Loop While currTime > lastTime
 
-            ReadBlock(_newestIndex) 'prošli NewestIndex
-            If GetTime(_newestIndex) <> newestTime Then 'sve poruke su nove
-                _newQueueLength = N
-                _nextUnreadNewIndex = Incr(_newestIndex)
-                _nextUnreadNewTime = GetTime(_nextUnreadNewIndex)
+            ' check whether there is more than N new messages
+            ReadBlock(_newestIndex)
+            If GetTime(_newestIndex) <> _newestTime Then ' all messages new (overwritten)
+                _newQueue_Length = N
+                _newQueue_NextIndex = Incr(_newestIndex)
+                _newQueue_NextTime = GetTime(_newQueue_NextIndex)
                 _passedLength = 0
-                _oldQueueLength = 0
-            ElseIf _newQueueLength >= N - _passedLength Then 'nema starih, ali nije sve puno
-                _passedLength = N - _newQueueLength
-                _oldQueueLength = 0
-            ElseIf _newQueueLength > N - (_passedLength + _oldQueueLength) Then _
-                'neke nove su zapisane na mjesto nesvih startih
-                _oldQueueLength = N - (_passedLength + _newQueueLength)
+                _oldQueue_Length = 0
+            ElseIf _newQueue_Length >= N - _passedLength Then ' oldQueue messages overwritten
+                _passedLength = N - _newQueue_Length
+                _oldQueue_Length = 0
+            ElseIf _newQueue_Length > N - (_passedLength + _oldQueue_Length) Then ' some oldQueue messsages overwritten
+                _oldQueue_Length = N - (_passedLength + _newQueue_Length)
             End If
 
             _newestIndex = Decr(I)
+            _newestTime = lastTime
+        End Sub
+
+        Sub ConvertOldQueueToNewQueue()
+            _newQueue_Length += _oldQueue_Length
+            _newQueue_NextIndex = Incr(_oldQueue_NextIndex - B * _oldQueue_Length)
+            _newQueue_NextTime = GetTime(_newQueue_NextIndex)
+
+            _newestIndex = Decr(_newQueue_NextIndex + B * _newQueue_Length)
+            _newestTime = GetTime(_newestIndex)
+
+            _oldQueue_Length = 0
         End Sub
 
 #End Region
@@ -240,13 +251,13 @@ Namespace Classes
         Public Function GetNextOlder() As Message
             GetNextOlder = New Message With {
                 .Sender = Sender,
-                .Content = GetString(_nextUnreadOldIndex),
-                .Time = _nextNewestUnreadOldTime,
-                .Type = GetMessageType(_nextUnreadOldIndex)
+                .Content = GetString(_oldQueue_NextIndex),
+                .Time = _oldQueue_NextTime,
+                .Type = GetMessageType(_oldQueue_NextIndex)
                 }
-            _oldQueueLength -= 1
-            _nextUnreadOldIndex = Decr(_nextUnreadOldIndex)
-            If _oldQueueLength > 0 Then _nextNewestUnreadOldTime = GetTime(_nextUnreadOldIndex)
+            _oldQueue_Length -= 1
+            _oldQueue_NextIndex = Decr(_oldQueue_NextIndex)
+            If _oldQueue_Length > 0 Then _oldQueue_NextTime = GetTime(_oldQueue_NextIndex)
             _passedLength += 1
         End Function
 
@@ -256,13 +267,13 @@ Namespace Classes
         Public Function GetNextNewer() As Message
             GetNextNewer = New Message With {
                 .Sender = Sender,
-                .Type = GetMessageType(_nextUnreadNewIndex),
-                .Content = GetString(_nextUnreadNewIndex),
-                .Time = _nextUnreadNewTime
+                .Type = GetMessageType(_newQueue_NextIndex),
+                .Content = GetString(_newQueue_NextIndex),
+                .Time = _newQueue_NextTime
                 }
-            _newQueueLength -= 1
-            _nextUnreadNewIndex = Incr(_nextUnreadNewIndex)
-            If _newQueueLength > 0 Then _nextUnreadNewTime = GetTime(_nextUnreadNewIndex)
+            _newQueue_Length -= 1
+            _newQueue_NextIndex = Incr(_newQueue_NextIndex)
+            If _newQueue_Length > 0 Then _newQueue_NextTime = GetTime(_newQueue_NextIndex)
             _passedLength += 1
         End Function
 

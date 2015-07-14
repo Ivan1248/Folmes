@@ -42,6 +42,7 @@ Partial Public Class MainGUI
             With TSChannels
                 If channel = Channels.PublicChannel Then
                     Channels.Current = Channels.PublicChannel
+                    MessageFiles.SwitchCommonChannel()
                     .AutoSize = True
                     TSChat.Visible = False
                 Else 'PRIVATE

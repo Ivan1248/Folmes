@@ -6,43 +6,43 @@ Partial Class MainGUI
     Private Class OutputHtmlMessages
         Public Structure CachedChannelHtml
             Dim Channel As String
-            Dim HtmlContents As String
-            Dim Count As Integer
+            Dim HtmlContent As String
+            Dim HtmlMessages As HtmlMessageList
+            Sub New(channel As String, htmlContent As String, htmlMessages As HtmlMessageList)
+                Me.Channel = channel
+                Me.HtmlContent = htmlContent
+                Me.HtmlMessages=htmlMessages
+            End Sub
         End Structure
         Protected Shared CachedChannelHtmls As New List(Of CachedChannelHtml)
         Shared Sub CacheChannelHtml()
             If CachedChannelHtmls IsNot Nothing Then
                 For Each C As CachedChannelHtml In CachedChannelHtmls
                     If C.Channel = Channels.Current Then
-                        C.HtmlContents = MainGUI.Output.Document.GetElementById("container").InnerHtml
-                        C.Count = Count
+                        C.HtmlContent = MainGUI.Output.Document.GetElementById("container").InnerHtml
+                        C.HtmlMessages = HtmlMessages
                         Exit Sub
                     End If
                 Next
             End If
             Dim a As HtmlDocument = MainGUI.Output.Document
-            CachedChannelHtmls.Add(New CachedChannelHtml With {.Channel = Channels.Current, .HtmlContents = MainGUI.Output.Document.GetElementById("container").InnerHtml, .Count = Count})
+            CachedChannelHtmls.Add(New CachedChannelHtml(Channels.Current, MainGUI.Output.Document.GetElementById("container").InnerHtml, HtmlMessages))
         End Sub
         Shared Function LoadCachedChannelHtml() As Boolean
             If CachedChannelHtmls IsNot Nothing Then
                 For Each C As CachedChannelHtml In CachedChannelHtmls
                     If C.Channel = Channels.Current Then
-                        MainGUI.Output.Document.GetElementById("container").InnerHtml = C.HtmlContents
-                        Count = C.Count
-                        'HTMLMessages = C.List
-                        HtmlMessages = New HtmlMessageList
+                        MainGUI.Output.Document.GetElementById("container").InnerHtml = C.HtmlContent
+                        HtmlMessages = C.HtmlMessages.RefreshReferences(MainGUI.Output.Document.GetElementById("container"))
                         Return True
                     End If
                 Next
             End If
             MainGUI.Output.Document.GetElementById("container").InnerHtml = String.Empty
-            HtmlMessages = New HtmlMessageList
-            Count = 0
+            HtmlMessages = New HtmlMessageList()
             Return False
         End Function
-
-        Private Shared HtmlMessages As New HtmlMessageList  'For inserting ordered by datetime
-        Friend Shared Count As Integer = 0
+        Private Shared HtmlMessages As New HtmlMessageList()  'For inserting ordered by datetime
         Public Shared Sub LoadInitial_Once() ' učitava stare poruke do najnovije prije otvaranja
             Dim NextFile As MessageFile = Nothing
             Dim CurrTime As Long
@@ -90,9 +90,8 @@ Partial Class MainGUI
         End Sub
         Shared Sub LoadMessageToOutput(message As Message)
             Dim doc As HtmlDocument = MainGUI.Output.Document
-            While Count >= My.Settings.NofMsgs
+            While HtmlMessages.Count >= My.Settings.NofMsgs
                 MainGUI.RemoveOldestHTMLMessage()
-                Count -= 1
                 If HtmlMessages.Count = My.Settings.NofMsgs Then
                     HtmlMessages.RemoveOldest()
                 End If
@@ -117,11 +116,10 @@ Partial Class MainGUI
             HtmlMessages.InsertElement(MessageElement, message.Time, doc.GetElementById("container"))
             MainGUI.ScrollDown()
             MainGUI.RefreshScroller()
-            Count += 1
         End Sub
     End Class
 
-#Region "Script"
+#Region "Javascript"
     Private Sub RefreshScroller()
         Output.Document.InvokeScript("refreshScroller")
     End Sub
@@ -129,7 +127,7 @@ Partial Class MainGUI
         Output.Document.InvokeScript("scrollDown", {0})
     End Sub
     Private Sub RemoveOldestHTMLMessage()
-        Output.Document.InvokeScript("refreshScroller")
+        Output.Document.InvokeScript("removeFirst")
     End Sub
 #End Region
 
@@ -141,34 +139,34 @@ Public Class HtmlMessageList
     Public Count As Integer = 0
     Sub InsertElement(message As HtmlElement, time As Long, container As HtmlElement)
         Dim Node As New HtmlMessageNode(message, time)
-        Count += 1
+        Me.Count += 1
         If Oldest Is Nothing Then   ' nema ničega
-            Newest = Node
-            Oldest = Node
+            Me.Newest = Node
+            Me.Oldest = Node
             container.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterBegin, message)
-        ElseIf time >= Newest.Time Then ' novija od najstarije
-            Newest.Succeeding = Node
-            Node.Preceeding = Newest
-            Newest = Node
+        ElseIf time >= Newest.Time Then ' novija od najnovije
+            Me.Newest.Succeeding = Node
+            Node.Preceeding = Me.Newest
+            Me.Newest = Node
             container.InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, message)
-        ElseIf time < Oldest.Time Then ' starija od najnovije
-            Node.Succeeding = Oldest
-            Oldest.Preceeding = Node
-            Oldest = Node
+        ElseIf time < Oldest.Time Then ' starija od najstarije
+            Node.Succeeding = Me.Oldest
+            Me.Oldest.Preceeding = Node
+            Me.Oldest = Node
             container.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterBegin, message)
         Else
             Dim Current, Preceeding As HtmlMessageNode
-            Current = Newest
+            Current = Me.Newest
             Preceeding = Current.Preceeding
             While time < Preceeding.Time
                 Current = Preceeding
-                Preceeding = Current.Preceeding
+                Preceeding = Preceeding.Preceeding
             End While 'Current.Preceeding < Node < Current
             Node.Preceeding = Preceeding
             Node.Succeeding = Current
             Current.Preceeding = Node
             Preceeding.Succeeding = Node
-            Preceeding.Message.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterEnd, message)
+            Preceeding.MessageHtmlElement.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterEnd, message)
         End If
     End Sub
     Sub RemoveOldest()
@@ -180,15 +178,25 @@ Public Class HtmlMessageList
         End If
         Oldest.Succeeding.Preceeding = Oldest
     End Sub
+
+    Function RefreshReferences(container As HtmlElement) As HtmlMessageList
+        Dim Current As HtmlMessageNode = Oldest
+        Dim MessageElements As HtmlElementCollection = container.Children
+        For i As Integer = 0 To MessageElements.Count - 1
+            Current.MessageHtmlElement = MessageElements(i)
+            Current = Current.Succeeding
+        Next
+        Return Me
+    End Function
+
     Private Class HtmlMessageNode
-        Public Message As HtmlElement
+        Public MessageHtmlElement As HtmlElement
         Public Time As Long
         Public Preceeding As HtmlMessageNode = Nothing
         Public Succeeding As HtmlMessageNode = Nothing
         Sub New(message As HtmlElement, time As Long)
-            Me.Message = message
+            Me.MessageHtmlElement = message
             Me.Time = time
         End Sub
     End Class
-
 End Class

@@ -29,6 +29,11 @@ Partial Class MainGUI
                 IngoingPrivate.Add(NewFile)
             Next
         End Sub
+        Shared Sub SwitchCommonChannel()
+            MessageFiles.SelectedIngoing = MessageFiles.IngoingCommon
+            MessageFiles.SelectedOutgoing = MessageFiles.OutgoingCommon
+        End Sub
+
         Shared Sub SwitchPrivateChannel(ByVal channelName As String)
             SelectedIngoing = New List(Of MessageFile)
             Dim MsgFile As MessageFile
@@ -39,7 +44,7 @@ Partial Class MainGUI
                     End If
                 Next
             End If
-            Dim fpath As String= Path.Combine(MessagesDir, My.Settings.Username, channelName & Files.Extension.Message)
+            Dim fpath As String = Path.Combine(MessagesDir, My.Settings.Username, channelName & Files.Extension.Message)
             If File.Exists(fpath) Then
                 MsgFile = New MessageFile(fpath, False, channelName, My.Settings.Username)
                 IngoingPrivate.Add(MsgFile)

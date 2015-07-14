@@ -37,8 +37,7 @@ Public NotInheritable Class MainGUI
 
             'Učitavanje datoteka i poruka
             MessageFiles.GetCommon()
-            MessageFiles.SelectedIngoing = MessageFiles.IngoingCommon
-            MessageFiles.SelectedOutgoing = MessageFiles.OutgoingCommon
+            MessageFiles.SwitchCommonChannel()
             MessageFiles.GetIngoingPrivate() 'potrebno za pronalazak novih poruka
             UserInfoFiles.GetAll()
             UserInfoFiles.Mine.SetOnlineStatus(True)

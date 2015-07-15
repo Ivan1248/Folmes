@@ -133,14 +133,14 @@ Public NotInheritable Class MainGUI
 
     Friend Function SendMessage(messageType As Message.MessageType) As Boolean
         If Not DetectAndCopyFiles(Input.Text) Then Return False
-        Dim msg As _
-                New Message() _
+        Dim msg As New Message() _
                 With {.Sender = My.Settings.Username, .Type = messageType, .Time = DateTime.UtcNow.ToBinary()}
-        If messageType = Message.MessageType.Reflexive Then
-            msg.Content = HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
-        Else
-            msg.Content = HtmlizeMessageContent(Input.Text)
-        End If
+        Select Case messageType
+            Case Message.MessageType.Normal, Message.MessageType.Declaration
+                msg.Content = HtmlizeMessageContent(Input.Text)
+            Case Message.MessageType.Reflexive
+                msg.Content = HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
+        End Select
         If Channels.Current = Channels.PublicChannel Then
             MessageFiles.OutgoingCommon.StoreEntry(msg)
         Else
@@ -374,4 +374,7 @@ Public NotInheritable Class MainGUI
 
 #End Region
 
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        MsgBox(Asc(CChar(vbLf)))
+    End Sub
 End Class

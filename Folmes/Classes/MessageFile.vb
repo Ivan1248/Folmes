@@ -165,7 +165,7 @@ Namespace Classes
             _newestTime = GetTime(_newestIndex)
             _oldQueue_NextIndex = _newestIndex
 
-            _oldQueue_Length = If(GetTime(I) = 0, I \ B, N * B)
+            _oldQueue_Length = If(GetTime(I) = 0, I \ B, N)
         End Sub
 
         ''' <summary>

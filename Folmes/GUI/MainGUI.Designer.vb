@@ -132,6 +132,7 @@ Partial Class MainGUI
         '
         'Input
         '
+        Me.Input.AcceptsTab = True
         Me.Input.AllowDrop = True
         Me.Input.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
         Me.Input.BorderStyle = System.Windows.Forms.BorderStyle.None

@@ -4,7 +4,6 @@ ako budem mijenjao framework, trebat æe promijeniti 2.0.0.0/4.0.0.0 u App.config
 
 	BUG: ne može otvoriti userinfo datoteku kada se osvježava
 	BUG: dugaèka poruka
-	BUG: ne valja redoslije uèitavanja
 
     NeZaboraviti: optimizirati javascript
     NeZaboraviti: Box - owner za sve ?

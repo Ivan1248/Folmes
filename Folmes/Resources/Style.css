@@ -2,7 +2,7 @@ body { background-color:#1e1e1e; color:#a9a9a9; font-family:"Segoe UI",Arial,san
 img { cursor:pointer; display:block; max-width:100%; }
 
 ::selection { background:rgba(255,255,255,0.1); color:#ddd; }
-a:link,a:visited,.url { color:#48b; cursor:pointer; text-decoration:none; transition:color .1s ease; }
+a:link,a:visited,.url { color:#48b; cursor:pointer; text-decoration:none; transition:color .0s ease; }
 a:hover,.url:hover { color:#5ad; cursor:pointer; }
 a:active { color:#48b; }
 

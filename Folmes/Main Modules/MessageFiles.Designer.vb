@@ -29,6 +29,7 @@ Partial Class MainGUI
                 IngoingPrivate.Add(NewFile)
             Next
         End Sub
+
         Shared Sub SwitchCommonChannel()
             MessageFiles.SelectedIngoing = MessageFiles.IngoingCommon
             MessageFiles.SelectedOutgoing = MessageFiles.OutgoingCommon

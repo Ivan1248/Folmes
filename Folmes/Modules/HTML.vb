@@ -53,6 +53,16 @@ Module Html
         For i As Integer = 0 To content.Length - 1
             If SpaceChars.Contains(content(i)) Then
                 canBeUri = True
+                Dim esc As String
+                Select Case content(i)
+                    Case " "c : esc = "&nbsp;" ' CR
+                    Case Chr(13) : esc = "" ' CR
+                    Case Chr(10) : esc = "<br>" ' LF
+                    Case Chr(9) : esc = "&emsp;" ' tab
+                    Case Else : Continue For
+                End Select
+                sb.Append(content, lastEnd + 1, i - 1 - lastEnd).Append(esc)
+                lastEnd = i
             ElseIf canBeUri And content(i) = "."c And i > 0 Then
                 Dim urlSpan As Tuple(Of Integer, Integer) = DetectUrlAroundDot(content, i)
                 start = urlSpan.Item1
@@ -80,8 +90,6 @@ Module Html
                     Case """"c : esc = "&quot;"
                     Case "<"c : esc = "&lt;"
                     Case ">"c : esc = "&gt;"
-                    Case Chr(13) : esc = String.Empty
-                    Case Chr(10) : esc = "<br>"
                     Case Else : Continue For
                 End Select
                 sb.Append(esc)

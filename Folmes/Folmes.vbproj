@@ -116,6 +116,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Datatypes\Message.vb" />
     <Compile Include="Classes\UserInfoFile.vb" />
     <Compile Include="Classes\MessageFile.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">

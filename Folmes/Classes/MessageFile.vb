@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text
+Imports Folmes.Datatypes
 Imports SharpFolmes
 
 Namespace Classes
@@ -18,20 +19,6 @@ Namespace Classes
     '3. OOPPPNNE
     '4. OOPPPPPE
     '5. NNNPPPPN
-
-    Public Class Message
-        Public Sender As String
-        Public Type As MessageType
-        Public Content As String
-        Public Time As Long
-
-        Enum MessageType As Short
-            Normal
-            Reflexive
-            Declaration
-        End Enum
-    End Class
-
 
     ''' <summary>
     '''     OLD - was in the file at the moment of opening
@@ -297,8 +284,8 @@ Namespace Classes
             Return ByteConverter.ToInt64(_memFile, index + DateInd)
         End Function
 
-        Private Function GetMessageType(index As Integer) As Message.MessageType
-            Return DirectCast(ByteConverter.ToInt16(_memFile, index + TypeInd), Message.MessageType)
+        Private Function GetMessageType(index As Integer) As Message.Kind
+            Return DirectCast(ByteConverter.ToInt16(_memFile, index + TypeInd), Message.Kind)
         End Function
 
         Private Sub ReadBlock(I As Integer)

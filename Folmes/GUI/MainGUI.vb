@@ -5,6 +5,7 @@
 Imports System.IO
 Imports System.Reflection
 Imports Folmes.Classes
+Imports Folmes.Datatypes
 
 #End Region
 
@@ -63,7 +64,7 @@ Public NotInheritable Class MainGUI
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
                 OutputHtmlMessages.LoadMessageToOutput(
-                    New Message With {.Type = Message.MessageType.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
+                    New Message With {.Type = Message.Kind.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
             End Try
@@ -123,22 +124,22 @@ Public NotInheritable Class MainGUI
             command = Input.Text.Substring(1, If(I <> -1, I, Input.Text.Length) - 1)
         End If
         Select Case command
-            Case Nothing : If SendMessage(Message.MessageType.Normal) Then Input.Clear()
-            Case "me" : If SendMessage(Message.MessageType.Reflexive) Then Input.Clear()
-            Case "put" : If SendMessage(Message.MessageType.Declaration) Then Input.Clear()
+            Case Nothing : If SendMessage(Message.Kind.Normal) Then Input.Clear()
+            Case "me" : If SendMessage(Message.Kind.Reflexive) Then Input.Clear()
+            Case "put" : If SendMessage(Message.Kind.Declaration) Then Input.Clear()
             Case "ping" : If Ping(Input.Text.Substring(6)) Then Input.Clear()
             Case "exit", "close" : Me.Close()
         End Select
     End Sub
 
-    Friend Function SendMessage(messageType As Message.MessageType) As Boolean
+    Friend Function SendMessage(messageType As Message.Kind) As Boolean
         If Not DetectAndCopyFiles(Input.Text) Then Return False
         Dim msg As New Message() _
                 With {.Sender = My.Settings.Username, .Type = messageType, .Time = DateTime.UtcNow.ToBinary()}
         Select Case messageType
-            Case Message.MessageType.Normal, Message.MessageType.Declaration
+            Case Message.Kind.Normal, Message.Kind.Declaration
                 msg.Content = HtmlizeMessageContent(Input.Text)
-            Case Message.MessageType.Reflexive
+            Case Message.Kind.Reflexive
                 msg.Content = HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
         End Select
         If Channels.Current = Channels.PublicChannel Then

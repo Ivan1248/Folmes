@@ -1,9 +1,10 @@
 ﻿Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Folmes.Classes
+Imports Folmes.Datatypes
 
 Partial Class MainGUI
-    Private Class OutputHtmlMessages
+    Private MustInherit Class OutputHtmlMessages
         Public Structure CachedChannelHtml
             Dim Channel As String
             Dim HtmlContent As String
@@ -11,7 +12,7 @@ Partial Class MainGUI
             Sub New(channel As String, htmlContent As String, htmlMessages As HtmlMessageList)
                 Me.Channel = channel
                 Me.HtmlContent = htmlContent
-                Me.HtmlMessages=htmlMessages
+                Me.HtmlMessages = htmlMessages
             End Sub
         End Structure
         Protected Shared CachedChannelHtmls As New List(Of CachedChannelHtml)
@@ -102,7 +103,7 @@ Partial Class MainGUI
                 .SetAttribute("className", "time")
                 .InnerText = DateTime.FromBinary(message.Time).ToLocalTime.ToString("dd.MM.yyyy. HH:mm")
             End With
-            If message.Type = message.MessageType.Normal Then
+            If message.Type = message.Kind.Normal Then
                 With MessageElement.AppendChild(doc.CreateElement("SPAN"))
                     .SetAttribute("className", "name")
                     .SetAttribute("style", "color:" & My.Settings.UsernameColor) 'zamijeniti boju

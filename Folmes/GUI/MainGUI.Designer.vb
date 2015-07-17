@@ -202,7 +202,9 @@ Partial Class MainGUI
         '
         'Output
         '
+        Me.Output.AllowNavigation = False
         Me.Output.AllowWebBrowserDrop = False
+        Me.Output.CausesValidation = False
         Me.Output.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Output.IsWebBrowserContextMenuEnabled = False
         Me.Output.Location = New System.Drawing.Point(0, 24)

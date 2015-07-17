@@ -1,14 +1,15 @@
 BUGOVI
 
-ako budem mijenjao framework, trebat æe promijeniti 2.0.0.0/4.0.0.0 u App.configu u 4.0.0.0/nešto drugo
+ako budem mijenjao framework, trebat æu promijeniti 2.0.0.0/4.0.0.0 u App.configu u 4.0.0.0/nešto drugo
 
 	BUG: ne može otvoriti userinfo datoteku kada se osvježava
-	BUG: dugaèka poruka
+	BUG: dugaèka poruka => krivi zapis => problemi u èitanju i prikazu (ništa prikazano)
 
     NeZaboraviti: optimizirati javascript
     NeZaboraviti: Box - owner za sve ?
     NeZaboraviti: ikone na svim prozorima
     NeZaboraviti: standardizirati boje i simbole
+	NeZaboraviti: CausesValidation?
 
 	javascript redak 96 invalid argument
 

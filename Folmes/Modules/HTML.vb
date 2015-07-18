@@ -2,40 +2,10 @@
 
 Module Html
 
-    Public Const DefaultHtml As String = "<html><head></head><body style=""background-color:#222""></body></html>"
 
     Const SpaceChars As String = " "c & vbCr & vbLf & vbTab
 
-    Public Sub LoadBaseHtml(callerOutput As WebBrowser, scripts As String())
-        With New StringBuilder() 'kapacitet
-            'HTML start
-            .Append("<!DOCTYPE html>" &
-                    "<html>" &
-                    "<head>" &
-                    "<meta name=""viewport"" content=""user-scalable=no, initial-scale=1"">" &
-                    "<meta http-equiv=""X-UA-Compatible"" content=""IE=edge"">" &
-                    "<style type=""text/css"">")
-            '       style
-            .Append("body{font-size:").Append(My.Settings.FontSize)
-            .Append("px;line-height:").Append(Math.Round(My.Settings.FontSize * 4 / 3))
-            .Append("px} img{max-height:").Append(My.Settings.ThumbnailHeight).Append("px} ")
-            .Append(My.Resources.Style)
-            .Append("</style><script>")
-            '       script
-            .Append(My.Resources.ScrollScript).Append(vbNewLine).Append(My.Resources.Script)
-            For Each scr As String In scripts
-                .Append(scr)
-            Next
-            '   body
-            .Append("</script></head>" &
-                    "<body data-click="""" data-sel="""">" &
-                    "<div id=""container"">")
-            '' U ELEMENTU ID = "container" NALAZE SE PORUKE ''
-            .Append(
-                "</div><div id=""scroller""></div><div id=""scrollertrack""></div><div id=""copybtn"">Copy</div></body></html>")
-            callerOutput.DocumentText = .ToString()
-        End With
-    End Sub
+
 
     ' 2 točke ili protokol i jedna točka do prvog razmaka (/s ili /n ili /r ili kraj)
     ' {x}.{x}.{x} ili {x}://{x}.{x}

@@ -37,7 +37,7 @@ Partial Class MainGUI
         Me.SelectAllBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopyO = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Output = New System.Windows.Forms.WebBrowser()
+        Me.Output = New MessagesContainer()
         Me.NotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CMShow = New System.Windows.Forms.ToolStripMenuItem()
@@ -46,7 +46,7 @@ Partial Class MainGUI
         Me.CMOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMExit = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TS = New System.Windows.Forms.ToolStrip()
+        Me.TS = New NFToolStrip()
         Me.TSTools = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TSOptions = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSCleaner = New System.Windows.Forms.ToolStripMenuItem()
@@ -202,19 +202,13 @@ Partial Class MainGUI
         '
         'Output
         '
-        Me.Output.AllowNavigation = False
-        Me.Output.AllowWebBrowserDrop = False
         Me.Output.CausesValidation = False
         Me.Output.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Output.IsWebBrowserContextMenuEnabled = False
         Me.Output.Location = New System.Drawing.Point(0, 24)
         Me.Output.Margin = New System.Windows.Forms.Padding(0)
         Me.Output.MinimumSize = New System.Drawing.Size(20, 20)
-        Me.Output.Name = "Output"
-        Me.Output.ScrollBarsEnabled = False
         Me.Output.Size = New System.Drawing.Size(374, 200)
         Me.Output.TabIndex = 12
-        Me.Output.Url = New System.Uri("", System.UriKind.Relative)
         '
         'NotifyIcon
         '
@@ -275,7 +269,6 @@ Partial Class MainGUI
         Me.TS.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.TS.Size = New System.Drawing.Size(374, 24)
         Me.TS.TabIndex = 11
-        Me.TS.Text = "ToolStrip1"
         '
         'TSTools
         '
@@ -414,13 +407,13 @@ Partial Class MainGUI
     Private WithEvents CMOpenFolder As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Private WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Private WithEvents TS As System.Windows.Forms.ToolStrip
+    Private WithEvents TS As NFToolStrip
     Private WithEvents TSTools As System.Windows.Forms.ToolStripDropDownButton
     Private WithEvents TSChannels As System.Windows.Forms.ToolStripDropDownButton
     Private WithEvents PublicChannel As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents TSChat As System.Windows.Forms.ToolStripButton
     Friend WithEvents Input As System.Windows.Forms.TextBox
-    Friend WithEvents Output As System.Windows.Forms.WebBrowser
+    Friend WithEvents Output As MessagesContainer
     Friend WithEvents NotifyIcon As System.Windows.Forms.NotifyIcon
     Friend WithEvents PubPrivChSeparator As System.Windows.Forms.ToolStripSeparator
     Private WithEvents TSOptions As System.Windows.Forms.ToolStripMenuItem

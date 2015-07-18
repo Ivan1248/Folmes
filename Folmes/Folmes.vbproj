@@ -117,10 +117,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datatypes\Message.vb" />
-    <Compile Include="Classes\UserInfoFile.vb" />
-    <Compile Include="Classes\MessageFile.vb" />
+    <Compile Include="Classes and Structures\UserInfoFile.vb" />
+    <Compile Include="Classes and Structures\MessageFile.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MessagesContainer.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\NFToolStrip.vb">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Main Modules\PingPong.Designer.vb">
       <SubType>Form</SubType>

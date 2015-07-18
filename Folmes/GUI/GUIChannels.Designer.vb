@@ -38,7 +38,7 @@ Partial Public Class MainGUI
     Private Sub SwitchChannel(channel As String)
         If channel <> Channels.Current Then
             SetLastRead()
-            OutputHtmlMessages.CacheChannelHtml()
+            Me.Output.CacheChannelHtml(Channels.Current)
             With TSChannels
                 If channel = Channels.PublicChannel Then
                     Channels.Current = Channels.PublicChannel
@@ -58,7 +58,7 @@ Partial Public Class MainGUI
                 End If
                 .Text = channel
             End With
-            If Not OutputHtmlMessages.LoadCachedChannelHtml() Then
+            If Not Me.Output.LoadCachedChannelHtml(Channels.Current) Then
                 OutputHtmlMessages.LoadInitial_Once()
             End If
             OutputHtmlMessages.LoadNew()

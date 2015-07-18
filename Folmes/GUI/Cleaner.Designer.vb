@@ -23,7 +23,7 @@ Partial Class Cleaner
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Cleaner))
-        Me.Output = New System.Windows.Forms.WebBrowser()
+        Me.Output = New MessagesContainer()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.DeleteBtn = New System.Windows.Forms.ToolStripButton()
         Me.Toggle = New System.Windows.Forms.ToolStripButton()
@@ -33,10 +33,8 @@ Partial Class Cleaner
         'Output
         '
         Me.Output.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Output.IsWebBrowserContextMenuEnabled = False
         Me.Output.Location = New System.Drawing.Point(0, 28)
         Me.Output.MinimumSize = New System.Drawing.Size(20, 20)
-        Me.Output.Name = "Output"
         Me.Output.Size = New System.Drawing.Size(304, 194)
         Me.Output.TabIndex = 0
         '
@@ -95,5 +93,5 @@ Partial Class Cleaner
     Private ToolStrip1 As System.Windows.Forms.ToolStrip
     Private WithEvents DeleteBtn As System.Windows.Forms.ToolStripButton
     Private WithEvents Toggle As System.Windows.Forms.ToolStripButton
-    Friend WithEvents Output As System.Windows.Forms.WebBrowser
+    Friend WithEvents Output As MessagesContainer
 End Class

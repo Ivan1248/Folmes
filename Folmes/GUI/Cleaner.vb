@@ -6,7 +6,7 @@ Public Class Cleaner
     Private Sub Cleaner_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Owner = MainGUI
         Skin()
-        Html.LoadBaseHtml(Me.Output, {My.Resources.CleanerScripts})
+        Output.LoadBaseHtml({My.Resources.CleanerScripts})
         AddHandler Output.DocumentCompleted, AddressOf LoadList
     End Sub
 
@@ -86,7 +86,7 @@ Public Class Cleaner
                     'End If
                 Next
             End If
-            Me.Output.Document.GetElementById("container").InnerHtml = .ToString
+            Output.Document.GetElementById("container").InnerHtml = .ToString ' = Output.MsgContainer
         End With
     End Sub
 

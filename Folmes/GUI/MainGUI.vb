@@ -43,27 +43,20 @@ Public NotInheritable Class MainGUI
             UserInfoFiles.GetAll()
             UserInfoFiles.Mine.SetOnlineStatus(True)
             With Output
-                Dim messagesLoad As WebBrowserDocumentCompletedEventHandler =
+                Dim messagesLoad As MessagesContainer.MsgContainerLoadedEventHandler =
                         Sub()
-                            RemoveHandler Output.DocumentCompleted, messagesLoad
+                            RemoveHandler Output.MsgContainerLoaded, messagesLoad
                             OutputHtmlMessages.LoadInitial_Once()
                         End Sub
-                AddHandler .DocumentCompleted, messagesLoad ' BUG: FIRES TWICE
-                .Document.Write(DefaultHtml)
-                .Visible = True
-                LoadBaseHtml(Me.Output, {})
+                AddHandler .MsgContainerLoaded, messagesLoad
+                .LoadBaseHtml({})
             End With
-
-            'Sučelje
             AddHandler Panel2.MouseUp, AddressOf Panel2_MouseUp
-            'Povezivanje
-            'IM.connect(PORT)
-            'InternetBGW.RunWorkerAsync() 'SetOnlineStatus(True) uključeno
         Catch ex As Exception
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
-                OutputHtmlMessages.LoadMessageToOutput(
+                Me.Output.LoadMessageToOutput(
                     New Message With {.Type = Message.Kind.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
@@ -152,7 +145,7 @@ Public NotInheritable Class MainGUI
                 End If
             Next
         End If
-        OutputHtmlMessages.LoadMessageToOutput(msg)
+        Me.Output.LoadMessageToOutput(msg)
         Return True
     End Function
 
@@ -176,7 +169,6 @@ Public NotInheritable Class MainGUI
             If InputBGPanel.Height + 80 > Me.ClientSize.Height Then
                 InputBGPanel.Height = Me.ClientSize.Height - 80
             End If
-            RefreshScroller()
         End If
     End Sub
 
@@ -184,7 +176,6 @@ Public NotInheritable Class MainGUI
         Dim modul As Integer = 8 - InputBGPanel.Height Mod 15
         InputBGPanel.Height += modul
         Cursor.Position = New Point(Cursor.Position.X, Cursor.Position.Y - modul)
-        RefreshScroller()
         My.Settings.InputHeight = InputBGPanel.Height '!!!!!!!!!!!!!!!!!!!!!!
     End Sub
 
@@ -261,7 +252,6 @@ Public NotInheritable Class MainGUI
                 Case Is < 23 : InputBGPanel.Height = 23
                 Case Is < Me.ClientSize.Height - 80 : InputBGPanel.Height = h
             End Select
-            RefreshScroller()
         End If
     End Sub
 
@@ -375,7 +365,5 @@ Public NotInheritable Class MainGUI
 
 #End Region
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        MsgBox(Asc(CChar(vbLf)))
-    End Sub
+
 End Class

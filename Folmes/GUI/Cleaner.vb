@@ -6,8 +6,8 @@ Public Class Cleaner
     Private Sub Cleaner_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Owner = MainGUI
         Skin()
-        Output.LoadBaseHtml({My.Resources.CleanerScripts})
-        AddHandler Output.DocumentCompleted, AddressOf LoadList
+        AddHandler Output.Initialized, AddressOf LoadList
+        Output.Initialize({My.Resources.CleanerScripts})
     End Sub
 
     Enum CleanerMode
@@ -66,7 +66,7 @@ Public Class Cleaner
     End Sub
     Private Sub LoadList(sender As Object, e As WebBrowserDocumentCompletedEventArgs)
         LoadList()
-        RemoveHandler Output.DocumentCompleted, AddressOf LoadList
+        RemoveHandler Output.Initialized, AddressOf LoadList
     End Sub
     Private Sub LoadList()
         With New StringBuilder()    'kapacitet

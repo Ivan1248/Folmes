@@ -6,6 +6,7 @@ Imports System.IO
 Imports System.Reflection
 Imports Folmes.Classes
 Imports Folmes.Datatypes
+Imports Folmes.GUI
 
 #End Region
 
@@ -43,20 +44,20 @@ Public NotInheritable Class MainGUI
             UserInfoFiles.GetAll()
             UserInfoFiles.Mine.SetOnlineStatus(True)
             With Output
-                Dim messagesLoad As MessagesContainer.MsgContainerLoadedEventHandler =
+                Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()
-                            RemoveHandler Output.MsgContainerLoaded, messagesLoad
+                            RemoveHandler Output.Initialized, messagesLoad
                             OutputHtmlMessages.LoadInitial_Once()
                         End Sub
-                AddHandler .MsgContainerLoaded, messagesLoad
-                .LoadBaseHtml({})
+                AddHandler .Initialized, messagesLoad
+                .Initialize({})
             End With
             AddHandler Panel2.MouseUp, AddressOf Panel2_MouseUp
         Catch ex As Exception
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
-                Me.Output.LoadMessageToOutput(
+                Me.Output.LoadMessage(
                     New Message With {.Type = Message.Kind.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
@@ -145,7 +146,7 @@ Public NotInheritable Class MainGUI
                 End If
             Next
         End If
-        Me.Output.LoadMessageToOutput(msg)
+        Me.Output.LoadMessage(msg)
         Return True
     End Function
 

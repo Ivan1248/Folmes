@@ -2,7 +2,6 @@
     Public Const PublicChannel As String = "Public Channel"
 
     Public Shared Current As String = PublicChannel 'ovo treba srediti (BOOL)
-
 End Class
 
 Public Class ChannelLastReadTime

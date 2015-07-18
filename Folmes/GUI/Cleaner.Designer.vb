@@ -1,4 +1,6 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿Imports Folmes.GUI
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class Cleaner
     Inherits System.Windows.Forms.Form
 
@@ -23,7 +25,7 @@ Partial Class Cleaner
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Cleaner))
-        Me.Output = New MessagesContainer()
+        Me.Output = New MessagesDisplay()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.DeleteBtn = New System.Windows.Forms.ToolStripButton()
         Me.Toggle = New System.Windows.Forms.ToolStripButton()
@@ -93,5 +95,5 @@ Partial Class Cleaner
     Private ToolStrip1 As System.Windows.Forms.ToolStrip
     Private WithEvents DeleteBtn As System.Windows.Forms.ToolStripButton
     Private WithEvents Toggle As System.Windows.Forms.ToolStripButton
-    Friend WithEvents Output As MessagesContainer
+    Friend WithEvents Output As MessagesDisplay
 End Class

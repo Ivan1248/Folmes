@@ -1,4 +1,6 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿Imports Folmes.GUI
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainGUI
     Inherits System.Windows.Forms.Form
 
@@ -37,7 +39,7 @@ Partial Class MainGUI
         Me.SelectAllBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopyO = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Output = New MessagesContainer()
+        Me.Output = New MessagesDisplay()
         Me.NotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CMShow = New System.Windows.Forms.ToolStripMenuItem()
@@ -413,7 +415,7 @@ Partial Class MainGUI
     Private WithEvents PublicChannel As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents TSChat As System.Windows.Forms.ToolStripButton
     Friend WithEvents Input As System.Windows.Forms.TextBox
-    Friend WithEvents Output As MessagesContainer
+    Friend WithEvents Output As MessagesDisplay
     Friend WithEvents NotifyIcon As System.Windows.Forms.NotifyIcon
     Friend WithEvents PubPrivChSeparator As System.Windows.Forms.ToolStripSeparator
     Private WithEvents TSOptions As System.Windows.Forms.ToolStripMenuItem

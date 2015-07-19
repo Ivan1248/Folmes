@@ -4,6 +4,7 @@
 
 Imports System.IO
 Imports System.Reflection
+Imports System.Text
 Imports Folmes.Classes
 Imports Folmes.Datatypes
 Imports Folmes.GUI
@@ -57,8 +58,8 @@ Public NotInheritable Class MainGUI
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
-                Me.Output.LoadMessage(
-                    New Message With {.Type = Message.Kind.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
+                Me.Output.PushMessage(
+                    New Message With {.Type = MessageType.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
             End Try
@@ -118,25 +119,25 @@ Public NotInheritable Class MainGUI
             command = Input.Text.Substring(1, If(I <> -1, I, Input.Text.Length) - 1)
         End If
         Select Case command
-            Case Nothing : If SendMessage(Message.Kind.Normal) Then Input.Clear()
-            Case "me" : If SendMessage(Message.Kind.Reflexive) Then Input.Clear()
-            Case "put" : If SendMessage(Message.Kind.Declaration) Then Input.Clear()
+            Case Nothing : If SendMessage(MessageType.Normal) Then Input.Clear()
+            Case "me" : If SendMessage(MessageType.Reflexive) Then Input.Clear()
+            Case "put" : If SendMessage(MessageType.Declaration) Then Input.Clear()
             Case "ping" : If Ping(Input.Text.Substring(6)) Then Input.Clear()
             Case "exit", "close" : Me.Close()
         End Select
     End Sub
 
-    Friend Function SendMessage(messageType As Message.Kind) As Boolean
+    Friend Function SendMessage(messageType As MessageType) As Boolean
         If Not DetectAndCopyFiles(Input.Text) Then Return False
         Dim msg As New Message() _
                 With {.Sender = My.Settings.Username, .Type = messageType, .Time = DateTime.UtcNow.ToBinary()}
         Select Case messageType
-            Case Message.Kind.Normal, Message.Kind.Declaration
+            Case messageType.Normal, messageType.Declaration
                 msg.Content = HtmlizeMessageContent(Input.Text)
-            Case Message.Kind.Reflexive
+            Case messageType.Reflexive
                 msg.Content = HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
         End Select
-        If Channels.Current = Channels.PublicChannel Then
+        If Channels.Current = Channels.Common Then
             MessageFiles.OutgoingCommon.StoreEntry(msg)
         Else
             For Each msgfile As MessageFile In MessageFiles.OutgoingPrivate
@@ -146,9 +147,11 @@ Public NotInheritable Class MainGUI
                 End If
             Next
         End If
-        Me.Output.LoadMessage(msg)
+        Me.Output.PushMessage(msg)
         Return True
     End Function
+
+
 
 #End Region
 

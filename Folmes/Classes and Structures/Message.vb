@@ -1,14 +1,13 @@
 ﻿Namespace Datatypes
     Public Class Message
         Public Sender As String
-        Public Type As Message.Kind
+        Public Type As MessageType
         Public Content As String
         Public Time As Long
-
-        Enum Kind As Short
-            Normal
-            Reflexive
-            Declaration
-        End Enum
     End Class
+    Public Enum MessageType As Short
+        Normal
+        Reflexive
+        Declaration
+    End Enum
 End Namespace

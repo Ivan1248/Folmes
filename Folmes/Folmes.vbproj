@@ -116,9 +116,10 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANEW\Messages.vb" />
     <Compile Include="Classes and Structures\Message.vb" />
-    <Compile Include="Classes and Structures\UserInfoFile.vb" />
     <Compile Include="Classes and Structures\MessageFile.vb" />
+    <Compile Include="Classes and Structures\UserInfoFile.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +129,7 @@
     <Compile Include="GUI\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ANEW\NewMessageFile.vb" />
     <Compile Include="Main Modules\PingPong.Designer.vb">
       <SubType>Form</SubType>
     </Compile>

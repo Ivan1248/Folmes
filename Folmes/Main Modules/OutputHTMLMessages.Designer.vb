@@ -21,13 +21,19 @@ Partial Class MainGUI
                     NextFile = MessageFiles.SelectedOutgoing
                 End If
                 If CurrTime = 0 Then Exit For
-                MainGUI.Output.LoadMessage(NextFile.GetNextOlder())
+                MainGUI.Output.PushMessage(NextFile.GetNextOlder())
             Next
         End Sub
 
+        Shared Sub InsertNew(message As Message)
+
+        End Sub
+
+
+
         Shared Sub LoadNew_File(msgFile As MessageFile)
             While msgFile.NewQueueLength > 0
-                MainGUI.Output.LoadMessage(msgFile.GetNextNewer())
+                MainGUI.Output.PushMessage(msgFile.GetNextNewer())
             End While
         End Sub
 
@@ -47,7 +53,7 @@ Partial Class MainGUI
                     CurrTime = NextFile.NextUnreadOldTime
                 End If
                 If CurrTime = Long.MaxValue Then Exit Sub
-                MainGUI.Output.LoadMessage(NextFile.GetNextNewer)
+                MainGUI.Output.PushMessage(NextFile.GetNextNewer)
             End While
         End Sub
     End Class

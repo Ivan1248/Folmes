@@ -40,8 +40,8 @@ Partial Public Class MainGUI
             SetLastRead()
             Me.Output.CacheChannelHtml(Channels.Current)
             With TSChannels
-                If channel = Channels.PublicChannel Then
-                    Channels.Current = Channels.PublicChannel
+                If channel = Channels.Common Then
+                    Channels.Current = Channels.Common
                     MessageFiles.SwitchCommonChannel()
                     .AutoSize = True
                     TSChat.Visible = False

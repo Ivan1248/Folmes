@@ -82,13 +82,13 @@ Namespace GUI
             End Sub
         End Structure
 
-        Private Class HtmlMessageList
-            Dim _newest As HtmlMessageNode = Nothing
-            Dim _oldest As HtmlMessageNode = Nothing
+        Private Class HtmlMessageList ' Necessary for inserting messages oredered by time
+            Dim _newest As HtmlMessageListNode = Nothing
+            Dim _oldest As HtmlMessageListNode = Nothing
             Public Count As Integer = 0
 
             Sub InsertElement(message As HtmlElement, time As Long, container As HtmlElement)
-                Dim node As New HtmlMessageNode(message, time)
+                Dim node As New HtmlMessageListNode(message, time)
                 Count += 1
                 If _oldest Is Nothing Then ' nema ničega
                     _newest = node
@@ -105,7 +105,7 @@ Namespace GUI
                     _oldest = node
                     container.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterBegin, message)
                 Else
-                    Dim current, preceeding As HtmlMessageNode
+                    Dim current, preceeding As HtmlMessageListNode
                     current = _newest
                     preceeding = current.Preceeding
                     While time < preceeding.Time
@@ -132,7 +132,7 @@ Namespace GUI
             End Sub
 
             Public Function RefreshReferencesInList(container As HtmlElement) As HtmlMessageList
-                Dim current As HtmlMessageNode = _oldest
+                Dim current As HtmlMessageListNode = _oldest
                 Dim messageElements As HtmlElementCollection = container.Children
                 For i As Integer = 0 To messageElements.Count - 1
                     current.MessageHtmlElement = messageElements(i)
@@ -141,11 +141,11 @@ Namespace GUI
                 Return Me
             End Function
 
-            Private Class HtmlMessageNode
+            Private Class HtmlMessageListNode
                 Public MessageHtmlElement As HtmlElement
                 Public ReadOnly Time As Long
-                Public Preceeding As HtmlMessageNode = Nothing
-                Public Succeeding As HtmlMessageNode = Nothing
+                Public Preceeding As HtmlMessageListNode = Nothing
+                Public Succeeding As HtmlMessageListNode = Nothing
 
                 Sub New(message As HtmlElement, time As Long)
                     MessageHtmlElement = message
@@ -188,7 +188,7 @@ Namespace GUI
             Return False
         End Function
 
-        Public Sub LoadMessage(message As Message)
+        Public Sub PushMessage(message As Message)
             If _htmlMessages.Count >= My.Settings.NofMsgs Then
                 RemoveOldestHtmlMessage()
                 _htmlMessages.RemoveOldest()
@@ -206,7 +206,7 @@ Namespace GUI
                 .SetAttribute("className", "time")
                 .InnerText = DateTime.FromBinary(message.Time).ToLocalTime.ToString("dd.MM.yyyy. HH:mm")
             End With
-            If message.Type = message.Kind.Normal Then
+            If message.Type = MessageType.Normal Then
                 With messageElement.AppendChild(Document.CreateElement("SPAN"))
                     .SetAttribute("className", "name")
                     .SetAttribute("style", "color:" & My.Settings.UsernameColor) 'zamijeniti boju

@@ -53,7 +53,7 @@ Partial Class MainGUI
                 Else
                     mFile.ReadNew()
                 End If
-                If Channels.Current = Channels.PublicChannel AndAlso DirPath = MessagesDir OrElse
+                If Channels.Current = Channels.Common AndAlso DirPath = MessagesDir OrElse
                     Channels.Current = Username AndAlso DirName = My.Settings.Username Then 'ako je korisnik na kanalu pošiljatelja
                     OutputHtmlMessages.LoadNew()
                 End If
@@ -101,7 +101,7 @@ exits:  MessagesWatcher.EnableRaisingEvents = True
         MessageFiles.OutgoingPrivate.Remove(MessageFiles.OutgoingPrivate.Find(Function(x) x.Sender = Name))
         MessageFiles.IngoingPrivate.Remove(MessageFiles.IngoingPrivate.Find(Function(x) x.Sender = Name))
 
-        If Channels.Current = Name Then SwitchChannel(Channels.PublicChannel)
+        If Channels.Current = Name Then SwitchChannel(Channels.Common)
     End Sub
 
     Private Sub DirectoriesWatcher_Renamed(sender As Object, e As RenamedEventArgs) Handles DirectoriesWatcher.Renamed

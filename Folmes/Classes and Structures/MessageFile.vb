@@ -284,8 +284,8 @@ Namespace Classes
             Return ByteConverter.ToInt64(_memFile, index + DateInd)
         End Function
 
-        Private Function GetMessageType(index As Integer) As Message.Kind
-            Return DirectCast(ByteConverter.ToInt16(_memFile, index + TypeInd), Message.Kind)
+        Private Function GetMessageType(index As Integer) As MessageType
+            Return DirectCast(ByteConverter.ToInt16(_memFile, index + TypeInd), MessageType)
         End Function
 
         Private Sub ReadBlock(I As Integer)

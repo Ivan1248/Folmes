@@ -16,7 +16,7 @@ Module Html
 
     Public Function HtmlizeMessageContent(content As String) As String 'NEDOSTAJU JOŠ SLIKE
         Dim sb As New StringBuilder(244) 'kapacitet
-        Dim start As Integer = 0
+        Dim start As Integer
         Dim lastEnd As Integer = -1
         Dim canBeUri As Boolean = True
 
@@ -81,7 +81,7 @@ Module Html
             Return erroret
         End If
         l -= 1
-        While (True)
+        While True
             If l < 0 OrElse SpaceChars.Contains(str(l)) Then
                 l += 1
                 Exit While
@@ -92,7 +92,7 @@ Module Html
             End If
         End While
         r += 1
-        While (True)
+        While True
             If r >= str.Length OrElse SpaceChars.Contains(str(r)) Then
                 r -= 1
                 Exit While

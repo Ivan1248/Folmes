@@ -6,7 +6,7 @@
 
     Private Shared down As Boolean = False
 
-    Protected Overrides Sub WndProc(ByRef m As Message)
+    Protected Overrides Sub WndProc(ByRef m As Windows.Forms.Message)
         If m.Msg = WM_LBUTTONUP AndAlso Not down Then
             m.Msg = WM_LBUTTONDOWN
             MyBase.WndProc(m)

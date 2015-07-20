@@ -1,6 +1,5 @@
 ﻿Imports System.IO
 Imports Folmes.Classes
-Imports Folmes.Datatypes
 
 Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
@@ -8,7 +7,7 @@ Partial Class MainGUI
     Private WithEvents DirectoriesWatcher As FileSystemWatcher
     Private Sub LoadFSWatchers()
         'TODO PingPong
-        MessagesWatcher = New FileSystemWatcher(MessagesDir, "*.fmsg") With {
+        MessagesWatcher = New FileSystemWatcher(MessagesDir, "*" & Extension.Message) With {
             .IncludeSubdirectories = True,
             .NotifyFilter = NotifyFilters.LastWrite
         }
@@ -25,31 +24,31 @@ Partial Class MainGUI
             fsw.EnableRaisingEvents = True
         Next
     End Sub
-    Private Sub MessagesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Changed
+    Private Sub MessagesWatcher_Changed(senderObject As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Changed
         MessagesWatcher.EnableRaisingEvents = True
 
         Dim DirPath As String = Path.GetDirectoryName(e.FullPath)
-        Dim SenderName As String = Path.GetFileName(DirPath)
-        Dim ChannelName As String = Path.GetFileName(Path.GetDirectoryName(DirPath))
+        Dim Sender As String = Path.GetFileName(DirPath)
+        Dim RecipientChannel As String = Path.GetFileName(Path.GetDirectoryName(DirPath))
         Dim NotificationType As Notifications.Notifications
-        If ChannelName = Channels.Common AndAlso SenderName <> My.Settings.Username Then
+        If RecipientChannel = Channels.Common AndAlso Sender <> My.Settings.Username Then
             NotificationType = Notifications.Notifications.PublicMessage
-        ElseIf ChannelName = My.Settings.Username Then
+        ElseIf RecipientChannel = My.Settings.Username Then
             NotificationType = Notifications.Notifications.PrivateMessage
         Else
             GoTo exitr
         End If
         Dim message As Message = MessageFile.LoadMessage(e.FullPath)
-        If Channels.Current = ChannelName Then
-            Me.Output.InsertMessage(message)
+        If Sender = Channels.Current OrElse (RecipientChannel = Channels.Current AndAlso Channels.Current = Channels.Common) Then
+            Me.Output.AddMessage(message)
         Else
-            If ChannelName = Channels.Common Then
-                Messages.CommonNewQueue.Add(message)
+            If RecipientChannel = Channels.Common Then
+                MessagesManager.CommonNewQueue.Add(message)
             Else
-                Messages.AddPrivateNew(ChannelName, message)
+                MessagesManager.AddPrivateNew(RecipientChannel, message)
             End If
         End If
-        Notify(NotificationType, SenderName)
+        Notify(NotificationType, Sender)
 
 exitr:  MessagesWatcher.EnableRaisingEvents = True
     End Sub

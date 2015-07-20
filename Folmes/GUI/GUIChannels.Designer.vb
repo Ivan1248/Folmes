@@ -1,5 +1,4 @@
 ﻿Imports Folmes.Classes
-Imports Folmes.Datatypes
 
 Partial Public Class MainGUI
 

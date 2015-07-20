@@ -1,5 +1,4 @@
 ﻿Imports System.Text
-Imports Folmes.Datatypes
 
 Namespace GUI
     Public Class MessagesDisplay : Inherits WebBrowser
@@ -188,7 +187,7 @@ Namespace GUI
             Return False
         End Function
 
-        Public Sub InsertMessage(message As Message)
+        Public Sub AddMessage(message As Message)
             If _htmlMessages.Count >= My.Settings.NofMsgs Then
                 RemoveOldestHtmlMessage()
                 _htmlMessages.RemoveOldest()

@@ -116,7 +116,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANEW\Messages.vb" />
+    <Compile Include="Modules\MessagesManager.vb" />
     <Compile Include="Classes and Structures\Message.vb" />
     <Compile Include="Classes and Structures\UserInfoFile.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
@@ -128,22 +128,22 @@
     <Compile Include="GUI\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ANEW\MessageFile.vb" />
-    <Compile Include="Main Modules\PingPong.Designer.vb">
+    <Compile Include="Modules\MessageFile.vb" />
+    <Compile Include="Modules\PingPong.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main Modules\UserInfoFiles.Designer.vb">
+    <Compile Include="Modules\UserInfoFiles.Designer.vb">
       <SubType>
       </SubType>
     </Compile>
-    <Compile Include="Main Modules\ToolStripColorTable.vb" />
+    <Compile Include="GUI\ToolStripColorTable.vb" />
     <Compile Include="Modules\Channels.vb" />
     <Compile Include="Modules\Files.vb" />
     <Compile Include="Modules\Notifications.vb" />
     <Compile Include="Modules\SentFiles.vb" />
     <Compile Include="Modules\Directories.vb" />
     <Compile Include="Modules\HTML.vb" />
-    <Compile Include="Main Modules\FSWatcher.Designer.vb">
+    <Compile Include="Modules\FSWatcher.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\AboutBox.Designer.vb">

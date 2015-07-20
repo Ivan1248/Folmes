@@ -1,10 +1,9 @@
 ﻿Imports System.IO
-Imports Folmes.Datatypes
 
-Public MustInherit Class Messages
+Public MustInherit Class MessagesManager
     Public Shared CommonNewQueue As New OrderedMessageList()
-    Public Shared PrivateNewQueue As Dictionary(Of String, OrderedMessageList)
-
+    Public Shared PrivateNewQueue As New Dictionary(Of String, OrderedMessageList)
+    
     Public Shared Sub AddPrivateNew(channel As String, message As Message)
         Dim oml As OrderedMessageList = Nothing
         For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
@@ -13,31 +12,35 @@ Public MustInherit Class Messages
                 Exit For
             End If
         Next
-        If oml Is Nothing Then oml = New OrderedMessageList()
-        PrivateNewQueue.Add(channel, oml)
+        If oml Is Nothing Then
+            oml = New OrderedMessageList()
+            PrivateNewQueue.Add(channel, oml)
+        End If
         oml.Add(message)
     End Sub
 
     Delegate Sub LoadSub(m As Message)
     Public Shared Sub LoadInitial(channel As String, loadSub As LoadSub) ' TODO optimizirati - ne mora se sortirati cijeli niz
+        Dim msgFilePaths As List(Of String)
         If channel = Channels.Common Then
-            Dim msgFilePaths As String() = Directory.GetFiles(Path.Combine(MessagesDir, Channels.Common))
-            Array.Sort(Of String)(msgFilePaths, AddressOf MessageFileComparison)
-            For i As Integer = msgFilePaths.Length - 1 - My.Settings.NofMsgs To msgFilePaths.Length - 1
-                loadSub(MessageFile.LoadMessage(msgFilePaths(i)))
-            Next
+            msgFilePaths = New List(Of String)(Directory.GetFiles(Path.Combine(MessagesDir, Channels.Common),
+                                                              "*" & Extension.Message, SearchOption.AllDirectories))
         Else
-            Dim msgFilePaths As New List(Of String)(Directory.GetFiles(Path.Combine(MessagesDir, channel, My.Settings.Username)))
+            Dim messagesPath As String = Path.Combine(MessagesDir, channel, My.Settings.Username)
+            MakeDir(messagesPath)
+            msgFilePaths = New List(Of String)(Directory.GetFiles(messagesPath))
+            messagesPath = Path.Combine(MessagesDir, My.Settings.Username, channel)
+            MakeDir(messagesPath)
             msgFilePaths.AddRange(Directory.GetFiles(Path.Combine(MessagesDir, My.Settings.Username, channel)))
-            msgFilePaths.Sort(AddressOf MessageFileComparison)
-            For i As Integer = msgFilePaths.Count - 1 - My.Settings.NofMsgs To msgFilePaths.Count - 1
-                loadSub(MessageFile.LoadMessage(msgFilePaths(i)))
-            Next
             For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
                 If m.Key = channel Then m.Value.Clear()
                 Exit For
             Next
         End If
+        msgFilePaths.Sort(AddressOf MessageFileComparison)
+        For i As Integer = Math.Max(msgFilePaths.Count - 1 - My.Settings.NofMsgs, 0) To msgFilePaths.Count - 1
+            loadSub(MessageFile.LoadMessage(msgFilePaths(i)))
+        Next
     End Sub
 
     Public Shared Sub LoadNew(channel As String, loadsub As LoadSub)

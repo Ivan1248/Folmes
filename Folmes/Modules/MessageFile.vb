@@ -1,12 +1,11 @@
 ﻿Imports System.IO
 Imports System.Text
-Imports Folmes.Datatypes
 
 Public MustInherit Class MessageFile
     Public Shared Sub Create(channel As String, msg As Message)
         Dim dirPath As String = Path.Combine(MessagesDir, channel, msg.Sender)
         MakeDir(dirPath)
-        Dim filePath As String = Path.Combine(dirPath, Convert.ToString(msg.Time, 16) & ".msg")
+        Dim filePath As String = Path.Combine(dirPath, Convert.ToString(msg.Time, 16) & Extension.Message)
         Dim sb As New StringBuilder
         sb.Append(ChrW(msg.Type))
         sb.AppendLine(msg.Sender)

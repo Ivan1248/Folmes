@@ -1,6 +1,4 @@
-﻿Imports Folmes.Datatypes
-
-Public MustInherit Class Channels
+﻿Public MustInherit Class Channels
     Public Const Common As String = "Common"
     Public Shared Users As Dictionary(Of String, Boolean)
 
@@ -9,9 +7,9 @@ Public MustInherit Class Channels
     Public Shared Sub Switch(channel As String)
         Current = channel
         If MainGUI.Output.LoadCachedChannelHtml(Channels.Current) Then
-            Messages.LoadNew(channel, AddressOf MainGUI.Output.InsertMessage)
+            MessagesManager.LoadNew(channel, AddressOf MainGUI.Output.AddMessage)
         Else
-            Messages.LoadInitial(channel, AddressOf MainGUI.Output.InsertMessage)
+            MessagesManager.LoadInitial(channel, AddressOf MainGUI.Output.AddMessage)
         End If
     End Sub
 

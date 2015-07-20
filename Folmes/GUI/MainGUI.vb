@@ -1,14 +1,7 @@
 ﻿#Region "Imports"
-
-
-
 Imports System.IO
 Imports System.Reflection
-Imports System.Text
-Imports Folmes.Classes
-Imports Folmes.Datatypes
-Imports Folmes.GUI
-
+Imports Folmes.GUi
 #End Region
 
 Public NotInheritable Class MainGUI
@@ -48,7 +41,7 @@ Public NotInheritable Class MainGUI
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()
                             RemoveHandler Output.Initialized, messagesLoad
-                            Messages.LoadInitial(Channels.Common, AddressOf Me.Output.InsertMessage)
+                            MessagesManager.LoadInitial(Channels.Common, AddressOf Me.Output.AddMessage)
                         End Sub
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})
@@ -58,7 +51,7 @@ Public NotInheritable Class MainGUI
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
-                Me.Output.InsertMessage(
+                Me.Output.AddMessage(
                     New Message With {.Type = MessageType.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
@@ -138,7 +131,7 @@ Public NotInheritable Class MainGUI
                 msg.Content = HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
         End Select
         MessageFile.Create(Channels.Current, msg)
-        Me.Output.InsertMessage(msg)
+        Me.Output.AddMessage(msg)
         Return True
     End Function
 #End Region

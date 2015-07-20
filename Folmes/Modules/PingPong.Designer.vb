@@ -1,41 +1,46 @@
 ﻿Imports System.IO
+Imports System.Resources
 
-Partial Class MainGUI
-#Region "Ping-pong (round-trip-time)"
-    Private PingTime As Long = 0
+Public MustInherit Class PingPong
+    Private Shared PingTime As Long = 0
 
-    Private Function Ping(userName As String) As Boolean
-        If PingTime <> 0 Then
-            MsgBox("Already waiting for a pong.")
-            Return False
+    Private Shared WithEvents TimeoutTimer As New System.Timers.Timer(10000) With {.AutoReset = False}
+
+    Private Shared Sub Reset() Handles TimeoutTimer.Elapsed
+        PingTime = 0
+        MainGUI.Output.AddMessage("PingPong: timeout.")
+    End Sub
+
+    Public Shared Function PingFile(username As String, pong As Boolean) As Boolean
+        If Not pong AndAlso PingTime <> 0 Then
+            Return True
         End If
-        If MainGUI.UserInfoFiles.IsOnline(userName) Then
-            File.Create(Path.Combine(MessagesDir, userName, My.Settings.Username & Files.Extension.Ping))
-            PingTime = DateTime.Now.Ticks \ 10000
+        If MainGUI.UserInfoFiles.IsOnline(username) OrElse username = My.Settings.Username Then
+            Dim dir As String = Path.Combine(PingDir, username)
+            MakeDir(dir)
+            File.Create(Path.Combine(dir, My.Settings.Username & If(pong, Extension.Pong, Extension.Ping))).Close()
+            PingTime = DateTime.UtcNow.Ticks \ 10000
+            TimeoutTimer.Start()
             Return True
         Else
-            MsgBox("Cannot ping " & userName & ". User is not online.")
+            MsgBox("Cannot ping " & username & ". User is not online.")
             Return False
         End If
     End Function
 
-    Private Sub GetPing()
-        MsgBox("RTT = " & (DateTime.Now.Ticks \ 10000 - PingTime) / 1000 & " s")
+    Public Shared Sub GetFileRTT()
+        MainGUI.Output.AddMessage("PingPong: MessageFile_RTT = " & (DateTime.UtcNow.Ticks \ 10000 - PingTime) & "ms")
         PingTime = 0
     End Sub
 
-    Private Sub CleanPing()
-        Dim DirPath As String = Path.Combine(MessagesDir, My.Settings.Username)
+    Public Shared Sub CleanPing()
+        Dim DirPath As String = Path.Combine(PingDir, My.Settings.Username)
         If Directory.Exists(DirPath) Then
             For Each PingFile As String In Directory.GetFiles(DirPath)
                 Select Case Path.GetExtension(PingFile)
-                    Case "ping", "pong" : File.Delete(PingFile)
+                    Case Extension.Ping, Extension.Pong : File.Delete(PingFile)
                 End Select
             Next
         End If
     End Sub
-
-
-#End Region
-
 End Class

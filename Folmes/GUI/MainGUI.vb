@@ -20,7 +20,7 @@ Public NotInheritable Class MainGUI
             CMOpenFolder.Text = "Open """ & Path.GetFileName(RootPath) & """"
 
             'Stvaranje direktorija
-            AssureBaseDirectories()
+            AssureMainDirectories()
             LoadFSWatchers()
 
             'Prvo pokretenje? i učitavanje kanala u izbornik
@@ -28,7 +28,7 @@ Public NotInheritable Class MainGUI
                 Me.Close()
             End If
             Me.Text &= " - " & My.Settings.Username
-            CleanPing()
+            PingPong.CleanPing()
             MakeDir(Path.Combine(MessagesDir, My.Settings.Username))
 
             'Učitavanje datoteka i poruka
@@ -52,7 +52,7 @@ Public NotInheritable Class MainGUI
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
                 Me.Output.AddMessage(
-                    New Message With {.Type = MessageType.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
+                    New Message With {.Type = MessageType.FolmesDeclaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
             End Try
@@ -114,8 +114,10 @@ Public NotInheritable Class MainGUI
         Select Case command
             Case Nothing : If SendMessage(MessageType.Normal) Then Input.Clear()
             Case "me" : If SendMessage(MessageType.Reflexive) Then Input.Clear()
-            Case "put" : If SendMessage(MessageType.Declaration) Then Input.Clear()
-            Case "ping" : If Ping(Input.Text.Substring(6)) Then Input.Clear()
+            Case "ping"
+                If Input.Text.Length > 6 AndAlso PingPong.PingFile(Input.Text.Substring(6).TrimEnd(), False) Then
+                    Input.Clear()
+                End If
             Case "exit", "close" : Me.Close()
         End Select
     End Sub
@@ -125,7 +127,7 @@ Public NotInheritable Class MainGUI
         Dim msg As New Message() _
                 With {.Sender = My.Settings.Username, .Type = messageType, .Time = DateTime.UtcNow.ToBinary()}
         Select Case messageType
-            Case messageType.Normal, messageType.Declaration
+            Case messageType.Normal, messageType.FolmesDeclaration
                 msg.Content = HtmlizeMessageContent(Input.Text)
             Case messageType.Reflexive
                 msg.Content = HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))

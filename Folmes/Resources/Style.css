@@ -11,12 +11,13 @@ a:active { color:#48b; }
 .file:active { background-color:#333; }
 
 .item { cursor:pointer;}
-.message,.item { border-bottom:0 #333 solid; margin:0; padding:3px 4px 4px 6px; }
+.message,.item { margin:0; padding:3px 4px 4px 6px; }
 	.message:hover, .item.hover { background-color:#222; }
 	.name { display:inline; font-weight:600; height:100%; vertical-align:top; }
 	.content { display:block; max-width:100%; vertical-align:top; }
 	.time { font-size:10px; line-height:1; margin:-3px 0 0 0; opacity:0; padding:0 2px 1px 2px; position:absolute; right:0; transition:opacity .1s linear; }
 	.message:hover .time { opacity:1; }
+.hl { border:1px #333 solid; }
 	
 #scrollertrack { bottom:0; height:100%; user-select:none; position:fixed; right:0; width:16px; z-index:1; }
 #scrollertrack:hover, #scroller:hover + #scrollertrack, #scroller:active + #scrollertrack { background-color:#222; }

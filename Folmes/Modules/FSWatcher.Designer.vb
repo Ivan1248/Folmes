@@ -3,13 +3,17 @@ Imports Folmes.Classes
 
 Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
+    Private WithEvents PingPongWatcher As FileSystemWatcher
     Private WithEvents UserFilesWatcher As FileSystemWatcher
     Private WithEvents DirectoriesWatcher As FileSystemWatcher
     Private Sub LoadFSWatchers()
-        'TODO PingPong
         MessagesWatcher = New FileSystemWatcher(MessagesDir, "*" & Extension.Message) With {
             .IncludeSubdirectories = True,
-            .NotifyFilter = NotifyFilters.LastWrite
+            .NotifyFilter = NotifyFilters.FileName
+        }
+        PingPongWatcher = New FileSystemWatcher(Path.Combine(PingDir, My.Settings.Username), "*.*") With {
+            .IncludeSubdirectories = False,
+            .NotifyFilter = NotifyFilters.FileName
         }
         DirectoriesWatcher = New FileSystemWatcher(MessagesDir, "*.*") With {
             .IncludeSubdirectories = False,
@@ -19,14 +23,12 @@ Partial Class MainGUI
             .IncludeSubdirectories = False,
             .NotifyFilter = NotifyFilters.FileName Or NotifyFilters.LastWrite
         }
-        For Each fsw As FileSystemWatcher In {MessagesWatcher, UserFilesWatcher, DirectoriesWatcher}
+        For Each fsw As FileSystemWatcher In {MessagesWatcher, PingPongWatcher, UserFilesWatcher, DirectoriesWatcher}
             fsw.SynchronizingObject = Me
             fsw.EnableRaisingEvents = True
         Next
     End Sub
-    Private Sub MessagesWatcher_Changed(senderObject As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Changed
-        MessagesWatcher.EnableRaisingEvents = True
-
+    Private Sub MessagesWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Created
         Dim DirPath As String = Path.GetDirectoryName(e.FullPath)
         Dim Sender As String = Path.GetFileName(DirPath)
         Dim RecipientChannel As String = Path.GetFileName(Path.GetDirectoryName(DirPath))
@@ -36,7 +38,7 @@ Partial Class MainGUI
         ElseIf RecipientChannel = My.Settings.Username Then
             NotificationType = Notifications.Notifications.PrivateMessage
         Else
-            GoTo exitr
+            Exit Sub
         End If
         Dim message As Message = MessageFile.LoadMessage(e.FullPath)
         If Sender = Channels.Current OrElse (RecipientChannel = Channels.Current AndAlso Channels.Current = Channels.Common) Then
@@ -49,8 +51,19 @@ Partial Class MainGUI
             End If
         End If
         Notify(NotificationType, Sender)
+    End Sub
 
-exitr:  MessagesWatcher.EnableRaisingEvents = True
+    Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Created
+        If Path.GetFileName(Path.GetDirectoryName(e.FullPath)) <> My.Settings.Username Then
+            Exit Sub
+        End If
+        File.Delete(e.FullPath)
+        If Path.GetExtension(e.Name) = Extension.Ping Then
+            Dim Sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
+            PingPong.PingFile(Sender, True)
+        Else
+            PingPong.GetFileRTT()
+        End If
     End Sub
 
     Private Sub UserFilesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Changed, UserFilesWatcher.Created

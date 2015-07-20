@@ -53,14 +53,6 @@ Namespace GUI
 
 #Region "Javascript Interface"
 
-        Private Sub RefreshScroller() Handles Me.Resize
-            Document.InvokeScript("refreshScroller")
-        End Sub
-
-        Private Sub ScrollDown()
-            Document.InvokeScript("scrollDown", {0})
-        End Sub
-
         Private Sub RemoveOldestHtmlMessage()
             Document.InvokeScript("removeFirst")
         End Sub
@@ -173,19 +165,31 @@ Namespace GUI
         End Sub
 
         Public Function LoadCachedChannelHtml(channel As String) As Boolean
+            LoadCachedChannelHtml = False
             If _cachedChannelHtmls IsNot Nothing Then
                 For Each c As CachedChannelHtml In _cachedChannelHtmls
                     If c.Channel = channel Then
                         _msgContainer.InnerHtml = c.HtmlContent
                         _htmlMessages = c.HtmlMessages.RefreshReferencesInList(_msgContainer)
-                        Return True
+                        LoadCachedChannelHtml = True
                     End If
                 Next
             End If
-            _msgContainer.InnerHtml = String.Empty
-            _htmlMessages = New HtmlMessageList()
-            Return False
+            If Not LoadCachedChannelHtml Then
+                _msgContainer.InnerHtml = String.Empty
+                _htmlMessages = New HtmlMessageList()
+            End If
+            'ScrollDown()
+            'RefreshScroller()
         End Function
+
+        Public Sub AddMessage(declaration As String)
+            Dim m As New Message
+            m.Time = DateTime.UtcNow.ToBinary()
+            m.Content = declaration
+            m.Type = MessageType.FolmesDeclaration
+            AddMessage(m)
+        End Sub
 
         Public Sub AddMessage(message As Message)
             If _htmlMessages.Count >= My.Settings.NofMsgs Then
@@ -194,27 +198,35 @@ Namespace GUI
             End If
             Dim messageElement As HtmlElement = InsertHtmlMessage(message)
             _htmlMessages.InsertElement(messageElement, message.Time, _msgContainer)
-            ScrollDown()
-            RefreshScroller()
+            'ScrollDown()
+            'RefreshScroller()
         End Sub
 
         Private Function InsertHtmlMessage(message As Message) As HtmlElement
             Dim messageElement As HtmlElement = Document.CreateElement("DIV")
-            messageElement.SetAttribute("className", "message")
             With messageElement.AppendChild(Document.CreateElement("DIV"))
                 .SetAttribute("className", "time")
                 .InnerText = DateTime.FromBinary(message.Time).ToLocalTime.ToString("dd.MM.yyyy. HH:mm")
             End With
-            If message.Type = MessageType.Normal Then
-                With messageElement.AppendChild(Document.CreateElement("SPAN"))
-                    .SetAttribute("className", "name")
-                    .SetAttribute("style", "color:" & My.Settings.UsernameColor) 'zamijeniti boju
-                    .InnerText = message.Sender
-                End With
-            End If
+            messageElement.SetAttribute("className", "message")
+            Select Case message.Type
+                Case MessageType.Normal, MessageType.Highlighted
+                    If message.Type = MessageType.Highlighted Then messageElement.SetAttribute("className", "hl message")
+                    With messageElement.AppendChild(Document.CreateElement("SPAN"))
+                        .SetAttribute("className", "name")
+                        .SetAttribute("style", "color:" & My.Settings.UsernameColor) 'zamijeniti boju
+                        .InnerText = message.Sender
+                    End With
+                Case MessageType.FolmesDeclaration
+                    With messageElement.AppendChild(Document.CreateElement("SPAN"))
+                        .SetAttribute("className", "name")
+                        .SetAttribute("style", "color:#aaaa00") 'zamijeniti boju
+                        .InnerText = "Folmes"
+                    End With
+            End Select
             With messageElement.AppendChild(Document.CreateElement("SPAN"))
                 .SetAttribute("className", "content")
-                .InnerHtml = message.Content
+                .InnerHtml = If(message.Type = MessageType.Reflexive, "*", String.Empty) & message.Content
             End With
             Return messageElement
         End Function

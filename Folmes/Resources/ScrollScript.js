@@ -37,7 +37,7 @@ function smoothScroll() {
     updateScrollerPos();
 }
 
-function wheelScroll(e) {
+function wheelScroll(e) { // handles window.onmousewheel
     var delta = e.wheelDelta ? e.wheelDelta / 120 : -e.detail / 3;
     scrollTarget = parseInt(scrolling ? scrollTarget : window.pageYOffset, 10) - delta * 50;
     if (!scrolling) {
@@ -46,15 +46,11 @@ function wheelScroll(e) {
     }
 }
 
-window.onmousewheel = wheelScroll;
-
-// called from outside
 function scrollDown(e) {
     window.scrollTo(0, document.documentElement.scrollHeight - e);
 }
 
-// called from outside
-function refreshScroller() {
+function refreshScroller() { // handles, window.onresize
     var doc = document,
         scroller = doc.getElementById("scroller"),
         docHeight = doc.documentElement.scrollHeight,
@@ -71,7 +67,7 @@ function refreshScroller() {
     updateScrollerPos();
 }
 
-function loadScroller() {
+function loadScroller() { // handles window.onload
     dragging = false;
 
     var doc = document,
@@ -89,12 +85,14 @@ function loadScroller() {
         doc.onmousemove = dragNscroll;
         doc.onselectstart = function() { return false; }
     };
+    window.onmouseup = function () {
+        document.onmousemove = null;
+        dragging = false;
+        document.onselectstart = null;
+    };
 }
 
 window.onload = loadScroller;
-
-window.onmouseup = function() {
-    document.onmousemove = null;
-    dragging = false;
-    document.onselectstart = null;
-};
+window.onmousewheel = wheelScroll;
+document.addEventListener("DOMNodeInserted", function () { scrollDown(0); refreshScroller(); }, false);
+window.onresize = function () { scrollDown(0); };

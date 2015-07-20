@@ -8,14 +8,17 @@ Module Directories
     Public UsersDir As String = FolmesDir & "\Users"
     Public FilesDir As String = FolmesDir & "\Files"
     Public ThumbnailDir As String = FilesDir & "\thumbnails"
+    Public PingDir As String = FolmesDir & "\RTT"
 
-    Public Sub AssureBaseDirectories()
+
+    Public Sub AssureMainDirectories()
         If Not Directory.Exists(FolmesDir) Then
             MakeDir(FolmesDir)
             HideFolmesFolder(True)
         End If
         MakeDir(MessagesDir)
         MakeDir(UsersDir)
+        MakeDir(Path.Combine(PingDir, My.Settings.Username))
     End Sub
 
     Public Sub HideFolmesFolder(hide As Boolean)

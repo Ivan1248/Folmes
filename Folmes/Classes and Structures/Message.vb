@@ -6,8 +6,9 @@
 End Class
 Public Enum MessageType As Short
     Normal
+    Highlighted
+    FolmesDeclaration
     Reflexive
-    Declaration
 End Enum
 
 Public Class OrderedMessageList

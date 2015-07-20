@@ -2,9 +2,11 @@
 Imports System.Text
 Imports Folmes.Datatypes
 
-Public MustInherit Class NewMessageFile
+Public MustInherit Class MessageFile
     Public Shared Sub Create(channel As String, msg As Message)
-        Dim filePath As String = Path.Combine(MessagesDir, channel, msg.Sender, Convert.ToString(msg.Time, 16) & ".msg")
+        Dim dirPath As String = Path.Combine(MessagesDir, channel, msg.Sender)
+        MakeDir(dirPath)
+        Dim filePath As String = Path.Combine(dirPath, Convert.ToString(msg.Time, 16) & ".msg")
         Dim sb As New StringBuilder
         sb.Append(ChrW(msg.Type))
         sb.AppendLine(msg.Sender)
@@ -15,7 +17,7 @@ Public MustInherit Class NewMessageFile
         End Using
     End Sub
 
-    Public Shared Function Load(fpath As String) As Message
+    Public Shared Function LoadMessage(fpath As String) As Message
         Dim m As New Message() With {.Time = Convert.ToInt64(Path.GetFileNameWithoutExtension(fpath), 16)}
         Using sr As New StreamReader(New FileStream(fpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             m.Type = CType(sr.Read(), MessageType)

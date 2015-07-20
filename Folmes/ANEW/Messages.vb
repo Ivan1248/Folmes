@@ -1,64 +1,72 @@
-﻿Imports Folmes.Datatypes
+﻿Imports System.IO
+Imports Folmes.Datatypes
 
-Public Class Messages
-    Public Shared IngoingCommon As New List(Of Tuple(Of String, MessageList))
-    Public Shared IngoingPrivate As New List(Of Tuple(Of String, MessageList))
-    Public Shared OutgoingCommon As MessageList
-    Public Shared OutgoingPrivate As New List(Of Tuple(Of String, MessageList))
+Public MustInherit Class Messages
+    Public Shared CommonNewQueue As New OrderedMessageList()
+    Public Shared PrivateNewQueue As Dictionary(Of String, OrderedMessageList)
 
-    Public Shared SelectedIngoing As New List(Of Tuple(Of String, MessageList))
-    Public Shared SelectedOutgoing As MessageList
-End Class
+    Public Shared Sub AddPrivateNew(channel As String, message As Message)
+        Dim oml As OrderedMessageList = Nothing
+        For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
+            If m.Key = channel Then
+                oml = m.Value
+                Exit For
+            End If
+        Next
+        If oml Is Nothing Then oml = New OrderedMessageList()
+        PrivateNewQueue.Add(channel, oml)
+        oml.Add(message)
+    End Sub
 
-Public Class MessageList
-    Public Count As Integer = 0
-    Public Name As String
-
-    Dim _newest As MessageListNode
-    Dim _oldest As MessageListNode
-
-    Public Sub Add(message As Message)
-        If Count = 0 Then
-            _newest = New MessageListNode(message)
-            _oldest = _newest
+    Delegate Sub LoadSub(m As Message)
+    Public Shared Sub LoadInitial(channel As String, loadSub As LoadSub) ' TODO optimizirati - ne mora se sortirati cijeli niz
+        If channel = Channels.Common Then
+            Dim msgFilePaths As String() = Directory.GetFiles(Path.Combine(MessagesDir, Channels.Common))
+            Array.Sort(Of String)(msgFilePaths, AddressOf MessageFileComparison)
+            For i As Integer = msgFilePaths.Length - 1 - My.Settings.NofMsgs To msgFilePaths.Length - 1
+                loadSub(MessageFile.LoadMessage(msgFilePaths(i)))
+            Next
         Else
-            Dim mln As New MessageListNode(message)
-            Select Case message.Time
-                Case Is > _newest.Message.Time
-                    _newest.Succeeding = mln
-                    mln.Preceeding = _newest
-                    _newest = mln
-                Case Is < _oldest.Message.Time
-                    _oldest.Preceeding = mln
-                    mln.Succeeding = _newest
-                    _oldest = mln
-                Case Else
-                    Dim preceeding As MessageListNode = _newest.Preceeding
-                    While preceeding.Message.Time > message.Time
-                        preceeding = preceeding.Preceeding
-                    End While
-                    mln.Preceeding = preceeding
-                    mln.Succeeding = preceeding.Succeeding
-
-                    mln.Succeeding.Preceeding = mln
-                    preceeding.Succeeding = mln
-            End Select
+            Dim msgFilePaths As New List(Of String)(Directory.GetFiles(Path.Combine(MessagesDir, channel, My.Settings.Username)))
+            msgFilePaths.AddRange(Directory.GetFiles(Path.Combine(MessagesDir, My.Settings.Username, channel)))
+            msgFilePaths.Sort(AddressOf MessageFileComparison)
+            For i As Integer = msgFilePaths.Count - 1 - My.Settings.NofMsgs To msgFilePaths.Count - 1
+                loadSub(MessageFile.LoadMessage(msgFilePaths(i)))
+            Next
+            For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
+                If m.Key = channel Then m.Value.Clear()
+                Exit For
+            Next
         End If
-        Count += 1
     End Sub
 
-    Public Sub RemoveOldest()
-        _oldest = _oldest.Succeeding
-        _oldest.Preceeding = Nothing
+    Public Shared Sub LoadNew(channel As String, loadsub As LoadSub)
+        Dim oml As OrderedMessageList = Nothing
+        If channel = Channels.Common Then
+            oml = CommonNewQueue
+        Else
+            For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
+                If m.Key = channel Then
+                    oml = m.Value
+                    Exit For
+                End If
+            Next
+            If oml Is Nothing Then Exit Sub
+        End If
+        While oml.Count > 0
+            loadsub(oml.PopOldest)
+        End While
     End Sub
 
-    Private Class MessageListNode
-        Public ReadOnly Message As Message
-        Public Preceeding As MessageListNode
-        Public Succeeding As MessageListNode
-        Sub New(message As Message)
-            Me.Message = message
-        End Sub
-    End Class
-
+    Private Shared Function MessageFileComparison(x As String, y As String) As Integer
+        Dim a As Integer = x.Length - Extension.Message.Length - 16
+        Dim b As Integer = y.Length - Extension.Message.Length - 16
+        For i As Integer = 0 To 15
+            Select Case Asc(x(a + 1)) - Asc(y(b + i))
+                Case Is > 0 : Return 1
+                Case Is < 0 : Return -1
+            End Select
+        Next
+        Return 0
+    End Function
 End Class

@@ -1,12 +1,14 @@
 ﻿Imports System.IO
 Imports Folmes.Classes
+Imports Folmes.Datatypes
 
 Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
     Private WithEvents UserFilesWatcher As FileSystemWatcher
     Private WithEvents DirectoriesWatcher As FileSystemWatcher
     Private Sub LoadFSWatchers()
-        MessagesWatcher = New FileSystemWatcher(MessagesDir, "*.*") With {
+        'TODO PingPong
+        MessagesWatcher = New FileSystemWatcher(MessagesDir, "*.fmsg") With {
             .IncludeSubdirectories = True,
             .NotifyFilter = NotifyFilters.LastWrite
         }
@@ -26,50 +28,30 @@ Partial Class MainGUI
     Private Sub MessagesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Changed
         MessagesWatcher.EnableRaisingEvents = True
 
-        Dim Username As String = Path.GetFileNameWithoutExtension(e.Name)
         Dim DirPath As String = Path.GetDirectoryName(e.FullPath)
-        Dim DirName As String = Path.GetFileName(DirPath)
-        Select Case Path.GetExtension(e.FullPath)
-            Case Files.Extension.Message
-                Dim NotificationType As Notifications.Notifications
-                Dim mFiles As List(Of MessageFile)
-                If DirPath = MessagesDir Then ' Public
-                    If Username = My.Settings.Username Then
-                        GoTo exits
-                    End If
-                    NotificationType = Notifications.Notifications.PublicMessage
-                    mFiles = MessageFiles.IngoingCommon
-                ElseIf DirName = My.Settings.Username Then ' Private
-                    NotificationType = Notifications.Notifications.PrivateMessage
-                    mFiles = MessageFiles.IngoingPrivate
-                Else
-                    GoTo exits
-                End If
-                Dim mFile As MessageFile = mFiles.Find(Function(mf) mf.Sender = Username)
-                If mFile Is Nothing Then 'ako nema
-                    mFile = New MessageFile(e.FullPath, False, Username, My.Settings.Username)
-                    mFiles.Add(mFile)
-                    mFile.ConvertOldQueueToNewQueue()
-                Else
-                    mFile.ReadNew()
-                End If
-                If Channels.Current = Channels.Common AndAlso DirPath = MessagesDir OrElse
-                    Channels.Current = Username AndAlso DirName = My.Settings.Username Then 'ako je korisnik na kanalu pošiljatelja
-                    OutputHtmlMessages.LoadNew()
-                End If
-                Notify(NotificationType, Username)
-            Case Files.Extension.Ping
-                If DirName = My.Settings.Username And e.ChangeType = WatcherChangeTypes.Created Then
-                    MoveFile(e.FullPath, Path.Combine(MessagesDir, Username, My.Settings.Username & Files.Extension.Pong))
-                End If
-            Case Files.Extension.Pong
-                If DirName = My.Settings.Username And e.ChangeType = WatcherChangeTypes.Created Then
-                    GetPing()
-                    File.Delete(e.FullPath)
-                End If
-        End Select
+        Dim SenderName As String = Path.GetFileName(DirPath)
+        Dim ChannelName As String = Path.GetFileName(Path.GetDirectoryName(DirPath))
+        Dim NotificationType As Notifications.Notifications
+        If ChannelName = Channels.Common AndAlso SenderName <> My.Settings.Username Then
+            NotificationType = Notifications.Notifications.PublicMessage
+        ElseIf ChannelName = My.Settings.Username Then
+            NotificationType = Notifications.Notifications.PrivateMessage
+        Else
+            GoTo exitr
+        End If
+        Dim message As Message = MessageFile.LoadMessage(e.FullPath)
+        If Channels.Current = ChannelName Then
+            Me.Output.InsertMessage(message)
+        Else
+            If ChannelName = Channels.Common Then
+                Messages.CommonNewQueue.Add(message)
+            Else
+                Messages.AddPrivateNew(ChannelName, message)
+            End If
+        End If
+        Notify(NotificationType, SenderName)
 
-exits:  MessagesWatcher.EnableRaisingEvents = True
+exitr:  MessagesWatcher.EnableRaisingEvents = True
     End Sub
 
     Private Sub UserFilesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Changed, UserFilesWatcher.Created
@@ -98,8 +80,8 @@ exits:  MessagesWatcher.EnableRaisingEvents = True
     Private Sub UserFilesWatcher_Deleted(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Deleted
         Dim Name As String = Path.GetFileNameWithoutExtension(e.Name)
         UserInfoFiles.Others.Remove(UserInfoFiles.Others.Find(Function(x) x.Username = Name))
-        MessageFiles.OutgoingPrivate.Remove(MessageFiles.OutgoingPrivate.Find(Function(x) x.Sender = Name))
-        MessageFiles.IngoingPrivate.Remove(MessageFiles.IngoingPrivate.Find(Function(x) x.Sender = Name))
+        'TODO MessageFiles.OutgoingPrivate.Remove(MessageFiles.OutgoingPrivate.Find(Function(x) x.Sender = Name))
+        'TODO MessageFiles.IngoingPrivate.Remove(MessageFiles.IngoingPrivate.Find(Function(x) x.Sender = Name))
 
         If Channels.Current = Name Then SwitchChannel(Channels.Common)
     End Sub

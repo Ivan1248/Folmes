@@ -1,13 +1,15 @@
 ﻿Imports Folmes.Classes
+Imports Folmes.Datatypes
 
 Partial Public Class MainGUI
 
-    Public Function AnyNewMessages(channel As String) As Boolean
+    Public Function AnyNewMessages(channel As String) As Boolean ' TODO prepraviti
         Dim last As ChannelLastReadTime = My.Settings.LastReadTimes.Find(Function(e) e.Channel = channel)
         If last Is Nothing Then Return True
-        Dim msgFile As MessageFile = MessageFiles.IngoingPrivate.Find(Function(e) e.Sender = channel)
-        If msgFile Is Nothing Then Return False
-        Return msgFile.NewQueueLength > 0 OrElse msgFile.NextUnreadOldTime > last.Time
+        'Dim msgFile As MessageFile = MessageFiles.IngoingPrivate.Find(Function(e) e.Sender = channel)
+        'If msgFile Is Nothing Then Return False
+        'Return msgFile.NewQueueLength > 0 OrElse msgFile.NextUnreadOldTime > last.Time
+        Return False
     End Function
 
     Private Sub ReloadPrivateChannelsToMenu()
@@ -37,17 +39,15 @@ Partial Public Class MainGUI
 
     Private Sub SwitchChannel(channel As String)
         If channel <> Channels.Current Then
-            SetLastRead()
+            Channels.SetLastRead()
             Me.Output.CacheChannelHtml(Channels.Current)
             With TSChannels
                 If channel = Channels.Common Then
-                    Channels.Current = Channels.Common
-                    MessageFiles.SwitchCommonChannel()
+                    Channels.Switch(channel)
                     .AutoSize = True
                     TSChat.Visible = False
                 Else 'PRIVATE
-                    Channels.Current = channel
-                    MessageFiles.SwitchPrivateChannel(channel)
+                    Channels.Switch(channel)
                     If .Width < 32 Then
                         .AutoSize = False
                         .Width = 32
@@ -58,10 +58,6 @@ Partial Public Class MainGUI
                 End If
                 .Text = channel
             End With
-            If Not Me.Output.LoadCachedChannelHtml(Channels.Current) Then
-                OutputHtmlMessages.LoadInitial_Once()
-            End If
-            OutputHtmlMessages.LoadNew()
         End If
     End Sub
 
@@ -71,19 +67,6 @@ Partial Public Class MainGUI
 
     Private Sub Channel_Click(sender As Object, e As EventArgs) Handles PublicChannel.Click
         SwitchChannel(DirectCast(sender, ToolStripMenuItem).Text)
-    End Sub
-
-    Public Sub SetLastRead()
-        If My.Settings.LastReadTimes IsNot Nothing Then
-            For Each lrt As ChannelLastReadTime In My.Settings.LastReadTimes
-                If lrt.Channel = Channels.Current Then
-                    lrt.Time = DateTime.UtcNow.ToBinary
-                    Exit Sub
-                End If
-            Next
-        End If
-        My.Settings.LastReadTimes.Add(
-            New ChannelLastReadTime With {.Channel = Channels.Current, .Time = DateTime.UtcNow.ToBinary})
     End Sub
 
 End Class

@@ -39,7 +39,7 @@ Partial Class MainGUI
         Me.SelectAllBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopyO = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Output = New MessagesDisplay()
+        Me.Output = New Folmes.GUI.MessagesDisplay()
         Me.NotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CMShow = New System.Windows.Forms.ToolStripMenuItem()
@@ -48,7 +48,7 @@ Partial Class MainGUI
         Me.CMOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMExit = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TS = New NFToolStrip()
+        Me.TS = New Folmes.NFToolStrip()
         Me.TSTools = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TSOptions = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSCleaner = New System.Windows.Forms.ToolStripMenuItem()
@@ -204,11 +204,16 @@ Partial Class MainGUI
         '
         'Output
         '
+        Me.Output.AllowNavigation = False
+        Me.Output.AllowWebBrowserDrop = False
         Me.Output.CausesValidation = False
         Me.Output.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Output.IsWebBrowserContextMenuEnabled = False
         Me.Output.Location = New System.Drawing.Point(0, 24)
         Me.Output.Margin = New System.Windows.Forms.Padding(0)
         Me.Output.MinimumSize = New System.Drawing.Size(20, 20)
+        Me.Output.Name = "Output"
+        Me.Output.ScrollBarsEnabled = False
         Me.Output.Size = New System.Drawing.Size(374, 200)
         Me.Output.TabIndex = 12
         '
@@ -333,7 +338,7 @@ Partial Class MainGUI
         Me.TSChannels.Name = "TSChannels"
         Me.TSChannels.ShowDropDownArrow = False
         Me.TSChannels.Size = New System.Drawing.Size(91, 24)
-        Me.TSChannels.Text = "Public Channel"
+        Me.TSChannels.Text = Channels.Common
         Me.TSChannels.ToolTipText = "Messaging channel"
         '
         'PublicChannel
@@ -341,7 +346,7 @@ Partial Class MainGUI
         Me.PublicChannel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(176, Byte), Integer), CType(CType(176, Byte), Integer), CType(CType(176, Byte), Integer))
         Me.PublicChannel.Name = "PublicChannel"
         Me.PublicChannel.Size = New System.Drawing.Size(154, 22)
-        Me.PublicChannel.Text = "Public Channel"
+        Me.PublicChannel.Text = Channels.Common
         '
         'PubPrivChSeparator
         '

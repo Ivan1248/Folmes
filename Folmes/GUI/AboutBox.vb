@@ -8,5 +8,4 @@
         '    properties dialog (under the "Project" menu).
         'Me.LabelCopyright.Text = My.Application.Info.Copyright
     End Sub
-
 End Class

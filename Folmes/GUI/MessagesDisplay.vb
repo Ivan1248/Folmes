@@ -188,7 +188,7 @@ Namespace GUI
             Return False
         End Function
 
-        Public Sub PushMessage(message As Message)
+        Public Sub InsertMessage(message As Message)
             If _htmlMessages.Count >= My.Settings.NofMsgs Then
                 RemoveOldestHtmlMessage()
                 _htmlMessages.RemoveOldest()

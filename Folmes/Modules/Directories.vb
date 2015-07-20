@@ -10,7 +10,7 @@ Module Directories
     Public FilesDir As String = FolmesDir & "\Files"
     Public ThumbnailDir As String = FilesDir & "\thumbnails"
 
-    Public Sub AssureDirectories()
+    Public Sub AssureBaseDirectories()
         If Not Directory.Exists(FolmesDir) Then
             MakeDir(FolmesDir)
             HideFolmesFolder(True)

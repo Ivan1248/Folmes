@@ -27,7 +27,7 @@ Public NotInheritable Class MainGUI
             CMOpenFolder.Text = "Open """ & Path.GetFileName(RootPath) & """"
 
             'Stvaranje direktorija
-            AssureDirectories()
+            AssureBaseDirectories()
             LoadFSWatchers()
 
             'Prvo pokretenje? i učitavanje kanala u izbornik
@@ -39,16 +39,16 @@ Public NotInheritable Class MainGUI
             MakeDir(Path.Combine(MessagesDir, My.Settings.Username))
 
             'Učitavanje datoteka i poruka
-            MessageFiles.GetCommon()
-            MessageFiles.SwitchCommonChannel()
-            MessageFiles.GetIngoingPrivate() 'potrebno za pronalazak novih poruka
+            'MessageFiles.GetCommon()
+            'MessageFiles.SwitchCommonChannel()
+            ' TODO MessageFiles.GetIngoingPrivate() 'potrebno za pronalazak novih poruka
             UserInfoFiles.GetAll()
             UserInfoFiles.Mine.SetOnlineStatus(True)
             With Output
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()
                             RemoveHandler Output.Initialized, messagesLoad
-                            OutputHtmlMessages.LoadInitial_Once()
+                            Messages.LoadInitial(Channels.Common, AddressOf Me.Output.InsertMessage)
                         End Sub
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})
@@ -58,7 +58,7 @@ Public NotInheritable Class MainGUI
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
-                Me.Output.PushMessage(
+                Me.Output.InsertMessage(
                     New Message With {.Type = MessageType.Declaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
@@ -94,7 +94,7 @@ Public NotInheritable Class MainGUI
             If My.Settings.Username <> Nothing Then
                 'SetOnlineStatus(False)
                 UserInfoFiles.Mine.SetOnlineStatus(False)
-                SetLastRead()
+                Channels.SetLastRead()
             End If
         Catch ex As Exception
         End Try
@@ -137,22 +137,10 @@ Public NotInheritable Class MainGUI
             Case messageType.Reflexive
                 msg.Content = HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
         End Select
-        If Channels.Current = Channels.Common Then
-            MessageFiles.OutgoingCommon.StoreEntry(msg)
-        Else
-            For Each msgfile As MessageFile In MessageFiles.OutgoingPrivate
-                If msgfile.Recipient = Channels.Current Then
-                    msgfile.StoreEntry(msg)
-                    Exit For
-                End If
-            Next
-        End If
-        Me.Output.PushMessage(msg)
+        MessageFile.Create(Channels.Current, msg)
+        Me.Output.InsertMessage(msg)
         Return True
     End Function
-
-
-
 #End Region
 
     '//////// Promjena veličine, NotifyIcon i Toolstrip //////////////////////////////////
@@ -368,6 +356,5 @@ Public NotInheritable Class MainGUI
     End Sub
 
 #End Region
-
 
 End Class

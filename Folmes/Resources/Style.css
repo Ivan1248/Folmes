@@ -19,9 +19,9 @@ a:active { color:#48b; }
 	.message:hover .time { opacity:1; }
 .hl { border:1px #333 solid; }
 	
-#scrollertrack { bottom:0; height:100%; user-select:none; position:fixed; right:0; width:16px; z-index:1; }
-#scrollertrack:hover, #scroller:hover + #scrollertrack, #scroller:active + #scrollertrack { background-color:#222; }
-#scroller { background-color:#333; bottom:0; height:0px; user-select:none; position:fixed; right:0px; width:16px; z-index:2; }
+#scrollerTrack { bottom:0; height:100%; position:fixed; right:0; width:16px; z-index:1; }
+#scrollerTrack:hover, #scroller:hover + #scrollertrack, #scroller:active + #scrollertrack { background-color:#222; }
+#scroller { background-color:#333; bottom:0; height:0; position:fixed; right:0; width:16px; z-index:2; }
 #scroller:hover { background-color:#444; }
 #scroller:active { background-color:#555; }
 

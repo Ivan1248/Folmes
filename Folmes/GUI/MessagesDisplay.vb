@@ -37,16 +37,16 @@ Namespace GUI
                 .Append(My.Resources.Style)
                 .Append("</style><script>")
                 '       script
-                .Append(My.Resources.ScrollScript).Append(vbNewLine).Append(My.Resources.Script)
+                .Append(My.Resources.ScrollerScript).Append(vbNewLine).Append(My.Resources.Script)
                 For Each scr As String In scripts
                     .Append(scr)
                 Next
                 '   body
                 .Append("</script></head>" &
                         "<body data-click="""" data-sel="""">" &
-                        "<div id=""container"">")
-                .Append(
-                    "</div><div id=""scroller""></div><div id=""scrollertrack""></div><div id=""copybtn"">Copy</div></body></html>")
+                        "<div id=""container""></div>")
+                .Append("<div id=""copybtn"">Copy</div></body></html>")
+
                 DocumentText = .ToString()
             End With
         End Sub
@@ -180,7 +180,7 @@ Namespace GUI
                 _htmlMessages = New HtmlMessageList()
             End If
             'ScrollDown()
-            'RefreshScroller()
+            'refreshScroller()
         End Function
 
         Public Sub AddMessage(declaration As String)
@@ -199,7 +199,7 @@ Namespace GUI
             Dim messageElement As HtmlElement = InsertHtmlMessage(message)
             _htmlMessages.InsertElement(messageElement, message.Time, _msgContainer)
             'ScrollDown()
-            'RefreshScroller()
+            'refreshScroller()
         End Sub
 
         Private Function InsertHtmlMessage(message As Message) As HtmlElement

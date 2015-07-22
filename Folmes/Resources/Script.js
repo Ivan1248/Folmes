@@ -20,3 +20,4 @@ document.onmouseup = function () { document.body.setAttribute("data-sel", getSel
 function removeFirst() {
     document.getElementById("container").firstChild.removeNode(true);
 }
+

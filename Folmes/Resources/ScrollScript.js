@@ -1,37 +1,26 @@
+var RelMouseY;
+var maxPageYOffset;
+var scrollTrackSpace;
 var scrollerRelMouseY;
-var pageLuft;
-var scrollerLuft;
-var dragging = false;
+var scroller;
 
 function setScrollerPos(y) {
-    document.getElementById("scroller").style.top = (y < 0 ? "0" : y < scrollerLuft ? y : scrollerLuft) + "px";
-}
-
-function dragNscroll(e) {
-    var newScrollerY = e.clientY - scrollerRelMouseY,
-        scrollVal = Math.round(pageLuft * newScrollerY / scrollerLuft);
-    setScrollerPos(newScrollerY);
-    window.scrollTo(0, scrollVal);
+    scroller.style.top = (y < 0 ? "0" : y < scrollTrackSpace ? y : scrollTrackSpace) + "px";
 }
 
 function updateScrollerPos() {
-    setScrollerPos(Math.round(scrollerLuft * window.pageYOffset / pageLuft));
+    setScrollerPos(Math.round(scrollTrackSpace * window.pageYOffset / maxPageYOffset));
 }
 
 var scrollTarget = 0;
 var scrolling = false;
 
-function smoothScroll() {
-    if (scrollTarget < 0) {
-        scrollTarget = -5;
-    } else if (scrollTarget > pageLuft) {
-        scrollTarget = pageLuft + 5;
-    }
+function smoothScrollToTarget() {
     window.scrollTo(0, (6 * window.pageYOffset + scrollTarget) / 7);
     if (Math.abs(scrollTarget - window.pageYOffset) > 5) {
-        setTimeout(smoothScroll, 10);
+        setTimeout(smoothScrollToTarget, 10);
     } else {
-        scrollTarget = Math.round(window.pageYOffset);
+        window.scrollTo(0, scrollTarget);
         scrolling = false;
     }
     updateScrollerPos();
@@ -39,60 +28,66 @@ function smoothScroll() {
 
 function wheelScroll(e) { // handles window.onmousewheel
     var delta = e.wheelDelta ? e.wheelDelta / 120 : -e.detail / 3;
-    scrollTarget = parseInt(scrolling ? scrollTarget : window.pageYOffset, 10) - delta * 50;
+    scrollTarget -= delta * 50;
+    if (scrollTarget < 0) scrollTarget = 0;
+    else if (scrollTarget > maxPageYOffset) scrollTarget = maxPageYOffset;
     if (!scrolling) {
-        setTimeout(smoothScroll, 10);
         scrolling = true;
+        smoothScrollToTarget();
     }
-}
-
-function scrollDown(e) {
-    window.scrollTo(0, document.documentElement.scrollHeight - e);
 }
 
 function refreshScroller() { // handles, window.onresize
     var doc = document,
-        scroller = doc.getElementById("scroller"),
         docHeight = doc.documentElement.scrollHeight,
         windowHeight = window.innerHeight,
         scrollerSize = windowHeight * windowHeight / docHeight,
         scrollerStyle = scroller.style;
 
-    pageLuft = docHeight - windowHeight;
-    scrollerLuft = windowHeight - scrollerSize;
+    window.scrollTo(0, docHeight);
+
+    scrolling = false;
+    scrollTarget = window.pageYOffset;
+
+    maxPageYOffset = docHeight - windowHeight;
+    scrollTrackSpace = windowHeight - scrollerSize;
 
     scrollerStyle.height = Math.round(scrollerSize) + "px";
-    scrollerStyle.top = scrollerLuft + "px";
+    scrollerStyle.top = scrollTrackSpace + "px";
 
     updateScrollerPos();
 }
 
-function loadScroller() { // handles window.onload
-    dragging = false;
-
-    var doc = document,
-        scroller = doc.getElementById("scroller");
-
-    refreshScroller();
-
-    scroller.onmousemove = function() {
-        if (!dragging) {
-            scrollerRelMouseY = event.clientY - parseInt(scroller.style.top, 10);
-        }
-    };
-    scroller.onmousedown = function() {
-        dragging = true;
-        doc.onmousemove = dragNscroll;
-        doc.onselectstart = function() { return false; }
-    };
-    window.onmouseup = function () {
-        document.onmousemove = null;
-        dragging = false;
-        document.onselectstart = null;
-    };
+function dragNscroll(e) {
+    var newScrollerY = e.clientY - scrollerRelMouseY,
+        scrollVal = Math.round(maxPageYOffset * newScrollerY / scrollTrackSpace);
+    setScrollerPos(newScrollerY);
+    window.scrollTo(0, scrollVal);
 }
 
-window.onload = loadScroller;
-window.onmousewheel = wheelScroll;
-document.addEventListener("DOMNodeInserted", function () { scrollDown(0); refreshScroller(); }, false);
-window.onresize = function () { scrollDown(0); };
+function initializeScroller() { // handles window.onload
+    var container = document.getElementById("container");
+    scroller = document.createElement("div");
+    scroller.id = "scroller";
+    container.appendChild(scroller);
+    var scrollerTrack = document.createElement("div");
+    scrollerTrack.id = "scrollertrack";
+    container.appendChild(scrollerTrack);
+
+    scroller.onmousedown = function (e) {
+        scrollerRelMouseY = e.clientY - parseInt(scroller.style.top, 10);
+        document.addEventListener("mousemove", dragNscroll);
+        document.onselectstart = function () { e.preventDefault(); return false; }; // disable text selection
+    };
+    window.addEventListener("mouseup", function () {
+        document.removeEventListener("mousemove", dragNscroll);
+        document.onselectstart = null; // enable text selection
+    });
+    window.addEventListener("mousewheel", wheelScroll);
+    window.addEventListener("resize", refreshScroller);
+    window.addEventListener("DOMNodeInserted", refreshScroller, false);
+
+    refreshScroller();
+}
+
+window.addEventListener("load", initializeScroller);

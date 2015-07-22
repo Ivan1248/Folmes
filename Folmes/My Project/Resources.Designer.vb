@@ -106,40 +106,40 @@ Namespace My.Resources
         Friend ReadOnly Property menu() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("menu", resourceCulture)
-                Return CType(obj, System.Drawing.Bitmap)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
-
+        
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property newmsg() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("newmsg", resourceCulture)
-                Return CType(obj, System.Drawing.Bitmap)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
-
+        
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property newmsg_online() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("newmsg_online", resourceCulture)
-                Return CType(obj, System.Drawing.Bitmap)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
-
+        
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property online() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("online", resourceCulture)
-                Return CType(obj, System.Drawing.Bitmap)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
-
+        
         '''<summary>
         '''  Looks up a localized string similar to function getSelectedText() {
         '''    var text = &quot;&quot;;
@@ -153,8 +153,8 @@ Namespace My.Resources
         '''
         '''function clickO(inp) {
         '''    var body = document.body;
-        '''    body.setAttribute(&apos;data-click&apos;, inp);
-        '''    setTimeout(function () {body.setAttribute(&apos;data-click&apos;, &apos;&apos;); }, 100); //ako se poslije klika u prazno
+        '''    body.setAttribute(&quot;data-click&quot;, inp);
+        '''    setTimeout(function () {body.setAttribute(&quot;data-click&quot;, &quot;&quot;); }, 100); //ako se poslije klika u prazno
         '''}
         '''
         '''documen [rest of string was truncated]&quot;;.
@@ -164,57 +164,59 @@ Namespace My.Resources
                 Return ResourceManager.GetString("Script", resourceCulture)
             End Get
         End Property
-
+        
         '''<summary>
-        '''  Looks up a localized string similar to var scrollerRelMouseY;
-        '''var pageLuft;
-        '''var scrollerLuft;
-        '''var dragging = false;
-        '''var doc = document;
+        '''  Looks up a localized string similar to var RelMouseY;
+        '''var maxPageYOffset;
+        '''var scrollTrackSpace;
+        '''var scrollerRelMouseY;
+        '''var scroller;
         '''
-        '''function setScrollerPos(Y) {
-        '''    document.getElementById(&apos;scroller&apos;).style.top = (Y &lt; 0 ? &quot;0&quot; : Y &lt; scrollerLuft ? Y : scrollerLuft) + &quot;px&quot;;
+        '''function setScrollerPos(y) {
+        '''    scroller.style.top = (y &lt; 0 ? &quot;0&quot; : y &lt; scrollTrackSpace ? y : scrollTrackSpace) + &quot;px&quot;;
         '''}
         '''
-        '''function dragNscroll(e) {
-        '''    var newScrollerY = e.clientY - scrollerRelMouseY,
-        '''        scrollVal = Math.round(pageLuft * newScrollerY / scrollerLuft);
-        '''    setScrollerPos(newScrollerY);
-        '''    window.scrollTo(0, scrollVal);
+        '''function updateScrollerPos() {
+        '''    setScrollerPos(Math.round(scrollTrackSpace * window.pageYOffset / maxPageYOffset));
         '''}
         '''
-        '''function updateScrollerPos()  [rest of string was truncated]&quot;;.
+        '''var scrollTarget = 0;
+        '''var scrolling = false;
+        '''
+        '''function smoothScrollToTarget() {
+        '''    window.scrollTo(0, (6 * window.pageYOffset + scrollTarget) / 7);
+        '''    if (Math [rest of string was truncated]&quot;;.
         '''</summary>
-        Friend ReadOnly Property ScrollScript() As String
+        Friend ReadOnly Property ScrollerScript() As String
             Get
-                Return ResourceManager.GetString("ScrollScript", resourceCulture)
+                Return ResourceManager.GetString("ScrollerScript", resourceCulture)
             End Get
         End Property
-
+        
         '''<summary>
         '''  Looks up a localized string similar to body { background-color:#1e1e1e; color:#a9a9a9; font-family:&quot;Segoe UI&quot;,Arial,sans-serif; margin:0; overflow:hidden; padding-top:2px; word-wrap:break-word; }
         '''img { cursor:pointer; display:block; max-width:100%; }
         '''
         '''::selection { background:rgba(255,255,255,0.1); color:#ddd; }
-        '''a:link,a:visited,.url { color:#48b; cursor:pointer; text-decoration:none; transition:color .1s ease; }
+        '''a:link,a:visited,.url { color:#48b; cursor:pointer; text-decoration:none; transition:color .0s ease; }
         '''a:hover,.url:hover { color:#5ad; cursor:pointer; }
         '''a:active { color:#48b; }
         '''
-        '''.file { background-color:#333; border:inset 1px s [rest of string was truncated]&quot;;.
+        '''.file { background-color:#333; border:inset 1px # [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property Style() As String
             Get
                 Return ResourceManager.GetString("Style", resourceCulture)
             End Get
         End Property
-
+        
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property X() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("X", resourceCulture)
-                Return CType(obj, System.Drawing.Bitmap)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
     End Module

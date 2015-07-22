@@ -1,7 +1,7 @@
 ﻿#Region "Imports"
 Imports System.IO
 Imports System.Reflection
-Imports Folmes.GUi
+Imports Folmes.GUI
 #End Region
 
 Public NotInheritable Class MainGUI
@@ -193,7 +193,7 @@ Public NotInheritable Class MainGUI
 
 #End Region
 
-#Region "Klikovi na linkove u HTML elementu 'click' + ScrollPos"
+#Region "Klikovi na linkove u HTML elementu 'click'"
 
     Private Sub Output_DocumentCompleted(sender As Object,
                                          e As WebBrowserDocumentCompletedEventArgs) _

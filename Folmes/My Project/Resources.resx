@@ -121,7 +121,7 @@
   <data name="Script" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Script.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
-  <data name="ScrollScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ScrollerScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ScrollScript.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
   <data name="Style" type="System.Resources.ResXFileRef, System.Windows.Forms">

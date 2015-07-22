@@ -337,21 +337,21 @@ Partial Class MainGUI
         Me.TSChannels.Margin = New System.Windows.Forms.Padding(0)
         Me.TSChannels.Name = "TSChannels"
         Me.TSChannels.ShowDropDownArrow = False
-        Me.TSChannels.Size = New System.Drawing.Size(91, 24)
-        Me.TSChannels.Text = Channels.Common
+        Me.TSChannels.Size = New System.Drawing.Size(62, 24)
+        Me.TSChannels.Text = "Common"
         Me.TSChannels.ToolTipText = "Messaging channel"
         '
         'PublicChannel
         '
         Me.PublicChannel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(176, Byte), Integer), CType(CType(176, Byte), Integer), CType(CType(176, Byte), Integer))
         Me.PublicChannel.Name = "PublicChannel"
-        Me.PublicChannel.Size = New System.Drawing.Size(154, 22)
-        Me.PublicChannel.Text = Channels.Common
+        Me.PublicChannel.Size = New System.Drawing.Size(125, 22)
+        Me.PublicChannel.Text = "Common"
         '
         'PubPrivChSeparator
         '
         Me.PubPrivChSeparator.Name = "PubPrivChSeparator"
-        Me.PubPrivChSeparator.Size = New System.Drawing.Size(151, 6)
+        Me.PubPrivChSeparator.Size = New System.Drawing.Size(122, 6)
         '
         'TSChat
         '

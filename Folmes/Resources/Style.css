@@ -26,6 +26,3 @@ a:active { color:#48b; }
 #scroller:active { background-color:#555; }
 
 #container { margin:0 16px 0 0; position:relative; width:auto; }
-
-#copybtn { background:#222; border:2px solid #222; cursor:default; display:none; outline:1px solid #444; padding:1px 3px 3px 3px; position:fixed; }
-#copybtn:hover { background:#333; }

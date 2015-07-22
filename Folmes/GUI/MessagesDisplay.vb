@@ -42,10 +42,9 @@ Namespace GUI
                     .Append(scr)
                 Next
                 '   body
-                .Append("</script></head>" &
-                        "<body data-click="""" data-sel="""">" &
+                .Append("</script></head><body>" &
                         "<div id=""container""></div>")
-                .Append("<div id=""copybtn"">Copy</div></body></html>")
+                .Append("</body></html>")
 
                 DocumentText = .ToString()
             End With

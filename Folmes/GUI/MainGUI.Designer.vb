@@ -30,27 +30,27 @@ Partial Class MainGUI
         Me.Button1 = New System.Windows.Forms.Button()
         Me.InputBGPanel = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Input = New System.Windows.Forms.TextBox()
-        Me.CCPContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.Input = New Folmes.GUI.InputTextBox()
+        Me.InputContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CutBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.PasteBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.SelectAllBtn = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CopyContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.OutputContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopyO = New System.Windows.Forms.ToolStripMenuItem()
         Me.Output = New Folmes.GUI.MessagesDisplay()
         Me.NotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.ContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.NotifyIconMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CMShow = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CMOptions = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CMSettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.TS = New Folmes.NFToolStrip()
         Me.TSTools = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.TSOptions = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TSSettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSCleaner = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSHelp = New System.Windows.Forms.ToolStripMenuItem()
@@ -61,9 +61,9 @@ Partial Class MainGUI
         Me.TSChat = New System.Windows.Forms.ToolStripButton()
         Me.InputBGPanel.SuspendLayout()
         Me.Panel2.SuspendLayout()
-        Me.CCPContMenu.SuspendLayout()
-        Me.CopyContMenu.SuspendLayout()
-        Me.ContMenu.SuspendLayout()
+        Me.InputContMenu.SuspendLayout()
+        Me.OutputContMenu.SuspendLayout()
+        Me.NotifyIconMenu.SuspendLayout()
         Me.TS.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -138,7 +138,7 @@ Partial Class MainGUI
         Me.Input.AllowDrop = True
         Me.Input.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
         Me.Input.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.Input.ContextMenuStrip = Me.CCPContMenu
+        Me.Input.ContextMenuStrip = Me.InputContMenu
         Me.Input.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Input.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel)
         Me.Input.ForeColor = System.Drawing.Color.DarkGray
@@ -150,11 +150,11 @@ Partial Class MainGUI
         Me.Input.Size = New System.Drawing.Size(354, 34)
         Me.Input.TabIndex = 0
         '
-        'CCPContMenu
+        'InputContMenu
         '
-        Me.CCPContMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CutBtn, Me.CopyBtn, Me.PasteBtn, Me.ToolStripMenuItem1, Me.SelectAllBtn})
-        Me.CCPContMenu.Name = "TextContMenu"
-        Me.CCPContMenu.Size = New System.Drawing.Size(121, 98)
+        Me.InputContMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CutBtn, Me.CopyBtn, Me.PasteBtn, Me.ToolStripMenuItem1, Me.SelectAllBtn})
+        Me.InputContMenu.Name = "TextContMenu"
+        Me.InputContMenu.Size = New System.Drawing.Size(121, 98)
         '
         'CutBtn
         '
@@ -189,11 +189,11 @@ Partial Class MainGUI
         Me.SelectAllBtn.Size = New System.Drawing.Size(120, 22)
         Me.SelectAllBtn.Text = "Select all"
         '
-        'CopyContMenu
+        'OutputContMenu
         '
-        Me.CopyContMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyO})
-        Me.CopyContMenu.Name = "TextContMenu"
-        Me.CopyContMenu.Size = New System.Drawing.Size(103, 26)
+        Me.OutputContMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyO})
+        Me.OutputContMenu.Name = "TextContMenu"
+        Me.OutputContMenu.Size = New System.Drawing.Size(103, 26)
         '
         'CopyO
         '
@@ -219,49 +219,49 @@ Partial Class MainGUI
         '
         'NotifyIcon
         '
-        Me.NotifyIcon.ContextMenuStrip = Me.ContMenu
+        Me.NotifyIcon.ContextMenuStrip = Me.NotifyIconMenu
         Me.NotifyIcon.Text = "Folmes"
         Me.NotifyIcon.Visible = True
         '
-        'ContMenu
+        'NotifyIconMenu
         '
-        Me.ContMenu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.ContMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CMShow, Me.CMOptions, Me.ToolStripSeparator1, Me.CMOpenFolder, Me.ToolStripSeparator2, Me.CMExit})
-        Me.ContMenu.Name = "ContextMenuStrip1"
-        Me.ContMenu.Size = New System.Drawing.Size(140, 104)
+        Me.NotifyIconMenu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.NotifyIconMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CMShow, Me.CMSettings, Me.ToolStripSeparator1, Me.CMOpenFolder, Me.ToolStripSeparator2, Me.CMExit})
+        Me.NotifyIconMenu.Name = "ContextMenuStrip1"
+        Me.NotifyIconMenu.Size = New System.Drawing.Size(176, 126)
         '
         'CMShow
         '
         Me.CMShow.Name = "CMShow"
-        Me.CMShow.Size = New System.Drawing.Size(139, 22)
+        Me.CMShow.Size = New System.Drawing.Size(152, 22)
         Me.CMShow.Text = "Show"
         '
-        'CMOptions
+        'CMSettings
         '
-        Me.CMOptions.Name = "CMOptions"
-        Me.CMOptions.Size = New System.Drawing.Size(139, 22)
-        Me.CMOptions.Text = "Options"
+        Me.CMSettings.Name = "CMSettings"
+        Me.CMSettings.Size = New System.Drawing.Size(152, 22)
+        Me.CMSettings.Text = "Settings"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(136, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
         '
         'CMOpenFolder
         '
         Me.CMOpenFolder.Name = "CMOpenFolder"
-        Me.CMOpenFolder.Size = New System.Drawing.Size(139, 22)
-        Me.CMOpenFolder.Text = "Open Folder"
+        Me.CMOpenFolder.Size = New System.Drawing.Size(175, 22)
+        Me.CMOpenFolder.Text = "Open shared folder"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(136, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(149, 6)
         '
         'CMExit
         '
         Me.CMExit.Name = "CMExit"
-        Me.CMExit.Size = New System.Drawing.Size(139, 22)
+        Me.CMExit.Size = New System.Drawing.Size(152, 22)
         Me.CMExit.Text = "Exit"
         '
         'TS
@@ -282,7 +282,7 @@ Partial Class MainGUI
         Me.TSTools.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.TSTools.AutoToolTip = False
         Me.TSTools.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSOptions, Me.TSCleaner, Me.ToolStripMenuItem2, Me.TSHelp, Me.TSAbout})
+        Me.TSTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSSettings, Me.TSCleaner, Me.ToolStripMenuItem2, Me.TSHelp, Me.TSAbout})
         Me.TSTools.ForeColor = System.Drawing.Color.DarkGray
         Me.TSTools.Image = Global.Folmes.My.Resources.Resources.menu
         Me.TSTools.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
@@ -294,37 +294,37 @@ Partial Class MainGUI
         Me.TSTools.Size = New System.Drawing.Size(24, 24)
         Me.TSTools.Text = "Tools"
         '
-        'TSOptions
+        'TSSettings
         '
-        Me.TSOptions.ForeColor = System.Drawing.Color.DarkGray
-        Me.TSOptions.Name = "TSOptions"
-        Me.TSOptions.Size = New System.Drawing.Size(116, 22)
-        Me.TSOptions.Text = "Settings"
+        Me.TSSettings.ForeColor = System.Drawing.Color.DarkGray
+        Me.TSSettings.Name = "TSSettings"
+        Me.TSSettings.Size = New System.Drawing.Size(152, 22)
+        Me.TSSettings.Text = "Settings"
         '
         'TSCleaner
         '
         Me.TSCleaner.ForeColor = System.Drawing.Color.DarkGray
         Me.TSCleaner.Name = "TSCleaner"
-        Me.TSCleaner.Size = New System.Drawing.Size(116, 22)
+        Me.TSCleaner.Size = New System.Drawing.Size(152, 22)
         Me.TSCleaner.Text = "Cleaner"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(113, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(149, 6)
         '
         'TSHelp
         '
         Me.TSHelp.ForeColor = System.Drawing.Color.DarkGray
         Me.TSHelp.Name = "TSHelp"
-        Me.TSHelp.Size = New System.Drawing.Size(116, 22)
+        Me.TSHelp.Size = New System.Drawing.Size(152, 22)
         Me.TSHelp.Text = "Help"
         '
         'TSAbout
         '
         Me.TSAbout.ForeColor = System.Drawing.Color.DarkGray
         Me.TSAbout.Name = "TSAbout"
-        Me.TSAbout.Size = New System.Drawing.Size(116, 22)
+        Me.TSAbout.Size = New System.Drawing.Size(152, 22)
         Me.TSAbout.Text = "About"
         '
         'TSChannels
@@ -386,9 +386,9 @@ Partial Class MainGUI
         Me.InputBGPanel.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
-        Me.CCPContMenu.ResumeLayout(False)
-        Me.CopyContMenu.ResumeLayout(False)
-        Me.ContMenu.ResumeLayout(False)
+        Me.InputContMenu.ResumeLayout(False)
+        Me.OutputContMenu.ResumeLayout(False)
+        Me.NotifyIconMenu.ResumeLayout(False)
         Me.TS.ResumeLayout(False)
         Me.TS.PerformLayout()
         Me.ResumeLayout(False)
@@ -399,16 +399,16 @@ Partial Class MainGUI
     Private WithEvents Button1 As System.Windows.Forms.Button
     Private WithEvents Panel2 As System.Windows.Forms.Panel
     Private WithEvents Button2 As System.Windows.Forms.Button
-    Private WithEvents CCPContMenu As System.Windows.Forms.ContextMenuStrip
+    Private WithEvents InputContMenu As System.Windows.Forms.ContextMenuStrip
     Private WithEvents CutBtn As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents CopyBtn As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents PasteBtn As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripSeparator
     Private WithEvents SelectAllBtn As System.Windows.Forms.ToolStripMenuItem
-    Private WithEvents CopyContMenu As System.Windows.Forms.ContextMenuStrip
+    Private WithEvents OutputContMenu As System.Windows.Forms.ContextMenuStrip
     Private WithEvents CopyO As System.Windows.Forms.ToolStripMenuItem
-    Private WithEvents ContMenu As System.Windows.Forms.ContextMenuStrip
-    Private WithEvents CMOptions As System.Windows.Forms.ToolStripMenuItem
+    Private WithEvents NotifyIconMenu As System.Windows.Forms.ContextMenuStrip
+    Private WithEvents CMSettings As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents CMExit As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents CMShow As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents CMOpenFolder As System.Windows.Forms.ToolStripMenuItem
@@ -423,7 +423,7 @@ Partial Class MainGUI
     Friend WithEvents Output As MessagesDisplay
     Friend WithEvents NotifyIcon As System.Windows.Forms.NotifyIcon
     Friend WithEvents PubPrivChSeparator As System.Windows.Forms.ToolStripSeparator
-    Private WithEvents TSOptions As System.Windows.Forms.ToolStripMenuItem
+    Private WithEvents TSSettings As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents TSCleaner As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents TSHelp As System.Windows.Forms.ToolStripMenuItem

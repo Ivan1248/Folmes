@@ -8,13 +8,15 @@ function getSelectedText() {
     return text;
 }
 
-function clickO(inp) {
-    var body = document.body;
-    body.setAttribute("data-click", inp);
-    setTimeout(function () {body.setAttribute("data-click", ""); }, 100); //ako se poslije klika u prazno
+function fileClick(inp) {
+    window.external.ProcessStart_Output(inp);
 }
 
-document.onmouseup = function () { document.body.setAttribute("data-sel", getSelectedText()); };
+function contMenu() {
+    if (getSelectedText()) window.external.ContextMenu_Output();
+}
+
+window.oncontextmenu = contMenu;
 
 // called from outside
 function removeFirst() {

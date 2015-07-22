@@ -116,6 +116,9 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GUI\InputTextBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Modules\MessagesManager.vb" />
     <Compile Include="Classes and Structures\Message.vb" />
     <Compile Include="Classes and Structures\UserInfoFile.vb" />

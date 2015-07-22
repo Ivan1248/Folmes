@@ -1,9 +1,17 @@
 ﻿#Region "Imports"
+
+
 Imports System.IO
+Imports System.Linq.Expressions
 Imports System.Reflection
+Imports System.Security.Permissions
 Imports Folmes.GUI
+
 #End Region
 
+'zbog komunikacije s Javascriptom
+<PermissionSet(SecurityAction.Demand, Name:="FullTrust")> _
+<System.Runtime.InteropServices.ComVisibleAttribute(True)>
 Public NotInheritable Class MainGUI
     'public = common (synonyms)
 
@@ -17,9 +25,8 @@ Public NotInheritable Class MainGUI
             LoadSettings()
             Me.Icon = New Icon(Assembly.GetExecutingAssembly.GetManifestResourceStream("Folmes.DBM.ico"))
             NotifyIcon.Icon = Me.Icon        'druge ikone
-            CMOpenFolder.Text = "Open """ & Path.GetFileName(RootPath) & """"
 
-            'Stvaranje direktorija
+            'Stvaranje direktorija i učitavanje FSW
             AssureMainDirectories()
             LoadFSWatchers()
 
@@ -32,9 +39,6 @@ Public NotInheritable Class MainGUI
             MakeDir(Path.Combine(MessagesDir, My.Settings.Username))
 
             'Učitavanje datoteka i poruka
-            'MessageFiles.GetCommon()
-            'MessageFiles.SwitchCommonChannel()
-            ' TODO MessageFiles.GetIngoingPrivate() 'potrebno za pronalazak novih poruka
             UserInfoFiles.GetAll()
             UserInfoFiles.Mine.SetOnlineStatus(True)
             With Output
@@ -47,12 +51,15 @@ Public NotInheritable Class MainGUI
                 .Initialize({})
             End With
             AddHandler Panel2.MouseUp, AddressOf Panel2_MouseUp
+
+            Output.ObjectForScripting = Me
         Catch ex As Exception
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
                 Me.Output.AddMessage(
-                    New Message With {.Type = MessageType.FolmesDeclaration, .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
+                    New Message With {.Type = MessageType.FolmesDeclaration,
+                                        .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
             End Try
@@ -74,15 +81,15 @@ Public NotInheritable Class MainGUI
         TS.Renderer = New ToolStripProfessionalRenderer(New ToolstripColorTable)
         CType(TS.Renderer, ToolStripProfessionalRenderer).RoundedEdges = False
 
-        CCPContMenu.Renderer = New ToolStripProfessionalRenderer(New ToolstripColorTable)
-        CopyContMenu.Renderer = New ToolStripProfessionalRenderer(New ToolstripColorTable)
+        InputContMenu.Renderer = New ToolStripProfessionalRenderer(New ToolstripColorTable)
+        OutputContMenu.Renderer = New ToolStripProfessionalRenderer(New ToolstripColorTable)
     End Sub
 
 #End Region
 
-#Region "Zatvaranje"
+#Region "Closing"
 
-    Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Shared Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Try
             If My.Settings.Username <> Nothing Then
                 'SetOnlineStatus(False)
@@ -95,32 +102,59 @@ Public NotInheritable Class MainGUI
 
 #End Region
 
-    '//////// Učitavanje datoteka,  poruka, slanje i FSW ///////////////////////////////////////////////
+#Region "Input + Input processing"
 
-    ' Učitavanje i postavljanje datoteka:
-    '    Box.MessageFiles
-    ' Učitavanje poruka:
-    '    Box.Messages
+#Region "DragDrop"
 
-#Region "Slanje poruka"
+    Private Shared Sub Input_DragEnter(sender As Object, e As DragEventArgs) Handles Input.DragEnter
+        e.Effect = DragDropEffects.All
+    End Sub
 
-    Friend Sub ProcessInput()
-        If Input.Text Is String.Empty Then Exit Sub
+    Private Sub Input_DragDrop(sender As Object, e As DragEventArgs) Handles Input.DragDrop
+        If (e.Data.GetDataPresent(DataFormats.Text)) Then
+            Input.AppendText(CStr(e.Data.GetData(DataFormats.Text)))
+        ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim filePath As String = CType(e.Data.GetData(DataFormats.FileDrop), String())(0)
+            If File.Exists(filePath) Then
+                Input.AppendText("[file:" & filePath & "]")
+            Else
+                MsgBox("I don't accept folders.")
+            End If
+        End If
+        Input.Focus()
+    End Sub
+
+#End Region
+
+    Private Sub Input_KeyDown(sender As Object, e As KeyEventArgs) Handles Input.KeyDown
+        If e.KeyCode = Keys.Enter AndAlso Not e.Shift Then
+            e.SuppressKeyPress = True
+            If Input.Text IsNot String.Empty Then
+                If Not ProcessInput() Then
+                    'TODO: zvuk greške
+                End If
+            End If
+        End If
+    End Sub
+
+    Friend Function ProcessInput() As Boolean
         Dim command As String = Nothing
         If Input.Text(0) = "/"c Then
             Dim I As Integer = Input.Text.IndexOf(" "c)
             command = Input.Text.Substring(1, If(I <> -1, I, Input.Text.Length) - 1)
         End If
         Select Case command
-            Case Nothing : If SendMessage(MessageType.Normal) Then Input.Clear()
-            Case "me" : If SendMessage(MessageType.Reflexive) Then Input.Clear()
+            Case Nothing : Return SendMessage(MessageType.Normal)
+            Case "me" : Return SendMessage(MessageType.Reflexive)
             Case "ping"
                 If Input.Text.Length > 6 AndAlso PingPong.PingFile(Input.Text.Substring(6).TrimEnd(), False) Then
                     Input.Clear()
                 End If
             Case "exit", "close" : Me.Close()
+            Case Else : Return False
         End Select
-    End Sub
+        Return True
+    End Function
 
     Friend Function SendMessage(messageType As MessageType) As Boolean
         If Not DetectAndCopyFiles(Input.Text) Then Return False
@@ -134,13 +168,13 @@ Public NotInheritable Class MainGUI
         End Select
         MessageFile.Create(Channels.Current, msg)
         Me.Output.AddMessage(msg)
+        Input.Clear()
         Return True
     End Function
+
 #End Region
 
-    '//////// Promjena veličine, NotifyIcon i Toolstrip //////////////////////////////////
-
-#Region "Resizing and minimizing + Notifyicon and context menu"
+#Region "Resizing and minimizing"
 
     Private Sub Box_ResizeEnd(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
         My.Settings.WindowSize = Me.Size '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -166,67 +200,17 @@ Public NotInheritable Class MainGUI
         My.Settings.InputHeight = InputBGPanel.Height '!!!!!!!!!!!!!!!!!!!!!!
     End Sub
 
-    Private Sub NotifyIcon1_Click(sender As Object, e As MouseEventArgs) Handles NotifyIcon.MouseClick
-        If e.Button = MouseButtons.Left Then : Deminimize()
-        Else : NotifyIcon.ContextMenuStrip.Show()
-        End If
-    End Sub
-
-    Private Sub NotifyIcon1Baloon_CMShow(sender As Object, e As EventArgs) _
-        Handles NotifyIcon.BalloonTipClicked, CMShow.Click
-        Deminimize()
-    End Sub
-
-    Private Sub CMExit_Click(sender As Object, e As EventArgs) Handles CMExit.Click
-        Me.Close()
-    End Sub
-
-    Private Shared Sub CMOpenFolder_Click(sender As Object, e As EventArgs) Handles CMOpenFolder.Click
-        Process.Start("explorer.exe", AppDomain.CurrentDomain.BaseDirectory())
-    End Sub
-
-    Private Sub Deminimize()
-        Me.Activate()
-        Me.ShowInTaskbar = True
-        Me.WindowState = FormWindowState.Normal
-    End Sub
-
 #End Region
 
-#Region "Klikovi na linkove u HTML elementu 'click'"
+#Region "Called from Script.js"
 
-    Private Sub Output_DocumentCompleted(sender As Object,
-                                         e As WebBrowserDocumentCompletedEventArgs) _
-        Handles Output.DocumentCompleted
-        With Output.Document
-            .AttachEventHandler("onclick", AddressOf ClickO)
-            .AttachEventHandler("oncontextmenu", AddressOf ClickOCm)
-        End With
-        'WebBrowser.ObjectForScripting Property 
+    Public Sub ProcessStart_Output(data As String)
+        Process.Start(data)
     End Sub
 
-    Private Sub ClickO(sender As Object, e As EventArgs) 'ClickO za otvaranje datoteka, dinamičko dodavanje handlera
-        Dim data As String = Output.Document.Body.GetAttribute("data-click")
-        If Not String.IsNullOrEmpty(data) Then Process.Start(data)
+    Public Sub ContextMenu_Output()
+        OutputContMenu.Show(Me, Me.PointToClient(MousePosition))
     End Sub
-
-    Private Sub ClickOCm(sender As Object, e As EventArgs) 'ClickO za kontekstni izbornik, dinamičko dodavanje handlera
-        If Output.Document.Body.GetAttribute("data-sel") <> String.Empty Then
-            CopyContMenu.Show(Me, Me.PointToClient(MousePosition))
-        End If
-    End Sub
-
-    '    Protected Function GetScrollPos() As Integer
-    '        Try
-    '            With Output
-    '                Return _
-    '                    .Document.Body.ScrollRectangle.Height - .Height -
-    '                    .Document.GetElementsByTagName("HTML")(0).ScrollTop
-    '            End With
-    '        Catch
-    '            Return 0
-    '        End Try
-    '    End Function
 
 #End Region
 
@@ -244,57 +228,46 @@ Public NotInheritable Class MainGUI
 
 #End Region
 
-#Region "Kontekstni izbornici inputa i outputa"
-    'input
-    Private Sub Cut_Click(sender As Object, e As EventArgs) Handles CutBtn.Click
-        Input.Cut()
+#Region "Menus, context menus and NotifyIcon"
+
+    Sub AddMainMenuHandlers() Handles Me.Load
+        AddHandler TSSettings.Click, Sub() Settings.Show()
+        AddHandler TSCleaner.Click, Sub() Cleaner.Show()
+        AddHandler TSHelp.Click, Sub() Help.Show()
+        AddHandler TSAbout.Click, Sub() AboutBox.Show()
     End Sub
 
-    Private Sub Copy_Click(sender As Object, e As EventArgs) Handles CopyBtn.Click
-        Input.Copy()
+    Sub AddContextMenuHandlers() Handles Me.Load
+        ' Input
+        AddHandler CutBtn.Click, Sub() Input.Cut()
+        AddHandler CopyBtn.Click, Sub() Input.Copy()
+        AddHandler PasteBtn.Click, Sub() Input.Paste()
+        AddHandler SelectAllBtn.Click, Sub() Input.SelectAll()
+        ' Output
+        AddHandler CopyO.Click, Sub() Output.Document.ExecCommand("Copy", False, vbNull)
     End Sub
 
-    Private Sub Paste_Click(sender As Object, e As EventArgs) Handles PasteBtn.Click
-        Input.Paste()
+    Sub AddNotifyIconHandlers() Handles Me.Load
+        AddHandler CMSettings.Click, Sub() Settings.Show()
+        AddHandler CMOpenFolder.Click, Sub() Process.Start("explorer.exe", AppDomain.CurrentDomain.BaseDirectory())
+        AddHandler CMExit.Click, Sub() Me.Close()
+        AddHandler CMShow.Click, Sub() Deminimize()
+        AddHandler NotifyIcon.BalloonTipClicked, Sub() Deminimize()
     End Sub
 
-    Private Sub SelectAll_Click(sender As Object, e As EventArgs) Handles SelectAllBtn.Click
-        Input.SelectAll()
-    End Sub
-
-    'output
-    Private Sub CopyO_Click(sender As Object, e As EventArgs) Handles CopyO.Click
-        Output.Document.ExecCommand("Copy", False, vbNull)
-    End Sub
-
-#End Region
-
-#Region "Tipke"
-
-    Private Sub input_keydown(sender As Object, e As KeyEventArgs) Handles Input.KeyDown
-        If e.KeyCode = Keys.Enter AndAlso Not e.Shift Then
-            ProcessInput()
-            e.SuppressKeyPress = True
+    Private Sub NotifyIcon1_Click(sender As Object, e As MouseEventArgs) Handles NotifyIcon.MouseClick
+        If e.Button = MouseButtons.Left Then : Deminimize()
+        Else : NotifyIcon.ContextMenuStrip.Show()
         End If
     End Sub
 
+    Private Sub Deminimize()
+        Me.Activate()
+        Me.ShowInTaskbar = True
+        Me.WindowState = FormWindowState.Normal
+    End Sub
+
 #End Region
-
-    Private Sub TSCMOptions_Click(sender As Object, e As EventArgs) Handles TSOptions.Click, CMOptions.Click
-        Settings.Show()
-    End Sub
-
-    Private Sub TSCleaner_Click(sender As Object, e As EventArgs) Handles TSCleaner.Click
-        Cleaner.Show()
-    End Sub
-
-    Private Sub TSHelp_Click(sender As Object, e As EventArgs) Handles TSHelp.Click
-        Help.Show()
-    End Sub
-
-    Private Sub TSAbout_Click(sender As Object, e As EventArgs) Handles TSAbout.Click
-        AboutBox.Show()
-    End Sub
 
     'Private Sub TSChat_Click(sender As Object, e As EventArgs) Handles TSChat.Click
     'For Each chatbox As BoxIM In IMBoxes
@@ -305,51 +278,4 @@ Public NotInheritable Class MainGUI
     'Next
     'OpenNewIM(CurrentChannel)
     'End Sub
-
-    '///////////////////////////
-
-
-#Region "DragDrop"
-
-    Private Shared Sub Input_DragEnter(sender As Object, e As DragEventArgs) Handles Input.DragEnter
-        e.Effect = DragDropEffects.All
-    End Sub
-
-    Private Sub Input_DragDrop(sender As Object, e As DragEventArgs) Handles Input.DragDrop
-        If (e.Data.GetDataPresent(DataFormats.Text)) Then
-            Input.AppendText(CStr(e.Data.GetData(DataFormats.Text)))
-        ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            Dim filePath As String = CType(e.Data.GetData(DataFormats.FileDrop), String())(0)
-            If File.Exists(filePath) Then
-                Input.AppendText("[file:" & filePath & "]")
-            Else
-                MsgBox("I don't accept folders.")
-            End If
-        End If
-        Input.Focus()
-    End Sub
-
-#End Region
-
-#Region "Troklik"
-
-    Dim _inTripleClickInterval As Boolean = False
-    Dim WithEvents _clickTimer As New Timer With {.Interval = 240}
-
-    Private Sub Input_DoubleClick(sender As Object, e As EventArgs) Handles Input.DoubleClick
-        _inTripleClickInterval = True
-        _clickTimer.Start()
-    End Sub
-
-    Private Sub Input_Click(sender As Object, e As EventArgs) Handles Input.Click
-        If _inTripleClickInterval Then Input.SelectAll()
-    End Sub
-
-    Private Sub Timertick() Handles _clickTimer.Tick
-        _inTripleClickInterval = False
-        _clickTimer.Stop()
-    End Sub
-
-#End Region
-
 End Class

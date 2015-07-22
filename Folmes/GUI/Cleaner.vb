@@ -73,7 +73,7 @@ Public Class Cleaner
             If Me._selected = CleanerMode.Files Then
                 For Each file_date As String() In GetFilesWithDates()
                     .Append("<div class=""item message""><div class=""time"">")
-                    .Append(file_date(1)).Append("</div><span class=""file"" onclick=""clickO('")
+                    .Append(file_date(1)).Append("</div><span class=""file"" onclick=""fileClick('")
                     .Append(Replace(Path.Combine(FilesDir, file_date(0)), "\", "\\")).Append("')"">")
                     .Append(file_date(0)).Append("</span></div>")
                 Next
@@ -92,9 +92,6 @@ Public Class Cleaner
 
 #Region "Klikovi na linkove u HTML elementu 'click'"
 
-    Private Sub Output_DocumentCompleted(ByVal sender As System.Object, ByVal e As System.Windows.Forms.WebBrowserDocumentCompletedEventArgs) Handles Output.DocumentCompleted
-        Output.Document.AttachEventHandler("onclick", AddressOf ClickO)
-    End Sub
     Private Sub ClickO(sender As Object, e As EventArgs)
         Dim FilePath As String = Output.Document.Body.GetAttribute("data-click")
         If FilePath <> Nothing Then

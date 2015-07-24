@@ -1,6 +1,10 @@
-﻿Imports System.Text
+﻿Imports System.Security.Permissions
+Imports System.Text
 
 Namespace GUI
+    'zbog komunikacije s Javascriptom
+    <PermissionSet(SecurityAction.Demand, Name:="FullTrust")> _
+    <System.Runtime.InteropServices.ComVisibleAttribute(True)>
     Public Class MessagesDisplay : Inherits WebBrowser
         Private _msgContainer As HtmlElement
         Public Event Initialized()
@@ -14,6 +18,19 @@ Namespace GUI
             Url = New Uri("", UriKind.Relative)
             Document.Write(defaultHtml)
         End Sub
+
+#Region "Called from Script.js"
+        Public Shadows Event ContextMenu()
+        Public Sub RaiseContextMenu()
+            RaiseEvent ContextMenu()
+        End Sub
+        Public Event ProcessStartClick(data As String)
+        Public Sub RaiseProcessStartClick(data As String)
+            RaiseEvent ProcessStartClick(data)
+        End Sub
+#End Region
+
+
 
         Public Sub Initialize(scripts As String())
             Dim setRefs As WebBrowserDocumentCompletedEventHandler =
@@ -47,6 +64,7 @@ Namespace GUI
                 .Append("</body></html>")
 
                 DocumentText = .ToString()
+                Me.ObjectForScripting = Me
             End With
         End Sub
 
@@ -178,8 +196,6 @@ Namespace GUI
                 _msgContainer.InnerHtml = String.Empty
                 _htmlMessages = New HtmlMessageList()
             End If
-            'ScrollDown()
-            'refreshScroller()
         End Function
 
         Public Sub AddMessage(declaration As String)
@@ -197,8 +213,6 @@ Namespace GUI
             End If
             Dim messageElement As HtmlElement = InsertHtmlMessage(message)
             _htmlMessages.InsertElement(messageElement, message.Time, _msgContainer)
-            'ScrollDown()
-            'refreshScroller()
         End Sub
 
         Private Function InsertHtmlMessage(message As Message) As HtmlElement

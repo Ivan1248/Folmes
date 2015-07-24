@@ -1,17 +1,10 @@
 ﻿#Region "Imports"
-
-
+Imports System.Diagnostics.Eventing.Reader
 Imports System.IO
-Imports System.Linq.Expressions
 Imports System.Reflection
-Imports System.Security.Permissions
 Imports Folmes.GUI
-
 #End Region
 
-'zbog komunikacije s Javascriptom
-<PermissionSet(SecurityAction.Demand, Name:="FullTrust")> _
-<System.Runtime.InteropServices.ComVisibleAttribute(True)>
 Public NotInheritable Class MainGUI
     'public = common (synonyms)
 
@@ -24,7 +17,7 @@ Public NotInheritable Class MainGUI
             'Postavke i još neke sitnice
             LoadSettings()
             Me.Icon = New Icon(Assembly.GetExecutingAssembly.GetManifestResourceStream("Folmes.DBM.ico"))
-            NotifyIcon.Icon = Me.Icon        'druge ikone
+            TrayIcon.Icon = Me.Icon        'druge ikone
 
             'Stvaranje direktorija i učitavanje FSW
             AssureMainDirectories()
@@ -50,9 +43,7 @@ Public NotInheritable Class MainGUI
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})
             End With
-            AddHandler Panel2.MouseUp, AddressOf Panel2_MouseUp
-
-            Output.ObjectForScripting = Me
+            AddHandler InputPaddingPanel.MouseUp, AddressOf Panel2_MouseUp
         Catch ex As Exception
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -204,11 +195,11 @@ Public NotInheritable Class MainGUI
 
 #Region "Called from Script.js"
 
-    Public Sub ProcessStart_Output(data As String)
+    Public Sub ProcessStart_OutputProcessStartClick(data As String) Handles Output.ProcessStartClick
         Process.Start(data)
     End Sub
 
-    Public Sub ContextMenu_Output()
+    Public Sub ContextMenu_OutputContextMenu() Handles Output.ContextMenu
         OutputContMenu.Show(Me, Me.PointToClient(MousePosition))
     End Sub
 
@@ -216,7 +207,7 @@ Public NotInheritable Class MainGUI
 
 #Region "Resizing and minimizing + Notifyicon and context menu"
 
-    Private Sub Panel2_MouseMove(sender As Object, e As MouseEventArgs) Handles Panel2.MouseMove
+    Private Sub InputPaddingPanel_MouseMove(sender As Object, e As MouseEventArgs) Handles InputPaddingPanel.MouseMove
         If e.Button = MouseButtons.Left Then
             Dim h As Integer = InputBGPanel.Height - e.Y
             Select Case h
@@ -247,17 +238,18 @@ Public NotInheritable Class MainGUI
         AddHandler CopyO.Click, Sub() Output.Document.ExecCommand("Copy", False, vbNull)
     End Sub
 
-    Sub AddNotifyIconHandlers() Handles Me.Load
+    Sub AddTrayIconHandlers() Handles Me.Load
+        ' Icon
+        AddHandler TrayIcon.BalloonTipClicked, Sub() Deminimize()
+        ' Context menu
         AddHandler CMSettings.Click, Sub() Settings.Show()
         AddHandler CMOpenFolder.Click, Sub() Process.Start("explorer.exe", AppDomain.CurrentDomain.BaseDirectory())
         AddHandler CMExit.Click, Sub() Me.Close()
-        AddHandler CMShow.Click, Sub() Deminimize()
-        AddHandler NotifyIcon.BalloonTipClicked, Sub() Deminimize()
     End Sub
 
-    Private Sub NotifyIcon1_Click(sender As Object, e As MouseEventArgs) Handles NotifyIcon.MouseClick
+    Private Sub TrayIcon_Click(sender As Object, e As MouseEventArgs) Handles TrayIcon.MouseClick
         If e.Button = MouseButtons.Left Then : Deminimize()
-        Else : NotifyIcon.ContextMenuStrip.Show()
+        Else : TrayIcon.ContextMenuStrip.Show()
         End If
     End Sub
 

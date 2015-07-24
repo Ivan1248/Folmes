@@ -8,12 +8,14 @@ function getSelectedText() {
     return text;
 }
 
-function fileClick(inp) {
-    window.external.ProcessStart_Output(inp);
+var messageDisplay = window.external;
+
+function fileClick(data) {
+    window.external.RaiseProcessStartClick(data);
 }
 
 function contMenu() {
-    if (getSelectedText()) window.external.ContextMenu_Output();
+    if (getSelectedText()) window.external.RaiseContextMenu();
 }
 
 window.oncontextmenu = contMenu;

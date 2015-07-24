@@ -27,10 +27,8 @@ Partial Class MainGUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainGUI))
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.InputBGPanel = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Input = New Folmes.GUI.InputTextBox()
+        Me.InputPaddingPanel = New System.Windows.Forms.Panel()
         Me.InputContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CutBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyBtn = New System.Windows.Forms.ToolStripMenuItem()
@@ -39,15 +37,14 @@ Partial Class MainGUI
         Me.SelectAllBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.OutputContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopyO = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Output = New Folmes.GUI.MessagesDisplay()
-        Me.NotifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.NotifyIconMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.CMShow = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.TrayIconMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CMSettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMExit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Output = New Folmes.GUI.MessagesDisplay()
         Me.TS = New Folmes.NFToolStrip()
         Me.TSTools = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TSSettings = New System.Windows.Forms.ToolStripMenuItem()
@@ -59,17 +56,18 @@ Partial Class MainGUI
         Me.PublicChannel = New System.Windows.Forms.ToolStripMenuItem()
         Me.PubPrivChSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.TSChat = New System.Windows.Forms.ToolStripButton()
+        Me.Input = New Folmes.GUI.InputTextBox()
         Me.InputBGPanel.SuspendLayout()
-        Me.Panel2.SuspendLayout()
+        Me.InputPaddingPanel.SuspendLayout()
         Me.InputContMenu.SuspendLayout()
         Me.OutputContMenu.SuspendLayout()
-        Me.NotifyIconMenu.SuspendLayout()
+        Me.TrayIconMenu.SuspendLayout()
         Me.TS.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button2
         '
-        Me.Button2.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Button2.Dock = System.Windows.Forms.DockStyle.Right
         Me.Button2.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button2.FlatAppearance.BorderSize = 0
         Me.Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
@@ -79,40 +77,18 @@ Partial Class MainGUI
         Me.Button2.ForeColor = System.Drawing.Color.DarkGray
         Me.Button2.ImageKey = "(none)"
         Me.Button2.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.Button2.Location = New System.Drawing.Point(0, 0)
+        Me.Button2.Location = New System.Drawing.Point(358, 0)
         Me.Button2.Margin = New System.Windows.Forms.Padding(0)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(20, 38)
+        Me.Button2.Size = New System.Drawing.Size(16, 38)
         Me.Button2.TabIndex = 4
         Me.Button2.Text = "*"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'Button1
-        '
-        Me.Button1.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
-        Me.Button1.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button1.FlatAppearance.BorderSize = 0
-        Me.Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
-        Me.Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-        Me.Button1.ForeColor = System.Drawing.Color.DarkGray
-        Me.Button1.ImageKey = "(none)"
-        Me.Button1.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.Button1.Location = New System.Drawing.Point(354, 0)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(0)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(20, 38)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "⏎"
-        Me.Button1.UseVisualStyleBackColor = False
-        '
         'InputBGPanel
         '
         Me.InputBGPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
-        Me.InputBGPanel.Controls.Add(Me.Button1)
-        Me.InputBGPanel.Controls.Add(Me.Panel2)
+        Me.InputBGPanel.Controls.Add(Me.InputPaddingPanel)
         Me.InputBGPanel.Controls.Add(Me.Button2)
         Me.InputBGPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.InputBGPanel.Location = New System.Drawing.Point(0, 224)
@@ -121,34 +97,16 @@ Partial Class MainGUI
         Me.InputBGPanel.Size = New System.Drawing.Size(374, 38)
         Me.InputBGPanel.TabIndex = 1
         '
-        'Panel2
+        'InputPaddingPanel
         '
-        Me.Panel2.Controls.Add(Me.Input)
-        Me.Panel2.Cursor = System.Windows.Forms.Cursors.SizeNS
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel2.Location = New System.Drawing.Point(20, 0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Panel2.Size = New System.Drawing.Size(354, 38)
-        Me.Panel2.TabIndex = 5
-        '
-        'Input
-        '
-        Me.Input.AcceptsTab = True
-        Me.Input.AllowDrop = True
-        Me.Input.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
-        Me.Input.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.Input.ContextMenuStrip = Me.InputContMenu
-        Me.Input.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Input.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel)
-        Me.Input.ForeColor = System.Drawing.Color.DarkGray
-        Me.Input.Location = New System.Drawing.Point(0, 4)
-        Me.Input.Margin = New System.Windows.Forms.Padding(0)
-        Me.Input.Multiline = True
-        Me.Input.Name = "Input"
-        Me.Input.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.Input.Size = New System.Drawing.Size(354, 34)
-        Me.Input.TabIndex = 0
+        Me.InputPaddingPanel.Controls.Add(Me.Input)
+        Me.InputPaddingPanel.Cursor = System.Windows.Forms.Cursors.WaitCursor
+        Me.InputPaddingPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.InputPaddingPanel.Location = New System.Drawing.Point(0, 0)
+        Me.InputPaddingPanel.Name = "InputPaddingPanel"
+        Me.InputPaddingPanel.Padding = New System.Windows.Forms.Padding(3, 5, 0, 0)
+        Me.InputPaddingPanel.Size = New System.Drawing.Size(358, 38)
+        Me.InputPaddingPanel.TabIndex = 5
         '
         'InputContMenu
         '
@@ -202,6 +160,47 @@ Partial Class MainGUI
         Me.CopyO.Size = New System.Drawing.Size(102, 22)
         Me.CopyO.Text = "Copy"
         '
+        'TrayIcon
+        '
+        Me.TrayIcon.ContextMenuStrip = Me.TrayIconMenu
+        Me.TrayIcon.Text = "Folmes"
+        Me.TrayIcon.Visible = True
+        '
+        'TrayIconMenu
+        '
+        Me.TrayIconMenu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.TrayIconMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CMSettings, Me.ToolStripSeparator1, Me.CMOpenFolder, Me.ToolStripSeparator2, Me.CMExit})
+        Me.TrayIconMenu.Name = "ContextMenuStrip1"
+        Me.TrayIconMenu.Size = New System.Drawing.Size(176, 82)
+        '
+        'CMSettings
+        '
+        Me.CMSettings.Name = "CMSettings"
+        Me.CMSettings.Size = New System.Drawing.Size(175, 22)
+        Me.CMSettings.Text = "Settings"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(172, 6)
+        '
+        'CMOpenFolder
+        '
+        Me.CMOpenFolder.Name = "CMOpenFolder"
+        Me.CMOpenFolder.Size = New System.Drawing.Size(175, 22)
+        Me.CMOpenFolder.Text = "Open shared folder"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(172, 6)
+        '
+        'CMExit
+        '
+        Me.CMExit.Name = "CMExit"
+        Me.CMExit.Size = New System.Drawing.Size(175, 22)
+        Me.CMExit.Text = "Exit"
+        '
         'Output
         '
         Me.Output.AllowNavigation = False
@@ -216,53 +215,6 @@ Partial Class MainGUI
         Me.Output.ScrollBarsEnabled = False
         Me.Output.Size = New System.Drawing.Size(374, 200)
         Me.Output.TabIndex = 12
-        '
-        'NotifyIcon
-        '
-        Me.NotifyIcon.ContextMenuStrip = Me.NotifyIconMenu
-        Me.NotifyIcon.Text = "Folmes"
-        Me.NotifyIcon.Visible = True
-        '
-        'NotifyIconMenu
-        '
-        Me.NotifyIconMenu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.NotifyIconMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CMShow, Me.CMSettings, Me.ToolStripSeparator1, Me.CMOpenFolder, Me.ToolStripSeparator2, Me.CMExit})
-        Me.NotifyIconMenu.Name = "ContextMenuStrip1"
-        Me.NotifyIconMenu.Size = New System.Drawing.Size(176, 126)
-        '
-        'CMShow
-        '
-        Me.CMShow.Name = "CMShow"
-        Me.CMShow.Size = New System.Drawing.Size(152, 22)
-        Me.CMShow.Text = "Show"
-        '
-        'CMSettings
-        '
-        Me.CMSettings.Name = "CMSettings"
-        Me.CMSettings.Size = New System.Drawing.Size(152, 22)
-        Me.CMSettings.Text = "Settings"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
-        '
-        'CMOpenFolder
-        '
-        Me.CMOpenFolder.Name = "CMOpenFolder"
-        Me.CMOpenFolder.Size = New System.Drawing.Size(175, 22)
-        Me.CMOpenFolder.Text = "Open shared folder"
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(149, 6)
-        '
-        'CMExit
-        '
-        Me.CMExit.Name = "CMExit"
-        Me.CMExit.Size = New System.Drawing.Size(152, 22)
-        Me.CMExit.Text = "Exit"
         '
         'TS
         '
@@ -298,33 +250,33 @@ Partial Class MainGUI
         '
         Me.TSSettings.ForeColor = System.Drawing.Color.DarkGray
         Me.TSSettings.Name = "TSSettings"
-        Me.TSSettings.Size = New System.Drawing.Size(152, 22)
+        Me.TSSettings.Size = New System.Drawing.Size(116, 22)
         Me.TSSettings.Text = "Settings"
         '
         'TSCleaner
         '
         Me.TSCleaner.ForeColor = System.Drawing.Color.DarkGray
         Me.TSCleaner.Name = "TSCleaner"
-        Me.TSCleaner.Size = New System.Drawing.Size(152, 22)
+        Me.TSCleaner.Size = New System.Drawing.Size(116, 22)
         Me.TSCleaner.Text = "Cleaner"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(113, 6)
         '
         'TSHelp
         '
         Me.TSHelp.ForeColor = System.Drawing.Color.DarkGray
         Me.TSHelp.Name = "TSHelp"
-        Me.TSHelp.Size = New System.Drawing.Size(152, 22)
+        Me.TSHelp.Size = New System.Drawing.Size(116, 22)
         Me.TSHelp.Text = "Help"
         '
         'TSAbout
         '
         Me.TSAbout.ForeColor = System.Drawing.Color.DarkGray
         Me.TSAbout.Name = "TSAbout"
-        Me.TSAbout.Size = New System.Drawing.Size(152, 22)
+        Me.TSAbout.Size = New System.Drawing.Size(116, 22)
         Me.TSAbout.Text = "About"
         '
         'TSChannels
@@ -365,6 +317,22 @@ Partial Class MainGUI
         Me.TSChat.Size = New System.Drawing.Size(24, 24)
         Me.TSChat.Text = "Chat"
         '
+        'Input
+        '
+        Me.Input.AcceptsTab = True
+        Me.Input.AllowDrop = True
+        Me.Input.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
+        Me.Input.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.Input.ContextMenuStrip = Me.InputContMenu
+        Me.Input.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Input.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel)
+        Me.Input.ForeColor = System.Drawing.Color.DarkGray
+        Me.Input.Location = New System.Drawing.Point(3, 5)
+        Me.Input.Multiline = True
+        Me.Input.Name = "Input"
+        Me.Input.Size = New System.Drawing.Size(355, 33)
+        Me.Input.TabIndex = 0
+        '
         'MainGUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -376,19 +344,17 @@ Partial Class MainGUI
         Me.Controls.Add(Me.TS)
         Me.Controls.Add(Me.InputBGPanel)
         Me.DoubleBuffered = True
-        Me.KeyPreview = True
         Me.Margin = New System.Windows.Forms.Padding(2, 3, 2, 3)
         Me.MinimumSize = New System.Drawing.Size(200, 200)
         Me.Name = "MainGUI"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Folmes"
         Me.InputBGPanel.ResumeLayout(False)
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
+        Me.InputPaddingPanel.ResumeLayout(False)
+        Me.InputPaddingPanel.PerformLayout()
         Me.InputContMenu.ResumeLayout(False)
         Me.OutputContMenu.ResumeLayout(False)
-        Me.NotifyIconMenu.ResumeLayout(False)
+        Me.TrayIconMenu.ResumeLayout(False)
         Me.TS.ResumeLayout(False)
         Me.TS.PerformLayout()
         Me.ResumeLayout(False)
@@ -396,8 +362,7 @@ Partial Class MainGUI
     End Sub
 
     Private WithEvents InputBGPanel As System.Windows.Forms.Panel
-    Private WithEvents Button1 As System.Windows.Forms.Button
-    Private WithEvents Panel2 As System.Windows.Forms.Panel
+    Private WithEvents InputPaddingPanel As System.Windows.Forms.Panel
     Private WithEvents Button2 As System.Windows.Forms.Button
     Private WithEvents InputContMenu As System.Windows.Forms.ContextMenuStrip
     Private WithEvents CutBtn As System.Windows.Forms.ToolStripMenuItem
@@ -407,10 +372,9 @@ Partial Class MainGUI
     Private WithEvents SelectAllBtn As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents OutputContMenu As System.Windows.Forms.ContextMenuStrip
     Private WithEvents CopyO As System.Windows.Forms.ToolStripMenuItem
-    Private WithEvents NotifyIconMenu As System.Windows.Forms.ContextMenuStrip
+    Private WithEvents TrayIconMenu As System.Windows.Forms.ContextMenuStrip
     Private WithEvents CMSettings As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents CMExit As System.Windows.Forms.ToolStripMenuItem
-    Private WithEvents CMShow As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents CMOpenFolder As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Private WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
@@ -419,13 +383,13 @@ Partial Class MainGUI
     Private WithEvents TSChannels As System.Windows.Forms.ToolStripDropDownButton
     Private WithEvents PublicChannel As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents TSChat As System.Windows.Forms.ToolStripButton
-    Friend WithEvents Input As System.Windows.Forms.TextBox
     Friend WithEvents Output As MessagesDisplay
-    Friend WithEvents NotifyIcon As System.Windows.Forms.NotifyIcon
+    Friend WithEvents TrayIcon As System.Windows.Forms.NotifyIcon
     Friend WithEvents PubPrivChSeparator As System.Windows.Forms.ToolStripSeparator
     Private WithEvents TSSettings As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents TSCleaner As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents TSHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TSAbout As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Input As Folmes.GUI.InputTextBox
 End Class

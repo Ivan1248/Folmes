@@ -963,7 +963,7 @@ Partial Class Settings
         Me.MinimizeToNotificationArea.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.MinimizeToNotificationArea.Size = New System.Drawing.Size(296, 17)
         Me.MinimizeToNotificationArea.TabIndex = 12
-        Me.MinimizeToNotificationArea.Text = "Minimizing to notification area"
+        Me.MinimizeToNotificationArea.Text = "Minimize to notification area"
         Me.MinimizeToNotificationArea.UseVisualStyleBackColor = True
         '
         'Tabs
@@ -980,7 +980,7 @@ Partial Class Settings
         Me.Tabs.Size = New System.Drawing.Size(326, 315)
         Me.Tabs.TabIndex = 9
         '
-        'Config
+        'Settings
         '
         Me.AcceptButton = Me.OKButton
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -994,7 +994,7 @@ Partial Class Settings
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Config"
+        Me.Name = "Settings"
         Me.Padding = New System.Windows.Forms.Padding(4)
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "Settings"

@@ -55,7 +55,7 @@ Public Module Notifications
     End Sub
 
     Private Sub ShowNotification(title As String, text As String)
-        MainGUI.NotifyIcon.ShowBalloonTip(1000, title, text, ToolTipIcon.None)
+        MainGUI.TrayIcon.ShowBalloonTip(1000, title, text, ToolTipIcon.None)
     End Sub
 
     '<DllImport("user32.dll", CharSet:=CharSet.Auto, ExactSpelling:=)>

@@ -5,6 +5,7 @@ Module Directories
     Public RootPath As String = Application.StartupPath
     Public FolmesDir As String = RootPath & "\.Folmes"
     Public MessagesDir As String = FolmesDir & "\Messages"
+    Public CommonChannelDir As String = MessagesDir & "\Common"
     Public UsersDir As String = FolmesDir & "\Users"
     Public FilesDir As String = FolmesDir & "\Files"
     Public ThumbnailDir As String = FilesDir & "\thumbnails"
@@ -17,6 +18,7 @@ Module Directories
             HideFolmesFolder(True)
         End If
         MakeDir(MessagesDir)
+        MakeDir(CommonChannelDir)
         MakeDir(UsersDir)
         MakeDir(Path.Combine(PingDir, My.Settings.Username))
     End Sub

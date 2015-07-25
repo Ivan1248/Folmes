@@ -94,7 +94,6 @@ Partial Class MainGUI
         UserInfoFiles.Others.Remove(UserInfoFiles.Others.Find(Function(x) x.Username = Name))
         'TODO MessageFiles.OutgoingPrivate.Remove(MessageFiles.OutgoingPrivate.Find(Function(x) x.Sender = Name))
         'TODO MessageFiles.IngoingPrivate.Remove(MessageFiles.IngoingPrivate.Find(Function(x) x.Sender = Name))
-
         If Channels.Current = Name Then SwitchChannel(Channels.Common)
     End Sub
 

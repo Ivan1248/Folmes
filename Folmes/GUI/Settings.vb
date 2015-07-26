@@ -112,7 +112,7 @@ Public Class Settings
             .MinimizeToTray = MinimizeToNotificationArea.Checked
             .StartMinimized = StartMinimized.Checked
             RunOnStartup(LaunchOnStartup.Checked)
-            HideFolmesFolder(HideFolderCB.Checked)
+            Directories.HideFolmesFolder(HideFolderCB.Checked)
 
             'Interface
             .FontSize = FontSize.Value
@@ -150,7 +150,7 @@ Public Class Settings
         My.Settings.Reset()
         UserInfoFiles.Mine.SetOnlineStatus(False)
         RunOnStartup(False)
-        MainGUI.Close()
+        Application.Exit()
     End Sub
 
 

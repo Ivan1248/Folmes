@@ -6,19 +6,20 @@ Module Directories
     Public FolmesDir As String = RootPath & "\.Folmes"
     Public MessagesDir As String = FolmesDir & "\Messages"
     Public CommonChannelDir As String = MessagesDir & "\Common"
+    Public PrivateMessagesDir As String = MessagesDir & "\Private"
     Public UsersDir As String = FolmesDir & "\Users"
-    Public FilesDir As String = FolmesDir & "\Files"
-    Public ThumbnailDir As String = FilesDir & "\thumbnails"
+    Public AttachmentsDir As String = FolmesDir & "\Files"
+    Public ThumbnailDir As String = AttachmentsDir & "\thumbnails"
     Public PingDir As String = FolmesDir & "\RTT"
-
 
     Public Sub AssureMainDirectories()
         If Not Directory.Exists(FolmesDir) Then
             MakeDir(FolmesDir)
-            HideFolmesFolder(True)
+            Directories.HideFolmesFolder(True)
         End If
         MakeDir(MessagesDir)
         MakeDir(CommonChannelDir)
+        MakeDir(PrivateMessagesDir)
         MakeDir(UsersDir)
         MakeDir(Path.Combine(PingDir, My.Settings.Username))
     End Sub
@@ -28,7 +29,7 @@ Module Directories
     End Sub
 
     Public Function GetUserDirs() As String()
-        Return Directory.GetDirectories(MessagesDir)
+        Return Directory.GetDirectories(PrivateMessagesDir)
     End Function
 
     Public Sub MakeDir(dirpath As String)

@@ -1,8 +1,7 @@
 ﻿#Region "Imports"
-Imports System.Diagnostics.Eventing.Reader
 Imports System.IO
 Imports System.Reflection
-Imports Folmes.GUI
+Imports Folmes.GUI.Controls
 #End Region
 
 Public NotInheritable Class MainGUI
@@ -20,16 +19,17 @@ Public NotInheritable Class MainGUI
             TrayIcon.Icon = Me.Icon        'druge ikone
 
             'Stvaranje direktorija i učitavanje FSW
-            AssureMainDirectories()
+            Directories.AssureMainDirectories()
             LoadFSWatchers()
 
             'Prvo pokretenje? i učitavanje kanala u izbornik
             If My.Settings.Username = Nothing AndAlso FirstRun.ShowDialog() <> DialogResult.OK Then
-                Me.Close()
+                Application.Exit()
+                End
             End If
             Me.Text &= " - " & My.Settings.Username
             PingPong.CleanPing()
-            MakeDir(Path.Combine(MessagesDir, My.Settings.Username))
+            MakeDir(Path.Combine(PrivateMessagesDir, My.Settings.Username))
 
             'Učitavanje datoteka i poruka
             UserInfoFiles.GetAll()
@@ -152,10 +152,10 @@ Public NotInheritable Class MainGUI
         Dim msg As New Message() _
                 With {.Sender = My.Settings.Username, .Type = messageType, .Time = DateTime.UtcNow.ToBinary()}
         Select Case messageType
-            Case messageType.Normal, messageType.FolmesDeclaration
-                msg.Content = HtmlizeMessageContent(Input.Text)
-            Case messageType.Reflexive
-                msg.Content = HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
+            Case MessageType.Normal, MessageType.FolmesDeclaration
+                msg.Content = Html.HtmlizeMessageContent(Input.Text)
+            Case MessageType.Reflexive
+                msg.Content = Html.HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
         End Select
         MessageFile.Create(Channels.Current, msg)
         Me.Output.AddMessage(msg)

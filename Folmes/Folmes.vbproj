@@ -116,7 +116,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\InputTextBox.vb">
+    <Compile Include="GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Modules\MessagesManager.vb" />
@@ -125,25 +125,24 @@
     <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\MessagesDisplay.vb">
+    <Compile Include="GUI\Controls\MessagesDisplay.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GUI\NFToolStrip.vb">
+    <Compile Include="GUI\Controls\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Modules\MessageFile.vb" />
-    <Compile Include="Modules\PingPong.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Modules\PingPong.vb" />
+    <Compile Include="Modules\User.vb" />
     <Compile Include="Modules\UserInfoFiles.vb">
       <SubType>
       </SubType>
     </Compile>
-    <Compile Include="GUI\ToolStripColorTable.vb" />
+    <Compile Include="GUI\Style\ToolStripColorTable.vb" />
     <Compile Include="Modules\Channels.vb" />
     <Compile Include="Modules\Files.vb" />
     <Compile Include="Modules\Notifications.vb" />
-    <Compile Include="Modules\SentFiles.vb" />
+    <Compile Include="Modules\Attachments.vb" />
     <Compile Include="Modules\Directories.vb" />
     <Compile Include="Modules\HTML.vb" />
     <Compile Include="Modules\FSWatchers.Designer.vb">
@@ -279,7 +278,6 @@
     <None Include="Resources\users.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Modules\Settings\" />
     <Folder Include="obj\x86\Debug\" />
   </ItemGroup>
   <ItemGroup>

@@ -69,10 +69,10 @@ function initializeScroller() { // handles window.onload
     var container = document.getElementById("container");
     scroller = document.createElement("div");
     scroller.id = "scroller";
-    container.appendChild(scroller);
+    container.parentElement.appendChild(scroller);
     var scrollerTrack = document.createElement("div");
     scrollerTrack.id = "scrollertrack";
-    container.appendChild(scrollerTrack);
+    container.parentElement.appendChild(scrollerTrack);
 
     scroller.onmousedown = function (e) {
         scrollerRelMouseY = e.clientY - parseInt(scroller.style.top, 10);

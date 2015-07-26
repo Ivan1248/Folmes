@@ -1,4 +1,4 @@
-﻿Imports Folmes.GUI
+﻿Imports Folmes.GUI.Controls
 
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class Cleaner

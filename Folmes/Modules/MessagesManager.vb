@@ -23,15 +23,15 @@ Public MustInherit Class MessagesManager
     Public Shared Sub LoadInitial(channel As String, loadSub As LoadSub) ' TODO optimizirati - ne mora se sortirati cijeli niz
         Dim msgFilePaths As List(Of String)
         If channel = Channels.Common Then
-            msgFilePaths = New List(Of String)(Directory.GetFiles(Path.Combine(MessagesDir, Channels.Common),
+            msgFilePaths = New List(Of String)(Directory.GetFiles(Directories.CommonChannelDir,
                                                               "*" & Extension.Message, SearchOption.AllDirectories))
         Else
-            Dim messagesPath As String = Path.Combine(MessagesDir, channel, My.Settings.Username)
+            Dim messagesPath As String = Path.Combine(PrivateMessagesDir, channel, My.Settings.Username)
             MakeDir(messagesPath)
             msgFilePaths = New List(Of String)(Directory.GetFiles(messagesPath))
-            messagesPath = Path.Combine(MessagesDir, My.Settings.Username, channel)
+            messagesPath = Path.Combine(PrivateMessagesDir, My.Settings.Username, channel)
             MakeDir(messagesPath)
-            msgFilePaths.AddRange(Directory.GetFiles(Path.Combine(MessagesDir, My.Settings.Username, channel)))
+            msgFilePaths.AddRange(Directory.GetFiles(messagesPath))
             For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
                 If m.Key = channel Then m.Value.Clear()
                 Exit For

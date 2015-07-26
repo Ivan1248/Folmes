@@ -1,4 +1,5 @@
 ﻿Imports Folmes.GUI
+Imports Folmes.GUI.Controls
 
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainGUI
@@ -44,8 +45,8 @@ Partial Class MainGUI
         Me.CMOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMExit = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Output = New Folmes.GUI.MessagesDisplay()
-        Me.TS = New Folmes.NFToolStrip()
+        Me.Output = New MessagesDisplay()
+        Me.TS = New NFToolStrip()
         Me.TSTools = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TSSettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSCleaner = New System.Windows.Forms.ToolStripMenuItem()
@@ -56,7 +57,7 @@ Partial Class MainGUI
         Me.PublicChannel = New System.Windows.Forms.ToolStripMenuItem()
         Me.PubPrivChSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.TSChat = New System.Windows.Forms.ToolStripButton()
-        Me.Input = New Folmes.GUI.InputTextBox()
+        Me.Input = New InputTextBox()
         Me.InputBGPanel.SuspendLayout()
         Me.InputPaddingPanel.SuspendLayout()
         Me.InputContMenu.SuspendLayout()
@@ -391,5 +392,5 @@ Partial Class MainGUI
     Friend WithEvents ToolStripMenuItem2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents TSHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TSAbout As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Input As Folmes.GUI.InputTextBox
+    Friend WithEvents Input As InputTextBox
 End Class

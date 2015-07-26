@@ -1,9 +1,9 @@
 ﻿Imports System.Security.Permissions
 Imports System.Text
 
-Namespace GUI
+Namespace GUI.Controls
     'zbog komunikacije s Javascriptom
-    <PermissionSet(SecurityAction.Demand, Name:="FullTrust")> _
+    <PermissionSet(SecurityAction.Demand, Name:="FullTrust")>
     <System.Runtime.InteropServices.ComVisibleAttribute(True)>
     Public Class MessagesDisplay : Inherits WebBrowser
         Private _msgContainer As HtmlElement

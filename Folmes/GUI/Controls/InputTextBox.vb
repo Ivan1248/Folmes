@@ -1,4 +1,4 @@
-﻿Namespace GUI
+﻿Namespace GUI.Controls
     Public Class InputTextBox : Inherits TextBox
 
 #Region "Tripleclick"

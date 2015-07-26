@@ -2,19 +2,19 @@
 Imports System.IO
 Imports System.Text
 
-Module SentFiles
+Module Attachments
 
     Public Const MaxPath As Integer = 512
     Public Const MaxImageHeight As Integer = 2
 
     Public Function GetFilesWithDates() As List(Of String()) 'zastarjelo
         GetFilesWithDates = New List(Of String())
-        For Each fl As FileInfo In New DirectoryInfo(FilesDir).GetFiles()
+        For Each fl As FileInfo In New DirectoryInfo(AttachmentsDir).GetFiles()
             GetFilesWithDates.Add({fl.Name, FormatDate(fl.LastWriteTime.ToLocalTime)})
         Next
     End Function
 
-    Private Function FormatDate(theDate As DateTime) As String
+    Private Function FormatDate(theDate As Date) As String
         Dim hourFormat As String = theDate.ToShortTimeString
         Return If(theDate.Date <> Date.Today, theDate.ToShortDateString & " " & hourFormat, hourFormat)
     End Function
@@ -30,7 +30,7 @@ Module SentFiles
     End Sub
 
     Public Function DetectAndCopyFiles(fileObj As String) As Boolean
-        Directory.CreateDirectory(FilesDir)
+        Directory.CreateDirectory(AttachmentsDir)
         Dim a As Integer
         Dim filename, filepath As String
         Dim sb As New StringBuilder(MaxPath, MaxPath)
@@ -46,7 +46,7 @@ Module SentFiles
                             filepath = sb.ToString
                             filename = Path.GetFileName(filepath)
                             Try
-                                File.Copy(filepath, Path.Combine(FilesDir, filename), True)
+                                File.Copy(filepath, Path.Combine(AttachmentsDir, filename), True)
                                 If IsImage(filepath) Then
                                     MakeFileThumbnail(filepath, filename)
                                 End If

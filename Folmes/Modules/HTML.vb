@@ -1,11 +1,8 @@
 ﻿Imports System.Text
 
-Module Html
-
+Public MustInherit Class Html
 
     Const SpaceChars As String = " "c & vbCr & vbLf & vbTab
-
-
 
     ' 2 točke ili protokol i jedna točka do prvog razmaka (/s ili /n ili /r ili kraj)
     ' {x}.{x}.{x} ili {x}://{x}.{x}
@@ -14,7 +11,7 @@ Module Html
     '        Return c = """" OrElse c = "<" OrElse c = ">" OrElse c = "\" OrElse Asc(c) < 33 OrElse Asc(c) > 122
     '    End Function
 
-    Public Function HtmlizeMessageContent(content As String) As String 'NEDOSTAJU JOŠ SLIKE
+    Public Shared Function HtmlizeMessageContent(content As String) As String 'NEDOSTAJU JOŠ SLIKE
         Dim sb As New StringBuilder(244) 'kapacitet
         Dim start As Integer
         Dim lastEnd As Integer = -1
@@ -72,7 +69,7 @@ Module Html
         Return sb.ToString
     End Function
 
-    Private Function DetectUrlAroundDot(str As String, dotIndex As Integer) As Tuple(Of Integer, Integer)
+    Private Shared Function DetectUrlAroundDot(str As String, dotIndex As Integer) As Tuple(Of Integer, Integer)
         Dim erroret As Tuple(Of Integer, Integer) = New Tuple(Of Integer, Integer)(-1, -1)
         Dim l As Integer = dotIndex - 1
         Dim r As Integer = dotIndex + 1
@@ -106,8 +103,8 @@ Module Html
         Return New Tuple(Of Integer, Integer)(l, r)
     End Function
 
-    Private Function IsAsciiLetter(c As Char) As Boolean
+    Private Shared Function IsAsciiLetter(c As Char) As Boolean
         Return (c >= "A"c AndAlso c <= "Z"c) OrElse (c >= "a"c AndAlso c <= "z"c)
     End Function
 
-End Module
+End Class

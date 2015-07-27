@@ -1,38 +1,61 @@
 ﻿Imports System.IO
+Imports System.Runtime.CompilerServices
 
 Public MustInherit Class Users
-    Public Structure User
+    Public Class User
+        Const InfoFileSize As Integer = 1
+
         Public Name As String
-        Public Status As Status
-    End Structure
+        Public Status As UserStatus
+        Private InfoFilePath As String
+        Sub New(userDirectory As String)
+            Me.Name = Path.GetFileName(userDirectory)
+            Me.InfoFilePath = Path.Combine(userDirectory, Files.Extension.UserInfo)
+            RefreshStatus()
+        End Sub
 
-    Public Shared List As List(Of User)   ' All users except The user
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Private Function UserFile() As FileStream
+            Return New FileStream(InfoFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite, InfoFileSize)
+        End Function
+        Public Sub RefreshStatus()
+            Using fs As FileStream = UserFile()
+                fs.Seek(0, SeekOrigin.Begin)
+                Status = If(fs.CanRead, UserStatus.Offline, CType(fs.ReadByte(), UserStatus))
+            End Using
+        End Sub
+        Public Sub SetStatus(status As UserStatus)
+            Using fs As FileStream = UserFile()
+                fs.Seek(0, SeekOrigin.Begin)
+                fs.WriteByte(status)
+                fs.Flush()
+            End Using
+        End Sub
 
-    Public Shared Sub InitializeList()
-        For Each d As String In Directory.GetDirectories(Dirs.Users)
-            Dim u As New User() With {.Name = Path.GetFileName(d)}
-            For Each f As String In Directory.GetFiles(d, "*" & Files.Extension.UserStatus)
-                For i As Integer = 0 To _status.Length - 1
-                    If Path.GetFileNameWithoutExtension(f) = _status(i) Then
-                        u.Status = CType(i, Status)
-                        Exit For
-                    End If
-                Next
-                Exit For
-            Next
-            List.Add(u)
+        Public Function IsOnline() As Boolean
+            Return Status <> UserStatus.Offline
+        End Function
+    End Class
+
+    Public Shared Others As List(Of User)
+    Public Shared MyUser As User
+
+    Public Shared Sub Initialize()
+        For Each userDir As String In Directory.GetDirectories(Dirs.Users)
+            Dim user As New User(userDir)
+            If user.Name <> My.Settings.Username Then
+                Others.Add(user)
+            Else
+                MyUser = user
+            End If
         Next
     End Sub
 
-    Public Enum Status
+    Public Enum UserStatus As Byte
         Online = 0
         Offline = 1
         Away = 2
     End Enum
-    Private Shared ReadOnly _status As String() = {"online", "offline", "away"}
-    Public Shared Sub SetStatus(username As String, status As Status)
-        File.Create(Path.Combine(Dirs.Users, username, _status(status)))
-    End Sub
 
     Public Shared Sub Create(username As String)
         Dirs.Create(Path.Combine(Dirs.PrivateMessages, username))
@@ -54,4 +77,11 @@ Public MustInherit Class Users
             End Try
         Next
     End Sub
+
+    Shared Function IsOnline(username As String) As Boolean
+        Dim user As User = Others.Find(Function(u) u.Name = username)
+        Return If(user IsNot Nothing, user.IsOnline(), False)
+    End Function
+
+
 End Class

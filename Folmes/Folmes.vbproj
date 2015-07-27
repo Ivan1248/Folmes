@@ -121,7 +121,6 @@
     </Compile>
     <Compile Include="Modules\MessagesManager.vb" />
     <Compile Include="Classes and Structures\Message.vb" />
-    <Compile Include="Classes and Structures\UserInfoFile.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -134,10 +133,6 @@
     <Compile Include="Modules\MessageFile.vb" />
     <Compile Include="Modules\PingPong.vb" />
     <Compile Include="Modules\Users.vb" />
-    <Compile Include="Modules\UserInfoFiles.vb">
-      <SubType>
-      </SubType>
-    </Compile>
     <Compile Include="GUI\Style\ToolStripColorTable.vb" />
     <Compile Include="Modules\Channels.vb" />
     <Compile Include="Modules\Files.vb" />

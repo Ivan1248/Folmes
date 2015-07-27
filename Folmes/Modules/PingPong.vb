@@ -14,7 +14,7 @@ Public MustInherit Class PingPong
         If Not pong AndAlso _pingTime <> 0 Then
             Return True
         End If
-        If UserInfoFiles.IsOnline(username) OrElse username = My.Settings.Username Then
+        If Users.IsOnline(username) OrElse username = My.Settings.Username Then
             Dim dir As String = Path.Combine(Dirs.PingPong, username)
             Dirs.Create(dir)
             File.Create(Path.Combine(dir, My.Settings.Username & If(pong, Extension.Pong, Extension.Ping))).Close()

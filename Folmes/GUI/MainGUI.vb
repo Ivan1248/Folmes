@@ -32,8 +32,8 @@ Public NotInheritable Class MainGUI
             Dirs.Create(Path.Combine(Dirs.PrivateMessages, My.Settings.Username))
 
             'Učitavanje datoteka i poruka
-            UserInfoFiles.GetAll()
-            UserInfoFiles.Mine.SetOnlineStatus(True)
+            Users.Initialize()
+            Users.MyUser.SetStatus(Users.UserStatus.Online)
             'TODO: Users.SetStatus(My.Settings.Username, Users.Status.Online)
             With Output
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
@@ -85,7 +85,7 @@ Public NotInheritable Class MainGUI
         Try
             If My.Settings.Username <> Nothing Then
                 'SetOnlineStatus(False)
-                UserInfoFiles.Mine.SetOnlineStatus(False)
+                Users.MyUser.SetStatus(Users.UserStatus.Offline)
                 Channels.SetLastRead()
             End If
         Catch ex As Exception

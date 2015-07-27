@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports Folmes.Classes
 
 Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
@@ -21,7 +20,7 @@ Partial Class MainGUI
         }
         UserFilesWatcher = New FileSystemWatcher(Dirs.Users, "*.*") With {
             .IncludeSubdirectories = False,
-            .NotifyFilter = NotifyFilters.FileName Or NotifyFilters.LastWrite
+            .NotifyFilter = NotifyFilters.FileName Or NotifyFilters.LastWrite Or NotifyFilters.DirectoryName
         }
         For Each fsw As FileSystemWatcher In {MessagesWatcher, PingPongWatcher, UserFilesWatcher, DirectoriesWatcher}
             fsw.SynchronizingObject = Me
@@ -67,22 +66,21 @@ Partial Class MainGUI
     End Sub
 
     Private Sub UserFilesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Changed, UserFilesWatcher.Created
-        Dim Name As String = Path.GetFileNameWithoutExtension(e.Name)
+        Dim Dir As String = Path.GetDirectoryName(e.FullPath)
+        Dim Name As String = Path.GetFileNameWithoutExtension(Dir)
 
         If Name = My.Settings.Username Then
             Exit Sub
         End If
 
-        If Path.GetExtension(e.FullPath) <> Files.Extension.UserInfo Then Exit Sub
-
-        Dim Foo As UserInfoFile = UserInfoFiles.Others.Find(Function(x) x.Username = Name)
-        If Foo Is Nothing Then
-            UserInfoFiles.Others.Add(New UserInfoFile(e.FullPath) With {.Username = Name})
+        Dim Foo As Users.User = Users.Others.Find(Function(u) u.Name = Name)
+        If e.ChangeType = WatcherChangeTypes.Created AndAlso Directory.Exists(e.FullPath) Then
+            Users.Others.Add(New Users.User(e.FullPath))
             Notify(Notifications.Notifications.Joined, Name)
         Else
-            Dim PrevStatus As Boolean = Foo.Online
-            Foo.Refresh()
-            If PrevStatus <> Foo.Online Then
+            Dim PrevStatus As Boolean = Foo.IsOnline()
+            Foo.RefreshStatus()
+            If PrevStatus <> Foo.IsOnline() Then
                 Notify(If(Not PrevStatus, Notifications.Notifications.LoggedIn, Notifications.Notifications.LoggedOut), Name)
             End If
             If Name = Channels.Current Then TSChat.Visible = Not PrevStatus
@@ -91,9 +89,7 @@ Partial Class MainGUI
 
     Private Sub UserFilesWatcher_Deleted(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Deleted
         Dim Name As String = Path.GetFileNameWithoutExtension(e.Name)
-        UserInfoFiles.Others.Remove(UserInfoFiles.Others.Find(Function(x) x.Username = Name))
-        'TODO MessageFiles.OutgoingPrivate.Remove(MessageFiles.OutgoingPrivate.Find(Function(x) x.Sender = Name))
-        'TODO MessageFiles.IngoingPrivate.Remove(MessageFiles.IngoingPrivate.Find(Function(x) x.Sender = Name))
+        Users.Others.RemoveAt(Users.Others.FindIndex(Function(x) x.Name = Name))
         If Channels.Current = Name Then SwitchChannel(Channels.Common)
     End Sub
 

@@ -1,6 +1,4 @@
-﻿Imports Folmes.Classes
-
-Partial Public Class MainGUI
+﻿Partial Public Class MainGUI
 
     Public Function AnyNewMessages(channel As String) As Boolean ' TODO prepraviti
         Dim last As ChannelLastReadTime = My.Settings.LastReadTimes.Find(Function(e) e.Channel = channel)
@@ -16,12 +14,12 @@ Partial Public Class MainGUI
             TSChannels.DropDownItems.Item(2).Dispose()
         End While
         Dim showSeparator As Boolean = False
-        For Each userFile As UserInfoFile In UserInfoFiles.Others
+        For Each user As Users.User In Users.Others
             showSeparator = True
-            Dim channelTsMenuItem As New ToolStripMenuItem(userFile.Username) With {.ForeColor = Color.FromArgb(176, 176, 176)}
+            Dim channelTsMenuItem As New ToolStripMenuItem(user.Name) With {.ForeColor = Color.FromArgb(176, 176, 176)}
             Dim status As Integer = 0
-            If userFile.Online Then status = 1
-            If Channels.Current <> userFile.Username AndAlso AnyNewMessages(userFile.Username) Then status = status Or 2
+            If user.IsOnline Then status = 1
+            If Channels.Current <> user.Name AndAlso AnyNewMessages(user.Name) Then status = status Or 2
             With channelTsMenuItem
                 Select Case status
                     Case 0 : .Image = Nothing
@@ -53,7 +51,7 @@ Partial Public Class MainGUI
                     Else
                         .AutoSize = True
                     End If
-                    TSChat.Visible = UserInfoFiles.IsOnline(channel)
+                    TSChat.Visible = Users.IsOnline(channel)
                 End If
                 .Text = channel
             End With

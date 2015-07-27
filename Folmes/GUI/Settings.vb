@@ -148,7 +148,7 @@ Public Class Settings
 
     Private Sub ResetButton_Click(sender As Object, e As EventArgs) Handles ResetButton.Click
         My.Settings.Reset()
-        UserInfoFiles.Mine.SetOnlineStatus(False)
+        Users.MyUser.SetStatus(Users.UserStatus.Offline)
         RunOnStartup(False)
         Application.Exit()
     End Sub

@@ -11,38 +11,36 @@
 Option Strict On
 Option Explicit On
 
-Imports Folmes.Classes
-
 Namespace My
-    
-    <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0"),  _
-     Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
+
+    <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0"),
+     Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
-        
-        Private Shared defaultInstance As MySettings = CType(Global.System.Configuration.ApplicationSettingsBase.Synchronized(New MySettings()),MySettings)
-        
+
+        Private Shared defaultInstance As MySettings = CType(Global.System.Configuration.ApplicationSettingsBase.Synchronized(New MySettings()), MySettings)
+
 #Region "My.Settings Auto-Save Functionality"
 #If _MyType = "WindowsForms" Then
-    Private Shared addedHandler As Boolean
+        Private Shared addedHandler As Boolean
 
-    Private Shared addedHandlerLockObject As New Object
+        Private Shared addedHandlerLockObject As New Object
 
-    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)> _
-    Private Shared Sub AutoSaveSettings(ByVal sender As Global.System.Object, ByVal e As Global.System.EventArgs)
-        If My.Application.SaveMySettingsOnExit Then
-            My.Settings.Save()
-        End If
-    End Sub
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>
+        Private Shared Sub AutoSaveSettings(ByVal sender As Global.System.Object, ByVal e As Global.System.EventArgs)
+            If My.Application.SaveMySettingsOnExit Then
+                My.Settings.Save()
+            End If
+        End Sub
 #End If
 #End Region
-        
+
         Public Shared ReadOnly Property [Default]() As MySettings
             Get
-                
+
 #If _MyType = "WindowsForms" Then
-               If Not addedHandler Then
+                If Not addedHandler Then
                     SyncLock addedHandlerLockObject
                         If Not addedHandler Then
                             AddHandler My.Application.Shutdown, AddressOf AutoSaveSettings
@@ -54,196 +52,196 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("")>
         Public Property Username() As String
             Get
-                Return CType(Me("Username"),String)
+                Return CType(Me("Username"), String)
             End Get
             Set
-                Me("Username") = value
+                Me("Username") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("80")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("80")>
         Public Property ThumbnailHeight() As Integer
             Get
-                Return CType(Me("ThumbnailHeight"),Integer)
+                Return CType(Me("ThumbnailHeight"), Integer)
             End Get
             Set
-                Me("ThumbnailHeight") = value
+                Me("ThumbnailHeight") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("12")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("12")>
         Public Property FontSize() As Integer
             Get
-                Return CType(Me("FontSize"),Integer)
+                Return CType(Me("FontSize"), Integer)
             End Get
             Set
-                Me("FontSize") = value
+                Me("FontSize") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("public")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("public")>
         Public Property Channel() As String
             Get
-                Return CType(Me("Channel"),String)
+                Return CType(Me("Channel"), String)
             End Get
             Set
-                Me("Channel") = value
+                Me("Channel") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("30")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("30")>
         Public Property NofMsgs() As Integer
             Get
-                Return CType(Me("NofMsgs"),Integer)
+                Return CType(Me("NofMsgs"), Integer)
             End Get
             Set
-                Me("NofMsgs") = value
+                Me("NofMsgs") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("400, 320")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("400, 320")>
         Public Property WindowSize() As Global.System.Drawing.Size
             Get
-                Return CType(Me("WindowSize"),Global.System.Drawing.Size)
+                Return CType(Me("WindowSize"), Global.System.Drawing.Size)
             End Get
             Set
-                Me("WindowSize") = value
+                Me("WindowSize") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("#a9a9a9")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("#a9a9a9")>
         Public Property UsernameColor() As String
             Get
-                Return CType(Me("UsernameColor"),String)
+                Return CType(Me("UsernameColor"), String)
             End Get
             Set
-                Me("UsernameColor") = value
+                Me("UsernameColor") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Dark")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("Dark")>
         Public Property Skin() As String
             Get
-                Return CType(Me("Skin"),String)
+                Return CType(Me("Skin"), String)
             End Get
             Set
-                Me("Skin") = value
+                Me("Skin") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("")> _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("")>
         Public Property LastReadTimes() As List(Of ChannelLastReadTime)
             Get
                 Return CType(Me("LastReadTimes"), List(Of ChannelLastReadTime))
             End Get
             Set(value As List(Of ChannelLastReadTime))
-                Me("LastReadTimes") = Value
+                Me("LastReadTimes") = value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("170")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("170")>
         Public Property Notifications() As Integer
             Get
-                Return CType(Me("Notifications"),Integer)
+                Return CType(Me("Notifications"), Integer)
             End Get
             Set
-                Me("Notifications") = value
+                Me("Notifications") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>
         Public Property MinimizeToTray() As Boolean
             Get
-                Return CType(Me("MinimizeToTray"),Boolean)
+                Return CType(Me("MinimizeToTray"), Boolean)
             End Get
             Set
-                Me("MinimizeToTray") = value
+                Me("MinimizeToTray") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>
         Public Property StartMinimized() As Boolean
             Get
-                Return CType(Me("StartMinimized"),Boolean)
+                Return CType(Me("StartMinimized"), Boolean)
             End Get
             Set
-                Me("StartMinimized") = value
+                Me("StartMinimized") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("53")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("53")>
         Public Property InputHeight() As Integer
             Get
-                Return CType(Me("InputHeight"),Integer)
+                Return CType(Me("InputHeight"), Integer)
             End Get
             Set
-                Me("InputHeight") = value
+                Me("InputHeight") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>
         Public Property PortForwarded() As Boolean
             Get
-                Return CType(Me("PortForwarded"),Boolean)
+                Return CType(Me("PortForwarded"), Boolean)
             End Get
             Set
-                Me("PortForwarded") = value
+                Me("PortForwarded") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("400, 320")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("400, 320")>
         Public Property ChatWindowSize() As Global.System.Drawing.Size
             Get
-                Return CType(Me("ChatWindowSize"),Global.System.Drawing.Size)
+                Return CType(Me("ChatWindowSize"), Global.System.Drawing.Size)
             End Get
             Set
-                Me("ChatWindowSize") = value
+                Me("ChatWindowSize") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("53")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("53")>
         Public Property ChatInputHeight() As Integer
             Get
-                Return CType(Me("ChatInputHeight"),Integer)
+                Return CType(Me("ChatInputHeight"), Integer)
             End Get
             Set
-                Me("ChatInputHeight") = value
+                Me("ChatInputHeight") = Value
             End Set
         End Property
     End Class

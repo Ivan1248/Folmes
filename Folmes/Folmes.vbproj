@@ -133,7 +133,7 @@
     </Compile>
     <Compile Include="Modules\MessageFile.vb" />
     <Compile Include="Modules\PingPong.vb" />
-    <Compile Include="Modules\User.vb" />
+    <Compile Include="Modules\Users.vb" />
     <Compile Include="Modules\UserInfoFiles.vb">
       <SubType>
       </SubType>
@@ -143,7 +143,7 @@
     <Compile Include="Modules\Files.vb" />
     <Compile Include="Modules\Notifications.vb" />
     <Compile Include="Modules\Attachments.vb" />
-    <Compile Include="Modules\Directories.vb" />
+    <Compile Include="Modules\Dirs.vb" />
     <Compile Include="Modules\HTML.vb" />
     <Compile Include="Modules\FSWatchers.Designer.vb">
       <SubType>Form</SubType>
@@ -308,12 +308,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FolmesFunc\SharpFolmes.csproj">
-      <Project>{bf8c7c9a-4aa5-4236-9c72-1d5bab829a28}</Project>
-      <Name>SharpFolmes</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

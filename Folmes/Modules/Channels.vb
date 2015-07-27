@@ -1,6 +1,5 @@
 ﻿Public MustInherit Class Channels
     Public Const Common As String = "Common"
-    Public Shared Users As Dictionary(Of String, Boolean)
 
     Public Shared Current As String = Common 'ovo treba srediti (BOOL)
 

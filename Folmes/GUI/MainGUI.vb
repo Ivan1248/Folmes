@@ -19,7 +19,7 @@ Public NotInheritable Class MainGUI
             TrayIcon.Icon = Me.Icon        'druge ikone
 
             'Stvaranje direktorija i učitavanje FSW
-            Directories.AssureMainDirectories()
+            Dirs.AssureMainDirectories()
             LoadFSWatchers()
 
             'Prvo pokretenje? i učitavanje kanala u izbornik
@@ -29,11 +29,12 @@ Public NotInheritable Class MainGUI
             End If
             Me.Text &= " - " & My.Settings.Username
             PingPong.CleanPing()
-            MakeDir(Path.Combine(PrivateMessagesDir, My.Settings.Username))
+            Dirs.Create(Path.Combine(Dirs.PrivateMessages, My.Settings.Username))
 
             'Učitavanje datoteka i poruka
             UserInfoFiles.GetAll()
             UserInfoFiles.Mine.SetOnlineStatus(True)
+            'TODO: Users.SetStatus(My.Settings.Username, Users.Status.Online)
             With Output
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()

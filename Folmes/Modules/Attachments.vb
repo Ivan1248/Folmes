@@ -9,7 +9,7 @@ Module Attachments
 
     Public Function GetFilesWithDates() As List(Of String()) 'zastarjelo
         GetFilesWithDates = New List(Of String())
-        For Each fl As FileInfo In New DirectoryInfo(AttachmentsDir).GetFiles()
+        For Each fl As FileInfo In New DirectoryInfo(Dirs.Attachments).GetFiles()
             GetFilesWithDates.Add({fl.Name, FormatDate(fl.LastWriteTime.ToLocalTime)})
         Next
     End Function
@@ -22,15 +22,14 @@ Module Attachments
     Public Sub MakeFileThumbnail(imgPath As String, thumbName As String)
         Dim callback As New Image.GetThumbnailImageAbort(Function() True)
         Dim img As Image = New Bitmap(imgPath)
-        MakeDir(ThumbnailDir)
+        Dirs.Create(Dirs.Thumbnails)
         If img.Height > MaxImageHeight Then
             img = img.GetThumbnailImage(MaxImageHeight * img.Width \ img.Height, MaxImageHeight, callback, New IntPtr())
         End If
-        img.Save(Path.Combine(ThumbnailDir, thumbName), StringToImageFormat(Path.GetExtension(imgPath)))
+        img.Save(Path.Combine(Dirs.Thumbnails, thumbName), StringToImageFormat(Path.GetExtension(imgPath)))
     End Sub
 
     Public Function DetectAndCopyFiles(fileObj As String) As Boolean
-        Directory.CreateDirectory(AttachmentsDir)
         Dim a As Integer
         Dim filename, filepath As String
         Dim sb As New StringBuilder(MaxPath, MaxPath)
@@ -46,7 +45,8 @@ Module Attachments
                             filepath = sb.ToString
                             filename = Path.GetFileName(filepath)
                             Try
-                                File.Copy(filepath, Path.Combine(AttachmentsDir, filename), True)
+                                Directory.CreateDirectory(Dirs.Attachments)
+                                File.Copy(filepath, Path.Combine(Dirs.Attachments, filename), True)
                                 If IsImage(filepath) Then
                                     MakeFileThumbnail(filepath, filename)
                                 End If

@@ -43,14 +43,14 @@ Public Class Cleaner
     End Sub
 
     Public Sub DeleteFile(ByVal filename As String)
-        filename = Path.Combine(AttachmentsDir, filename)
+        filename = Path.Combine(Dirs.Attachments, filename)
         File.Delete(filename)
     End Sub
     Public Sub DeleteUser(ByVal username As String)
-        Dim userPth As String = Path.Combine(PrivateMessagesDir, username)
+        Dim userPth As String = Path.Combine(Dirs.PrivateMessages, username)
         Directory.Delete(userPth, True)
         File.Delete(userPth & Files.Extension.Message)
-        For Each dir As String In Directories.GetUserDirs()
+        For Each dir As String In Dirs.GetUserDirs()
             File.Delete(dir + "\" & username & Files.Extension.Message)
         Next
     End Sub
@@ -74,11 +74,11 @@ Public Class Cleaner
                 For Each file_date As String() In GetFilesWithDates()
                     .Append("<div class=""item message""><div class=""time"">")
                     .Append(file_date(1)).Append("</div><span class=""file"" onclick=""fileClick('")
-                    .Append(Replace(Path.Combine(AttachmentsDir, file_date(0)), "\", "\\")).Append("')"">")
+                    .Append(Replace(Path.Combine(Dirs.Attachments, file_date(0)), "\", "\\")).Append("')"">")
                     .Append(file_date(0)).Append("</span></div>")
                 Next
             Else
-                For Each user As String In Directories.GetUserDirs()
+                For Each user As String In Dirs.GetUserDirs()
                     user = Path.GetFileName(user)
                     'If user <> My.Settings.Username Then
                     .Append("<div class=""item message""><div class=""time""></div><span class=""file"">")

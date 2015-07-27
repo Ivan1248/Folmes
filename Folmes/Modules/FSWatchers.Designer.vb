@@ -7,19 +7,19 @@ Partial Class MainGUI
     Private WithEvents UserFilesWatcher As FileSystemWatcher
     Private WithEvents DirectoriesWatcher As FileSystemWatcher
     Private Sub LoadFSWatchers()
-        MessagesWatcher = New FileSystemWatcher(MessagesDir, "*" & Extension.Message) With {
+        MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & Extension.Message) With {
             .IncludeSubdirectories = True,
             .NotifyFilter = NotifyFilters.FileName
         }
-        PingPongWatcher = New FileSystemWatcher(Path.Combine(PingDir, My.Settings.Username), "*.*") With {
+        PingPongWatcher = New FileSystemWatcher(Path.Combine(Dirs.PingPong, My.Settings.Username), "*.*") With {
             .IncludeSubdirectories = False,
             .NotifyFilter = NotifyFilters.FileName
         }
-        DirectoriesWatcher = New FileSystemWatcher(MessagesDir, "*.*") With {
+        DirectoriesWatcher = New FileSystemWatcher(Dirs.Messages, "*.*") With {
             .IncludeSubdirectories = False,
             .NotifyFilter = NotifyFilters.DirectoryName
         }
-        UserFilesWatcher = New FileSystemWatcher(UsersDir, "*.*") With {
+        UserFilesWatcher = New FileSystemWatcher(Dirs.Users, "*.*") With {
             .IncludeSubdirectories = False,
             .NotifyFilter = NotifyFilters.FileName Or NotifyFilters.LastWrite
         }

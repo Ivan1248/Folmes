@@ -5,11 +5,11 @@ Public MustInherit Class MessageFile
     Public Shared Sub Create(channel As String, msg As Message)
         Dim dirPath As String
         If channel = Channels.Common Then
-            dirPath = Path.Combine(Directories.CommonChannelDir, msg.Sender)
+            dirPath = Path.Combine(Dirs.CommonChannel, msg.Sender)
         Else
-            dirPath = Path.Combine(PrivateMessagesDir, channel, msg.Sender)
+            dirPath = Path.Combine(Dirs.PrivateMessages, channel, msg.Sender)
         End If
-        MakeDir(dirPath)
+        Dirs.Create(dirPath)
         Dim filePath As String = Path.Combine(dirPath, Convert.ToString(msg.Time, 16) & Extension.Message)
         Dim sb As New StringBuilder
         sb.Append(ChrW(msg.Type))

@@ -15,8 +15,8 @@ Public MustInherit Class PingPong
             Return True
         End If
         If UserInfoFiles.IsOnline(username) OrElse username = My.Settings.Username Then
-            Dim dir As String = Path.Combine(PingDir, username)
-            MakeDir(dir)
+            Dim dir As String = Path.Combine(Dirs.PingPong, username)
+            Dirs.Create(dir)
             File.Create(Path.Combine(dir, My.Settings.Username & If(pong, Extension.Pong, Extension.Ping))).Close()
             _pingTime = DateTime.UtcNow.Ticks \ 10000
             _timeoutTimer.Start()
@@ -33,7 +33,7 @@ Public MustInherit Class PingPong
     End Sub
 
     Public Shared Sub CleanPing()
-        Dim dirPath As String = Path.Combine(PingDir, My.Settings.Username)
+        Dim dirPath As String = Path.Combine(Dirs.PingPong, My.Settings.Username)
         If Directory.Exists(dirPath) Then
             For Each pingFile As String In Directory.GetFiles(dirPath)
                 Select Case Path.GetExtension(pingFile)

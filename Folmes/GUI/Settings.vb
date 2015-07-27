@@ -37,7 +37,7 @@ Public Class Settings
         Next
     End Sub
     Public Function IsFolderHidden() As Boolean
-        Return (My.Computer.FileSystem.GetDirectoryInfo(FolmesDir).Attributes And FileAttributes.Hidden) <> 0
+        Return (My.Computer.FileSystem.GetDirectoryInfo(Dirs.Folmes).Attributes And FileAttributes.Hidden) <> 0
     End Function
 
 #Region "General"
@@ -112,7 +112,7 @@ Public Class Settings
             .MinimizeToTray = MinimizeToNotificationArea.Checked
             .StartMinimized = StartMinimized.Checked
             RunOnStartup(LaunchOnStartup.Checked)
-            Directories.HideFolmesFolder(HideFolderCB.Checked)
+            Dirs.HideFolmesFolder(HideFolderCB.Checked)
 
             'Interface
             .FontSize = FontSize.Value

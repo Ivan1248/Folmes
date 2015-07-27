@@ -6,7 +6,7 @@ Public Class FirstRun
 
     Private Sub OKButton_Click(sender As Object, e As EventArgs) Handles OKButton.Click
         If usernameIsValid Then
-            If Not Directory.Exists(Path.Combine(PrivateMessagesDir, Name)) OrElse MessageBox.Show("The username '" & Username.Text & "' is already registered." & vbNewLine & "Is this your old username?", "Username exists", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) = Windows.Forms.DialogResult.Yes Then
+            If Not Directory.Exists(Path.Combine(Dirs.PrivateMessages, Name)) OrElse MessageBox.Show("The username '" & Username.Text & "' is already registered." & vbNewLine & "Is this your old username?", "Username exists", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) = Windows.Forms.DialogResult.Yes Then
                 My.Settings.Username = Username.Text
                 Me.DialogResult = Windows.Forms.DialogResult.OK
             End If

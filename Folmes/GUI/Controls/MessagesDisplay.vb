@@ -30,8 +30,6 @@ Namespace GUI.Controls
         End Sub
 #End Region
 
-
-
         Public Sub Initialize(scripts As String())
             Dim setRefs As WebBrowserDocumentCompletedEventHandler =
                     Sub()
@@ -124,8 +122,7 @@ Namespace GUI.Controls
                     node.Succeeding = current
                     current.Preceeding = node
                     preceeding.Succeeding = node
-                    preceeding.MessageHtmlElement.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterEnd,
-                                                                        message)
+                    preceeding.Message.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterEnd, message)
                 End If
             End Sub
 
@@ -143,20 +140,20 @@ Namespace GUI.Controls
                 Dim current As HtmlMessageListNode = _oldest
                 Dim messageElements As HtmlElementCollection = container.Children
                 For i As Integer = 0 To messageElements.Count - 1
-                    current.MessageHtmlElement = messageElements(i)
+                    current.Message = messageElements(i)
                     current = current.Succeeding
                 Next
                 Return Me
             End Function
 
             Private Class HtmlMessageListNode
-                Public MessageHtmlElement As HtmlElement
+                Public Message As HtmlElement
                 Public ReadOnly Time As Long
                 Public Preceeding As HtmlMessageListNode = Nothing
                 Public Succeeding As HtmlMessageListNode = Nothing
 
                 Sub New(message As HtmlElement, time As Long)
-                    MessageHtmlElement = message
+                    Me.Message = message
                     Me.Time = time
                 End Sub
             End Class
@@ -211,15 +208,15 @@ Namespace GUI.Controls
                 RemoveOldestHtmlMessage()
                 _htmlMessages.RemoveOldest()
             End If
-            Dim messageElement As HtmlElement = InsertHtmlMessage(message)
+            Dim messageElement As HtmlElement = CreateHtmlMessage(message)
             _htmlMessages.InsertElement(messageElement, message.Time, _msgContainer)
         End Sub
 
-        Private Function InsertHtmlMessage(message As Message) As HtmlElement
+        Private Function CreateHtmlMessage(message As Message) As HtmlElement
             Dim messageElement As HtmlElement = Document.CreateElement("DIV")
             With messageElement.AppendChild(Document.CreateElement("DIV"))
                 .SetAttribute("className", "time")
-                .InnerText = DateTime.FromBinary(message.Time).ToLocalTime.ToString("dd.MM.yyyy. HH:mm")
+                .InnerText = Date.FromBinary(message.Time).ToLocalTime.ToString("dd.MM.yyyy. HH:mm")
             End With
             messageElement.SetAttribute("className", "message")
             Select Case message.Type

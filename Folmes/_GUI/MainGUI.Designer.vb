@@ -30,6 +30,7 @@ Partial Class MainGUI
         Me.Button2 = New System.Windows.Forms.Button()
         Me.InputBGPanel = New System.Windows.Forms.Panel()
         Me.InputPaddingPanel = New System.Windows.Forms.Panel()
+        Me.Input = New Folmes.GUI.Controls.InputTextBox()
         Me.InputContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CutBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyBtn = New System.Windows.Forms.ToolStripMenuItem()
@@ -45,8 +46,8 @@ Partial Class MainGUI
         Me.CMOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.CMExit = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Output = New MessagesDisplay()
-        Me.TS = New NFToolStrip()
+        Me.Output = New Folmes.GUI.Controls.MessagesDisplay()
+        Me.TS = New Folmes.GUI.Controls.NFToolStrip()
         Me.TSTools = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TSSettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSCleaner = New System.Windows.Forms.ToolStripMenuItem()
@@ -56,8 +57,6 @@ Partial Class MainGUI
         Me.TSChannels = New System.Windows.Forms.ToolStripDropDownButton()
         Me.PublicChannel = New System.Windows.Forms.ToolStripMenuItem()
         Me.PubPrivChSeparator = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSChat = New System.Windows.Forms.ToolStripButton()
-        Me.Input = New InputTextBox()
         Me.InputBGPanel.SuspendLayout()
         Me.InputPaddingPanel.SuspendLayout()
         Me.InputContMenu.SuspendLayout()
@@ -108,6 +107,22 @@ Partial Class MainGUI
         Me.InputPaddingPanel.Padding = New System.Windows.Forms.Padding(3, 5, 0, 0)
         Me.InputPaddingPanel.Size = New System.Drawing.Size(358, 38)
         Me.InputPaddingPanel.TabIndex = 5
+        '
+        'Input
+        '
+        Me.Input.AcceptsTab = True
+        Me.Input.AllowDrop = True
+        Me.Input.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
+        Me.Input.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.Input.ContextMenuStrip = Me.InputContMenu
+        Me.Input.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Input.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel)
+        Me.Input.ForeColor = System.Drawing.Color.DarkGray
+        Me.Input.Location = New System.Drawing.Point(3, 5)
+        Me.Input.Multiline = True
+        Me.Input.Name = "Input"
+        Me.Input.Size = New System.Drawing.Size(355, 33)
+        Me.Input.TabIndex = 0
         '
         'InputContMenu
         '
@@ -223,7 +238,7 @@ Partial Class MainGUI
         Me.TS.BackColor = System.Drawing.Color.FromArgb(CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.TS.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel)
         Me.TS.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.TS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSTools, Me.TSChannels, Me.TSChat})
+        Me.TS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSTools, Me.TSChannels})
         Me.TS.Location = New System.Drawing.Point(0, 0)
         Me.TS.Name = "TS"
         Me.TS.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -251,33 +266,33 @@ Partial Class MainGUI
         '
         Me.TSSettings.ForeColor = System.Drawing.Color.DarkGray
         Me.TSSettings.Name = "TSSettings"
-        Me.TSSettings.Size = New System.Drawing.Size(116, 22)
+        Me.TSSettings.Size = New System.Drawing.Size(152, 22)
         Me.TSSettings.Text = "Settings"
         '
         'TSCleaner
         '
         Me.TSCleaner.ForeColor = System.Drawing.Color.DarkGray
         Me.TSCleaner.Name = "TSCleaner"
-        Me.TSCleaner.Size = New System.Drawing.Size(116, 22)
+        Me.TSCleaner.Size = New System.Drawing.Size(152, 22)
         Me.TSCleaner.Text = "Cleaner"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(113, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(149, 6)
         '
         'TSHelp
         '
         Me.TSHelp.ForeColor = System.Drawing.Color.DarkGray
         Me.TSHelp.Name = "TSHelp"
-        Me.TSHelp.Size = New System.Drawing.Size(116, 22)
+        Me.TSHelp.Size = New System.Drawing.Size(152, 22)
         Me.TSHelp.Text = "Help"
         '
         'TSAbout
         '
         Me.TSAbout.ForeColor = System.Drawing.Color.DarkGray
         Me.TSAbout.Name = "TSAbout"
-        Me.TSAbout.Size = New System.Drawing.Size(116, 22)
+        Me.TSAbout.Size = New System.Drawing.Size(152, 22)
         Me.TSAbout.Text = "About"
         '
         'TSChannels
@@ -305,34 +320,6 @@ Partial Class MainGUI
         '
         Me.PubPrivChSeparator.Name = "PubPrivChSeparator"
         Me.PubPrivChSeparator.Size = New System.Drawing.Size(122, 6)
-        '
-        'TSChat
-        '
-        Me.TSChat.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSChat.Image = Global.Folmes.My.Resources.Resources.chat
-        Me.TSChat.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.TSChat.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSChat.Margin = New System.Windows.Forms.Padding(0)
-        Me.TSChat.Name = "TSChat"
-        Me.TSChat.Padding = New System.Windows.Forms.Padding(1)
-        Me.TSChat.Size = New System.Drawing.Size(24, 24)
-        Me.TSChat.Text = "Chat"
-        '
-        'Input
-        '
-        Me.Input.AcceptsTab = True
-        Me.Input.AllowDrop = True
-        Me.Input.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
-        Me.Input.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.Input.ContextMenuStrip = Me.InputContMenu
-        Me.Input.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Input.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel)
-        Me.Input.ForeColor = System.Drawing.Color.DarkGray
-        Me.Input.Location = New System.Drawing.Point(3, 5)
-        Me.Input.Multiline = True
-        Me.Input.Name = "Input"
-        Me.Input.Size = New System.Drawing.Size(355, 33)
-        Me.Input.TabIndex = 0
         '
         'MainGUI
         '
@@ -383,7 +370,6 @@ Partial Class MainGUI
     Private WithEvents TSTools As System.Windows.Forms.ToolStripDropDownButton
     Private WithEvents TSChannels As System.Windows.Forms.ToolStripDropDownButton
     Private WithEvents PublicChannel As System.Windows.Forms.ToolStripMenuItem
-    Private WithEvents TSChat As System.Windows.Forms.ToolStripButton
     Friend WithEvents Output As MessagesDisplay
     Friend WithEvents TrayIcon As System.Windows.Forms.NotifyIcon
     Friend WithEvents PubPrivChSeparator As System.Windows.Forms.ToolStripSeparator

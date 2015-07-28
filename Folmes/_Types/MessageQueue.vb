@@ -1,17 +1,4 @@
-﻿Public Class Message
-    Public Sender As String
-    Public Type As MessageType
-    Public Content As String
-    Public Time As Long
-End Class
-Public Enum MessageType As Short
-    Normal
-    Highlighted
-    FolmesDeclaration
-    Reflexive
-End Enum
-
-Public Class MessageQueue
+﻿Public Class MessageQueue
     Public Count As Integer = 0
     Dim _array As Message()
     Dim _modMask As Integer
@@ -53,4 +40,3 @@ Public Class MessageQueue
     End Function
 
 End Class
-

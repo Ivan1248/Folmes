@@ -116,67 +116,67 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\Controls\InputTextBox.vb">
+    <Compile Include="_GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Modules\MessagesManager.vb" />
-    <Compile Include="Classes and Structures\Message.vb" />
-    <Compile Include="GUI\GUIChannels.Designer.vb">
+    <Compile Include="_Modules_variable\MessagesManager.vb" />
+    <Compile Include="_Types\Message.vb" />
+    <Compile Include="_GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Controls\MessagesDisplay.vb">
+    <Compile Include="_GUI\Controls\MessagesDisplay.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GUI\Controls\NFToolStrip.vb">
+    <Compile Include="_GUI\Controls\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Modules\MessageFile.vb" />
-    <Compile Include="Modules\PingPong.vb" />
-    <Compile Include="Modules\Users.vb" />
-    <Compile Include="GUI\Style\ToolStripColorTable.vb" />
-    <Compile Include="Modules\Channels.vb" />
-    <Compile Include="Modules\Files.vb" />
-    <Compile Include="Modules\Notifications.vb" />
-    <Compile Include="Modules\Attachments.vb" />
-    <Compile Include="Modules\Dirs.vb" />
-    <Compile Include="Modules\HTML.vb" />
-    <Compile Include="Modules\FSWatchers.Designer.vb">
+    <Compile Include="_Modules_static\MessageFile.vb" />
+    <Compile Include="_Modules_static\PingPong.vb" />
+    <Compile Include="_Modules_variable\Users.vb" />
+    <Compile Include="_GUI\Style\ToolStripColorTable.vb" />
+    <Compile Include="_ToReDo\Channels.vb" />
+    <Compile Include="_Modules_static\Files.vb" />
+    <Compile Include="_Modules_static\Notifications.vb" />
+    <Compile Include="_ToReDo\Attachments.vb" />
+    <Compile Include="_Modules_static\Dirs.vb" />
+    <Compile Include="_Modules_static\HTML.vb" />
+    <Compile Include="_Modules_variable\FSWatchers.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\AboutBox.Designer.vb">
+    <Compile Include="_GUI\AboutBox.Designer.vb">
       <DependentUpon>AboutBox.vb</DependentUpon>
     </Compile>
-    <Compile Include="GUI\AboutBox.vb">
+    <Compile Include="_GUI\AboutBox.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Cleaner.Designer.vb">
+    <Compile Include="_ToReDo\Cleaner.Designer.vb">
       <DependentUpon>Cleaner.vb</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Cleaner.vb">
+    <Compile Include="_ToReDo\Cleaner.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\FirstRun.Designer.vb">
+    <Compile Include="_GUI\FirstRun.Designer.vb">
       <DependentUpon>FirstRun.vb</DependentUpon>
     </Compile>
-    <Compile Include="GUI\FirstRun.vb">
+    <Compile Include="_GUI\FirstRun.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Help.Designer.vb">
+    <Compile Include="_GUI\Help.Designer.vb">
       <DependentUpon>Help.vb</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Help.vb">
+    <Compile Include="_GUI\Help.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\MainGUI.Designer.vb">
+    <Compile Include="_GUI\MainGUI.Designer.vb">
       <DependentUpon>MainGUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="GUI\MainGUI.vb">
+    <Compile Include="_GUI\MainGUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Settings.vb">
+    <Compile Include="_GUI\Settings.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Settings.Designer.vb">
+    <Compile Include="_GUI\Settings.Designer.vb">
       <DependentUpon>Settings.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
@@ -195,26 +195,28 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="_Types\MessageQueue.vb" />
+    <Compile Include="_Types\User.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GUI\AboutBox.resx">
+    <EmbeddedResource Include="_GUI\AboutBox.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Cleaner.resx">
+    <EmbeddedResource Include="_ToReDo\Cleaner.resx">
       <DependentUpon>Cleaner.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Settings.resx">
+    <EmbeddedResource Include="_GUI\Settings.resx">
       <DependentUpon>Settings.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\FirstRun.resx">
+    <EmbeddedResource Include="_GUI\FirstRun.resx">
       <DependentUpon>FirstRun.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Help.resx">
+    <EmbeddedResource Include="_GUI\Help.resx">
       <DependentUpon>Help.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\MainGUI.resx">
+    <EmbeddedResource Include="_GUI\MainGUI.resx">
       <DependentUpon>MainGUI.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -229,6 +231,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Graph1.dgml" />
     <None Include="My Project\app.manifest">
       <SubType>Designer</SubType>
@@ -274,6 +277,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="obj\x86\Debug\" />
+    <Folder Include="_Unused\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\X.png" />

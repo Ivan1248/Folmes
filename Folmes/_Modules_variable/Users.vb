@@ -1,41 +1,6 @@
 ﻿Imports System.IO
-Imports System.Runtime.CompilerServices
 
 Public MustInherit Class Users
-    Public Class User
-        Const InfoFileSize As Integer = 1
-
-        Public Name As String
-        Public Status As UserStatus
-        Private InfoFilePath As String
-        Sub New(userDirectory As String)
-            Me.Name = Path.GetFileName(userDirectory)
-            Me.InfoFilePath = Path.Combine(userDirectory, Files.Extension.UserInfo)
-            RefreshStatus()
-        End Sub
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Private Function UserFile() As FileStream
-            Return New FileStream(InfoFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite, InfoFileSize)
-        End Function
-        Public Sub RefreshStatus()
-            Using fs As FileStream = UserFile()
-                fs.Seek(0, SeekOrigin.Begin)
-                Status = If(fs.CanRead, UserStatus.Offline, CType(fs.ReadByte(), UserStatus))
-            End Using
-        End Sub
-        Public Sub SetStatus(status As UserStatus)
-            Using fs As FileStream = UserFile()
-                fs.Seek(0, SeekOrigin.Begin)
-                fs.WriteByte(status)
-                fs.Flush()
-            End Using
-        End Sub
-
-        Public Function IsOnline() As Boolean
-            Return Status <> UserStatus.Offline
-        End Function
-    End Class
 
     Public Shared Others As New List(Of User)
     Public Shared MyUser As User
@@ -51,12 +16,6 @@ Public MustInherit Class Users
         Next
         If MyUser Is Nothing Then MyUser = Create(My.Settings.Username)
     End Sub
-
-    Public Enum UserStatus As Byte
-        Online = 0
-        Offline = 1
-        Away = 2
-    End Enum
 
     Public Shared Function Create(username As String) As User
         Dirs.Create(Path.Combine(Dirs.PrivateMessages, username))
@@ -80,10 +39,9 @@ Public MustInherit Class Users
         Next
     End Sub
 
-    Shared Function IsOnline(username As String) As Boolean
+    Public Shared Function IsOnline(username As String) As Boolean
         Dim user As User = Others.Find(Function(u) u.Name = username)
         Return If(user IsNot Nothing, user.IsOnline(), False)
     End Function
-
 
 End Class

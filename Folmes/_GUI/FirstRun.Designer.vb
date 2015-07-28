@@ -40,7 +40,7 @@ Partial Class FirstRun
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(166, 65)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Hello, and welcome to Folmes!" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "To get started, enter your desired nickname into" & _
+        Me.Label1.Text = "Hello, and welcome to Folmes!" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "To get started, enter your desired nickname into" &
     " the textbox below." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'FlowLayoutPanel1

@@ -61,11 +61,11 @@ Public MustInherit Class MessagesManager
         End While
     End Sub
 
-    Private Shared Function MessageFileComparison(x As String, y As String) As Integer
-        Dim a As Integer = x.Length - Extension.Message.Length - 16
-        Dim b As Integer = y.Length - Extension.Message.Length - 16
+    Private Shared Function MessageFileComparison(file1 As String, file2 As String) As Integer
+        Dim a As Integer = file1.Length - Extension.Message.Length - 16
+        Dim b As Integer = file2.Length - Extension.Message.Length - 16
         For i As Integer = 0 To 15
-            Select Case Asc(x(a + 1)) - Asc(y(b + i))
+            Select Case Asc(file1(a + 1)) - Asc(file2(b + i))
                 Case Is > 0 : Return 1
                 Case Is < 0 : Return -1
             End Select

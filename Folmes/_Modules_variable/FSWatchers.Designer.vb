@@ -70,9 +70,9 @@ Partial Class MainGUI
             Exit Sub
         End If
 
-        Dim Foo As Users.User = Users.Others.Find(Function(u) u.Name = Name)
+        Dim Foo As User = Users.Others.Find(Function(u) u.Name = Name)
         If Foo Is Nothing Then
-            Users.Others.Add(New Users.User(e.FullPath))
+            Users.Others.Add(New User(e.FullPath))
             Notify(Notifications.Notifications.Joined, Name)
         Else
             Dim PrevStatus As Boolean = Foo.IsOnline()
@@ -80,7 +80,6 @@ Partial Class MainGUI
             If PrevStatus <> Foo.IsOnline() Then
                 Notify(If(Not PrevStatus, Notifications.Notifications.LoggedIn, Notifications.Notifications.LoggedOut), Name)
             End If
-            If Name = Channels.Current Then TSChat.Visible = Not PrevStatus
         End If
     End Sub
 

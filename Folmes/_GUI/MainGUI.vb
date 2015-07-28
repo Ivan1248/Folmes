@@ -33,7 +33,7 @@ Public NotInheritable Class MainGUI
 
             'Učitavanje datoteka i poruka
             Users.Initialize()
-            Users.MyUser.SetStatus(Users.UserStatus.Online)
+            Users.MyUser.SetStatus(UserStatus.Online)
             'TODO: Users.SetStatus(My.Settings.Username, Users.Status.Online)
             With Output
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
@@ -85,7 +85,7 @@ Public NotInheritable Class MainGUI
         Try
             If My.Settings.Username <> Nothing Then
                 'SetOnlineStatus(False)
-                Users.MyUser.SetStatus(Users.UserStatus.Offline)
+                Users.MyUser.SetStatus(UserStatus.Offline)
                 Channels.SetLastRead()
             End If
         Catch ex As Exception
@@ -143,8 +143,8 @@ Public NotInheritable Class MainGUI
                     Input.Clear()
                 End If
             Case "exit", "close" : Me.Close()
-            Case "online" : Users.MyUser.SetStatus(Users.UserStatus.Online)
-            Case "offline" : Users.MyUser.SetStatus(Users.UserStatus.Offline)
+            Case "online" : Users.MyUser.SetStatus(UserStatus.Online)
+            Case "offline" : Users.MyUser.SetStatus(UserStatus.Offline)
             Case Else : Return False
         End Select
         Return True

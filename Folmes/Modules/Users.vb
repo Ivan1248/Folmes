@@ -37,7 +37,7 @@ Public MustInherit Class Users
         End Function
     End Class
 
-    Public Shared Others As List(Of User)
+    Public Shared Others As New List(Of User)
     Public Shared MyUser As User
 
     Public Shared Sub Initialize()
@@ -49,6 +49,7 @@ Public MustInherit Class Users
                 MyUser = user
             End If
         Next
+        If MyUser Is Nothing Then MyUser = Create(My.Settings.Username)
     End Sub
 
     Public Enum UserStatus As Byte
@@ -57,10 +58,11 @@ Public MustInherit Class Users
         Away = 2
     End Enum
 
-    Public Shared Sub Create(username As String)
+    Public Shared Function Create(username As String) As User
         Dirs.Create(Path.Combine(Dirs.PrivateMessages, username))
         Dirs.Create(Path.Combine(Dirs.Users, username))
-    End Sub
+        Return New User(Path.Combine(Dirs.Users, My.Settings.Username))
+    End Function
 
     Public Shared Sub Delete(username As String)
         Dim dirsToDelete As New List(Of String)

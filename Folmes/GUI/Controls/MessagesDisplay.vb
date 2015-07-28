@@ -88,7 +88,7 @@ Namespace GUI.Controls
             End Sub
         End Structure
 
-        Private Class HtmlMessageList ' Necessary for inserting messages oredered by time
+        Private Class HtmlMessageList ' Necessary for inserting messages ordered by time
             Dim _newest As HtmlMessageListNode = Nothing
             Dim _oldest As HtmlMessageListNode = Nothing
             Public Count As Integer = 0

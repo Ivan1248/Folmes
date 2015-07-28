@@ -3,8 +3,7 @@
 Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
     Private WithEvents PingPongWatcher As FileSystemWatcher
-    Private WithEvents UserFilesWatcher As FileSystemWatcher
-    Private WithEvents DirectoriesWatcher As FileSystemWatcher
+    Private WithEvents UsersWatcher As FileSystemWatcher
     Private Sub LoadFSWatchers()
         MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & Extension.Message) With {
             .IncludeSubdirectories = True,
@@ -14,15 +13,11 @@ Partial Class MainGUI
             .IncludeSubdirectories = False,
             .NotifyFilter = NotifyFilters.FileName
         }
-        DirectoriesWatcher = New FileSystemWatcher(Dirs.Messages, "*.*") With {
-            .IncludeSubdirectories = False,
-            .NotifyFilter = NotifyFilters.DirectoryName
+        UsersWatcher = New FileSystemWatcher(Dirs.Users, "*.*") With {
+            .IncludeSubdirectories = True,
+            .NotifyFilter = NotifyFilters.LastWrite Or NotifyFilters.DirectoryName
         }
-        UserFilesWatcher = New FileSystemWatcher(Dirs.Users, "*.*") With {
-            .IncludeSubdirectories = False,
-            .NotifyFilter = NotifyFilters.FileName Or NotifyFilters.LastWrite Or NotifyFilters.DirectoryName
-        }
-        For Each fsw As FileSystemWatcher In {MessagesWatcher, PingPongWatcher, UserFilesWatcher, DirectoriesWatcher}
+        For Each fsw As FileSystemWatcher In {MessagesWatcher, PingPongWatcher, UsersWatcher}
             fsw.SynchronizingObject = Me
             fsw.EnableRaisingEvents = True
         Next
@@ -44,7 +39,7 @@ Partial Class MainGUI
             Me.Output.AddMessage(message)
         Else
             If RecipientChannel = Channels.Common Then
-                MessagesManager.CommonNewQueue.Add(message)
+                MessagesManager.CommonNewQueue.Enqueue(message)
             Else
                 MessagesManager.AddPrivateNew(RecipientChannel, message)
             End If
@@ -61,11 +56,13 @@ Partial Class MainGUI
             Dim Sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
             PingPong.PingFile(Sender, True)
         Else
-            PingPong.GetFileRTT()
+            PingPong.GetFileRtt()
         End If
     End Sub
 
-    Private Sub UserFilesWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Changed, UserFilesWatcher.Created
+    Private Sub UsersWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UsersWatcher.Changed
+        If e.ChangeType <> WatcherChangeTypes.Changed Then Exit Sub
+
         Dim Dir As String = Path.GetDirectoryName(e.FullPath)
         Dim Name As String = Path.GetFileNameWithoutExtension(Dir)
 
@@ -74,7 +71,7 @@ Partial Class MainGUI
         End If
 
         Dim Foo As Users.User = Users.Others.Find(Function(u) u.Name = Name)
-        If e.ChangeType = WatcherChangeTypes.Created AndAlso Directory.Exists(e.FullPath) Then
+        If Foo Is Nothing Then
             Users.Others.Add(New Users.User(e.FullPath))
             Notify(Notifications.Notifications.Joined, Name)
         Else
@@ -87,13 +84,9 @@ Partial Class MainGUI
         End If
     End Sub
 
-    Private Sub UserFilesWatcher_Deleted(sender As Object, e As FileSystemEventArgs) Handles UserFilesWatcher.Deleted
-        Dim Name As String = Path.GetFileNameWithoutExtension(e.Name)
-        Users.Others.RemoveAt(Users.Others.FindIndex(Function(x) x.Name = Name))
-        If Channels.Current = Name Then SwitchChannel(Channels.Common)
-    End Sub
-
-    Private Sub DirectoriesWatcher_Renamed(sender As Object, e As RenamedEventArgs) Handles DirectoriesWatcher.Renamed
-        If Channels.Current = e.OldName Then SwitchChannel(Path.GetFileName(e.FullPath))
+    Private Sub UsersWatcher_Deleted(sender As Object, e As FileSystemEventArgs) Handles UsersWatcher.Deleted
+        If e.Name IsNot Nothing Then Exit Sub ' not a directory
+        Users.Others.RemoveAt(Users.Others.FindIndex(Function(u) u.Name = e.Name))
+        If Channels.Current = e.Name Then SwitchChannel(Channels.Common)
     End Sub
 End Class

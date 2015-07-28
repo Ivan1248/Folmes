@@ -11,49 +11,36 @@ Public Enum MessageType As Short
     Reflexive
 End Enum
 
-Public Class OrderedMessageList
+Public Class MessageQueue
     Public Count As Integer = 0
-    Dim _newest As MessageListNode
-    Dim _oldest As MessageListNode
+    Dim _array As Message()
+    Dim _modMask As Integer
+    Dim _newest As Integer = -1
+    Dim _oldest As Integer = 0
 
-    Public Function PopOldest() As Message
-        PopOldest = _oldest.Message
-        RemoveOldest()
-    End Function
-
-    Public Sub Add(message As Message)
-        If Count = 0 Then
-            _newest = New MessageListNode(message)
-            _oldest = _newest
-        Else
-            Dim mln As New MessageListNode(message)
-            Select Case message.Time
-                Case Is > _newest.Message.Time
-                    _newest.Succeeding = mln
-                    mln.Preceeding = _newest
-                    _newest = mln
-                Case Is < _oldest.Message.Time
-                    _oldest.Preceeding = mln
-                    mln.Succeeding = _newest
-                    _oldest = mln
-                Case Else
-                    Dim preceeding As MessageListNode = _newest.Preceeding
-                    While preceeding.Message.Time > message.Time
-                        preceeding = preceeding.Preceeding
-                    End While
-                    mln.Preceeding = preceeding
-                    mln.Succeeding = preceeding.Succeeding
-
-                    mln.Succeeding.Preceeding = mln
-                    preceeding.Succeeding = mln
-            End Select
-        End If
-        Count += 1
+    Sub New(maxCount As Integer)
+        _modMask = 1
+        While _modMask < maxCount
+            _modMask <<= 1
+        End While
+        _array = New Message(_modMask) {}
+        _modMask -= 1
     End Sub
 
-    Public Sub RemoveOldest()
-        _oldest = _oldest.Succeeding
-        _oldest.Preceeding = Nothing
+    Public Function Dequeue() As Message
+        Dequeue = _array(_oldest)
+        _oldest = Incr(_oldest)
+        Count -= 1
+    End Function
+
+    Public Sub Enqueue(message As Message)
+        _newest = Incr(_newest)
+        _array(_newest) = message
+        If Count = _modMask + 1 Then
+            _oldest = Incr(_oldest)
+        Else
+            Count += 1
+        End If
     End Sub
 
     Public Sub Clear()
@@ -61,12 +48,9 @@ Public Class OrderedMessageList
         _oldest = Nothing
     End Sub
 
-    Private Class MessageListNode
-        Public ReadOnly Message As Message
-        Public Preceeding As MessageListNode
-        Public Succeeding As MessageListNode
-        Sub New(message As Message)
-            Me.Message = message
-        End Sub
-    End Class
+    Private Function Incr(i As Integer) As Integer
+        Return (i + 1) And _modMask
+    End Function
+
 End Class
+

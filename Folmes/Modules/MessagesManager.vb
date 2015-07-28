@@ -1,22 +1,22 @@
 ﻿Imports System.IO
 
 Public MustInherit Class MessagesManager
-    Public Shared CommonNewQueue As New OrderedMessageList()
-    Public Shared PrivateNewQueue As New Dictionary(Of String, OrderedMessageList)
-    
+    Public Shared CommonNewQueue As New MessageQueue(My.Settings.NofMsgs)
+    Public Shared PrivateNewQueue As New Dictionary(Of String, MessageQueue)
+
     Public Shared Sub AddPrivateNew(channel As String, message As Message)
-        Dim oml As OrderedMessageList = Nothing
-        For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
+        Dim oml As MessageQueue = Nothing
+        For Each m As KeyValuePair(Of String, MessageQueue) In PrivateNewQueue
             If m.Key = channel Then
                 oml = m.Value
                 Exit For
             End If
         Next
         If oml Is Nothing Then
-            oml = New OrderedMessageList()
+            oml = New MessageQueue(My.Settings.NofMsgs)
             PrivateNewQueue.Add(channel, oml)
         End If
-        oml.Add(message)
+        oml.Enqueue(message)
     End Sub
 
     Delegate Sub LoadSub(m As Message)
@@ -32,7 +32,7 @@ Public MustInherit Class MessagesManager
             messagesPath = Path.Combine(Dirs.PrivateMessages, My.Settings.Username, channel)
             Dirs.Create(messagesPath)
             msgFilePaths.AddRange(Directory.GetFiles(messagesPath))
-            For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
+            For Each m As KeyValuePair(Of String, MessageQueue) In PrivateNewQueue
                 If m.Key = channel Then m.Value.Clear()
                 Exit For
             Next
@@ -44,11 +44,11 @@ Public MustInherit Class MessagesManager
     End Sub
 
     Public Shared Sub LoadNew(channel As String, loadsub As LoadSub)
-        Dim oml As OrderedMessageList = Nothing
+        Dim oml As MessageQueue = Nothing
         If channel = Channels.Common Then
             oml = CommonNewQueue
         Else
-            For Each m As KeyValuePair(Of String, OrderedMessageList) In PrivateNewQueue
+            For Each m As KeyValuePair(Of String, MessageQueue) In PrivateNewQueue
                 If m.Key = channel Then
                     oml = m.Value
                     Exit For
@@ -57,7 +57,7 @@ Public MustInherit Class MessagesManager
             If oml Is Nothing Then Exit Sub
         End If
         While oml.Count > 0
-            loadsub(oml.PopOldest)
+            loadsub(oml.Dequeue)
         End While
     End Sub
 

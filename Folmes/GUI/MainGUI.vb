@@ -122,8 +122,8 @@ Public NotInheritable Class MainGUI
         If e.KeyCode = Keys.Enter AndAlso Not e.Shift Then
             e.SuppressKeyPress = True
             If Input.Text IsNot String.Empty Then
-                If Not ProcessInput() Then
-                    'TODO: zvuk greške
+                If ProcessInput() Then
+                    Input.Clear()
                 End If
             End If
         End If
@@ -143,6 +143,8 @@ Public NotInheritable Class MainGUI
                     Input.Clear()
                 End If
             Case "exit", "close" : Me.Close()
+            Case "online" : Users.MyUser.SetStatus(Users.UserStatus.Online)
+            Case "offline" : Users.MyUser.SetStatus(Users.UserStatus.Offline)
             Case Else : Return False
         End Select
         Return True
@@ -160,7 +162,6 @@ Public NotInheritable Class MainGUI
         End Select
         MessageFile.Create(Channels.Current, msg)
         Me.Output.AddMessage(msg)
-        Input.Clear()
         Return True
     End Function
 

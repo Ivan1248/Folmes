@@ -39,7 +39,7 @@ Public NotInheritable Class MainGUI
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()
                             RemoveHandler Output.Initialized, messagesLoad
-                            MessagesManager.LoadInitial(Channels.Common, AddressOf Me.Output.AddMessage)
+                            MessagesManager.LoadInitial(AddressOf Me.Output.AddMessage, Channels.Common)
                         End Sub
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})
@@ -160,7 +160,7 @@ Public NotInheritable Class MainGUI
             Case MessageType.Reflexive
                 msg.Content = Html.HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
         End Select
-        MessageFile.Create(Channels.Current, msg)
+        MessagesManager.CreateMessageFile(Channels.Current, msg)
         Me.Output.AddMessage(msg)
         Return True
     End Function

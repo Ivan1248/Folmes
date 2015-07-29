@@ -19,8 +19,19 @@ Public MustInherit Class MessagesManager
         oml.Enqueue(message)
     End Sub
 
+    Private Shared Function MessageFileComparison(file1 As String, file2 As String) As Integer
+        Dim a As Integer = file1.Length - Extension.Message.Length - 16
+        Dim b As Integer = file2.Length - Extension.Message.Length - 16
+        For i As Integer = 0 To 15
+            Select Case Asc(file1(a + 1)) - Asc(file2(b + i))
+                Case Is > 0 : Return 1
+                Case Is < 0 : Return -1
+            End Select
+        Next
+        Return 0
+    End Function
     Delegate Sub LoadSub(m As Message)
-    Public Shared Sub LoadInitial(channel As String, loadSub As LoadSub) ' TODO optimizirati - ne mora se sortirati cijeli niz
+    Public Shared Sub LoadInitial(loadsub As LoadSub, channel As String) ' TODO optimizirati - ne mora se sortirati cijeli niz
         Dim msgFilePaths As List(Of String)
         If channel = Channels.Common Then
             msgFilePaths = New List(Of String)(Directory.GetFiles(Dirs.CommonChannel,
@@ -39,11 +50,11 @@ Public MustInherit Class MessagesManager
         End If
         msgFilePaths.Sort(AddressOf MessageFileComparison)
         For i As Integer = Math.Max(msgFilePaths.Count - 1 - My.Settings.NofMsgs, 0) To msgFilePaths.Count - 1
-            loadSub(MessageFile.LoadMessage(msgFilePaths(i)))
+            loadsub(MessageFile.LoadMessage(msgFilePaths(i)))
         Next
     End Sub
 
-    Public Shared Sub LoadNew(channel As String, loadsub As LoadSub)
+    Public Shared Sub LoadNew(loadsub As LoadSub, channel As String)
         Dim oml As MessageQueue = Nothing
         If channel = Channels.Common Then
             oml = CommonNewQueue
@@ -61,15 +72,22 @@ Public MustInherit Class MessagesManager
         End While
     End Sub
 
-    Private Shared Function MessageFileComparison(file1 As String, file2 As String) As Integer
-        Dim a As Integer = file1.Length - Extension.Message.Length - 16
-        Dim b As Integer = file2.Length - Extension.Message.Length - 16
-        For i As Integer = 0 To 15
-            Select Case Asc(file1(a + 1)) - Asc(file2(b + i))
-                Case Is > 0 : Return 1
-                Case Is < 0 : Return -1
-            End Select
-        Next
-        Return 0
+    Public Shared Function LoadMessage(fpath As String) As Message
+        Return MessageFile.LoadMessage(fpath)
+        'TODO: ++
     End Function
+
+    Public Shared Sub CreateMessageFile(channel As String, msg As Message)
+        Dim dirPath As String
+        If channel = Channels.Common Then
+            dirPath = Path.Combine(Dirs.CommonChannel, msg.Sender)
+        Else
+            dirPath = Path.Combine(Dirs.PrivateMessages, channel, msg.Sender)
+        End If
+        Dirs.Create(dirPath)
+        Dim filePath As String = Path.Combine(dirPath, Convert.ToString(msg.Time, 16) & Extension.Message)
+        MessageFile.Create(filePath, msg)
+        'TODO: ++
+    End Sub
+
 End Class

@@ -17,12 +17,14 @@ Public Class User
     Private Function UserFile() As FileStream
         Return New FileStream(InfoFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite, InfoFileSize)
     End Function
+
     Public Sub RefreshStatus()
         Using fs As FileStream = UserFile()
             fs.Seek(0, SeekOrigin.Begin)
             Status = If(fs.CanRead, UserStatus.Offline, CType(fs.ReadByte(), UserStatus))
         End Using
     End Sub
+
     Public Sub SetStatus(status As UserStatus)
         Using fs As FileStream = UserFile()
             fs.Seek(0, SeekOrigin.Begin)

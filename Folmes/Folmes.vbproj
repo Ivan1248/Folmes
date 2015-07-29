@@ -130,7 +130,7 @@
     <Compile Include="_GUI\Controls\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="_Modules_static\MessageFile.vb" />
+    <Compile Include="_Types\MessageFile.vb" />
     <Compile Include="_Modules_static\PingPong.vb" />
     <Compile Include="_Modules_variable\Users.vb" />
     <Compile Include="_GUI\Style\ToolStripColorTable.vb" />

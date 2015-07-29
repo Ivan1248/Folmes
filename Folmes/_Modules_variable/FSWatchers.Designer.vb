@@ -4,6 +4,7 @@ Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
     Private WithEvents PingPongWatcher As FileSystemWatcher
     Private WithEvents UsersWatcher As FileSystemWatcher
+
     Private Sub LoadFSWatchers()
         MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & Extension.Message) With {
             .IncludeSubdirectories = True,
@@ -22,6 +23,7 @@ Partial Class MainGUI
             fsw.EnableRaisingEvents = True
         Next
     End Sub
+
     Private Sub MessagesWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Created
         Dim DirPath As String = Path.GetDirectoryName(e.FullPath)
         Dim Sender As String = Path.GetFileName(DirPath)
@@ -34,12 +36,12 @@ Partial Class MainGUI
         Else
             Exit Sub
         End If
-        Dim message As Message = MessageFile.LoadMessage(e.FullPath)
+        Dim message As Message = MessagesManager.LoadMessage(e.FullPath)
         If Sender = Channels.Current OrElse (RecipientChannel = Channels.Current AndAlso Channels.Current = Channels.Common) Then
             Me.Output.AddMessage(message)
         Else
             If RecipientChannel = Channels.Common Then
-                MessagesManager.CommonNewQueue.Enqueue(message)
+                MessagesManager.CommonNewQueue.Enqueue(message) ' TODO
             Else
                 MessagesManager.AddPrivateNew(RecipientChannel, message)
             End If
@@ -61,15 +63,14 @@ Partial Class MainGUI
     End Sub
 
     Private Sub UsersWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UsersWatcher.Changed
-        If e.ChangeType <> WatcherChangeTypes.Changed Then Exit Sub
-
+        If e.ChangeType <> WatcherChangeTypes.Changed Then
+            Exit Sub
+        End If
         Dim Dir As String = Path.GetDirectoryName(e.FullPath)
         Dim Name As String = Path.GetFileNameWithoutExtension(Dir)
-
         If Name = My.Settings.Username Then
             Exit Sub
         End If
-
         Dim Foo As User = Users.Others.Find(Function(u) u.Name = Name)
         If Foo Is Nothing Then
             Users.Others.Add(New User(e.FullPath))

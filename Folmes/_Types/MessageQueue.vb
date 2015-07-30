@@ -1,4 +1,5 @@
 ﻿Public Class MessageQueue
+    Public Id As String
     Public Count As Integer = 0
     Dim _array As Message()
     Dim _modMask As Integer

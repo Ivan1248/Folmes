@@ -130,16 +130,16 @@
     <Compile Include="_GUI\Controls\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="_Types\MessageFile.vb" />
-    <Compile Include="_Modules_static\PingPong.vb" />
+    <Compile Include="_Modules_constant\MessageFile.vb" />
+    <Compile Include="_Modules_constant\PingPong.vb" />
     <Compile Include="_Modules_variable\Users.vb" />
     <Compile Include="_GUI\Style\ToolStripColorTable.vb" />
     <Compile Include="_ToReDo\Channels.vb" />
-    <Compile Include="_Modules_static\Files.vb" />
-    <Compile Include="_Modules_static\Notifications.vb" />
+    <Compile Include="_Modules_constant\Files.vb" />
+    <Compile Include="_Modules_constant\Notifications.vb" />
     <Compile Include="_ToReDo\Attachments.vb" />
-    <Compile Include="_Modules_static\Dirs.vb" />
-    <Compile Include="_Modules_static\HTML.vb" />
+    <Compile Include="_Modules_constant\Dirs.vb" />
+    <Compile Include="_Modules_constant\HTML.vb" />
     <Compile Include="_Modules_variable\FSWatchers.Designer.vb">
       <SubType>Form</SubType>
     </Compile>

@@ -23,9 +23,9 @@ Public MustInherit Class MessagesManager
         Dim a As Integer = file1.Length - Extension.Message.Length - 16
         Dim b As Integer = file2.Length - Extension.Message.Length - 16
         For i As Integer = 0 To 15
-            Select Case Asc(file1(a + 1)) - Asc(file2(b + i))
-                Case Is > 0 : Return -1
-                Case Is < 0 : Return 1
+            Select Case Asc(file1(a + i)) - Asc(file2(b + i))
+                Case Is > 0 : Return 1
+                Case Is < 0 : Return -1
             End Select
         Next
         Return 0

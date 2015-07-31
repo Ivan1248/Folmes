@@ -100,7 +100,7 @@ Partial Class MainGUI
         'InputPaddingPanel
         '
         Me.InputPaddingPanel.Controls.Add(Me.Input)
-        Me.InputPaddingPanel.Cursor = System.Windows.Forms.Cursors.WaitCursor
+        Me.InputPaddingPanel.Cursor = System.Windows.Forms.Cursors.SizeNS
         Me.InputPaddingPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.InputPaddingPanel.Location = New System.Drawing.Point(0, 0)
         Me.InputPaddingPanel.Name = "InputPaddingPanel"

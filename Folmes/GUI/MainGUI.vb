@@ -43,7 +43,6 @@ Public NotInheritable Class MainGUI
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})
             End With
-            AddHandler InputPaddingPanel.MouseUp, AddressOf Panel2_MouseUp
         Catch ex As Exception
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -170,7 +169,7 @@ Public NotInheritable Class MainGUI
     Private Sub Box_ResizeEnd(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
         My.Settings.WindowSize = Me.Size '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         If Me.WindowState <> FormWindowState.Minimized Then
-            Panel2_MouseUp(Nothing, Nothing)
+            InputPaddingPanel_MouseUp(Nothing, Nothing)
         End If
     End Sub
 
@@ -184,11 +183,21 @@ Public NotInheritable Class MainGUI
         End If
     End Sub
 
-    Private Sub Panel2_MouseUp(sender As Object, e As Object) 'Handles Panel2.MouseUp
+    Private Sub InputPaddingPanel_MouseUp(sender As Object, e As Object) Handles InputPaddingPanel.MouseUp
         Dim modul As Integer = 8 - InputBGPanel.Height Mod 15
         InputBGPanel.Height += modul
         Cursor.Position = New Point(Cursor.Position.X, Cursor.Position.Y - modul)
         My.Settings.InputHeight = InputBGPanel.Height '!!!!!!!!!!!!!!!!!!!!!!
+    End Sub
+
+    Private Sub InputPaddingPanel_MouseMove(sender As Object, e As MouseEventArgs) Handles InputPaddingPanel.MouseMove
+        If e.Button = MouseButtons.Left Then
+            Dim h As Integer = InputBGPanel.Height - e.Y
+            Select Case h
+                Case Is < 23 : InputBGPanel.Height = 23
+                Case Is < Me.ClientSize.Height - 80 : InputBGPanel.Height = h
+            End Select
+        End If
     End Sub
 
 #End Region
@@ -201,20 +210,6 @@ Public NotInheritable Class MainGUI
 
     Public Sub ContextMenu_OutputContextMenu() Handles Output.ContextMenu
         OutputContMenu.Show(Me, Me.PointToClient(MousePosition))
-    End Sub
-
-#End Region
-
-#Region "Resizing and minimizing + Notifyicon and context menu"
-
-    Private Sub InputPaddingPanel_MouseMove(sender As Object, e As MouseEventArgs) Handles InputPaddingPanel.MouseMove
-        If e.Button = MouseButtons.Left Then
-            Dim h As Integer = InputBGPanel.Height - e.Y
-            Select Case h
-                Case Is < 23 : InputBGPanel.Height = 23
-                Case Is < Me.ClientSize.Height - 80 : InputBGPanel.Height = h
-            End Select
-        End If
     End Sub
 
 #End Region

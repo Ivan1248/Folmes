@@ -31,9 +31,9 @@
             With TSChannels
                 Channels.Switch(channel)
                 If Output.LoadCachedChannelHtml(channel) Then
-                    MessagesManager.LoadNew(AddressOf Output.AddMessage, channel)
+                    MessagesManager.LoadNew(channel)
                 Else
-                    MessagesManager.LoadInitial(AddressOf Output.AddMessage, channel)
+                    MessagesManager.LoadInitial(channel)
                 End If
                 .Text = channel
             End With

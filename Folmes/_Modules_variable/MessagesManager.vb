@@ -1,10 +1,14 @@
 ﻿Imports System.IO
 
 Public MustInherit Class MessagesManager
-    Public Shared CommonNewQueue As New MessageQueue(My.Settings.NofMsgs)
-    Public Shared PrivateNewQueue As New List(Of MessageQueue)
+    Private Shared CommonNewQueue As New MessageQueue(My.Settings.NofMsgs)
+    Private Shared PrivateNewQueue As New List(Of MessageQueue)
 
     Public Shared Sub AddPrivateNew(channel As String, message As Message)
+        If Channels.Current = channel Then
+            MainGUI.Output.AddMessage(message)
+            Exit Sub
+        End If
         Dim oml As MessageQueue = Nothing
         For Each m As MessageQueue In PrivateNewQueue
             If m.Id = channel Then
@@ -19,6 +23,14 @@ Public MustInherit Class MessagesManager
         oml.Enqueue(message)
     End Sub
 
+    Public Shared Sub AddCommonNew(message As Message)
+        If Channels.Current = Channels.Common Then
+            MainGUI.Output.AddMessage(message)
+        Else
+            CommonNewQueue.Enqueue(message)
+        End If
+    End Sub
+
     Private Shared Function MessageFileComparison(file1 As String, file2 As String) As Integer
         Dim a As Integer = file1.Length - Extension.Message.Length - 16
         Dim b As Integer = file2.Length - Extension.Message.Length - 16
@@ -31,7 +43,7 @@ Public MustInherit Class MessagesManager
         Return 0
     End Function
     Delegate Sub LoadSub(m As Message)
-    Public Shared Sub LoadInitial(loadsub As LoadSub, channel As String) ' TODO optimizirati - ne mora se sortirati cijeli niz
+    Public Shared Sub LoadInitial(channel As String) ' TODO optimizirati - ne mora se sortirati cijeli niz
         Dim msgFilePaths As List(Of String)
         If channel = Channels.Common Then
             msgFilePaths = New List(Of String)(Directory.GetFiles(Dirs.CommonChannel,
@@ -51,7 +63,7 @@ Public MustInherit Class MessagesManager
         msgFilePaths.Sort(AddressOf MessageFileComparison)
         Dim oldestToDisplay As Integer = Math.Max(0, msgFilePaths.Count - 1 - My.Settings.NofMsgs)
         For i As Integer = oldestToDisplay To msgFilePaths.Count - 1
-            loadsub(MessageFile.LoadMessage(msgFilePaths(i)))
+            MainGUI.Output.AddMessage(MessageFile.LoadMessage(msgFilePaths(i)))
         Next
         For i As Integer = 0 To oldestToDisplay - 1 'deletes all not displayed messages
             Try
@@ -61,7 +73,7 @@ Public MustInherit Class MessagesManager
         Next
     End Sub
 
-    Public Shared Sub LoadNew(loadsub As LoadSub, channel As String)
+    Public Shared Sub LoadNew(channel As String)
         Dim oml As MessageQueue = Nothing
         If channel = Channels.Common Then
             oml = CommonNewQueue
@@ -75,7 +87,7 @@ Public MustInherit Class MessagesManager
             If oml Is Nothing Then Exit Sub
         End If
         While oml.Count > 0
-            loadsub(oml.Dequeue)
+            MainGUI.Output.AddMessage(oml.Dequeue)
         End While
     End Sub
 

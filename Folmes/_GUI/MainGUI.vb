@@ -39,7 +39,7 @@ Public NotInheritable Class MainGUI
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()
                             RemoveHandler Output.Initialized, messagesLoad
-                            MessagesManager.LoadInitial(AddressOf Me.Output.AddMessage, Channels.Common)
+                            MessagesManager.LoadInitial(Channels.Common)
                         End Sub
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})

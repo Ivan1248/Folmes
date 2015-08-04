@@ -1,14 +1,17 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 
 Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
     Private WithEvents PingPongWatcher As FileSystemWatcher
     Private WithEvents UsersWatcher As FileSystemWatcher
 
+    Private WithEvents BW As New BackgroundWorker()
+
     Private Sub LoadFSWatchers()
         MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & Extension.Message) With {
             .IncludeSubdirectories = True,
-            .NotifyFilter = NotifyFilters.FileName
+            .NotifyFilter = NotifyFilters.LastWrite
         }
         PingPongWatcher = New FileSystemWatcher(Path.Combine(Dirs.PingPong, My.Settings.Username), "*.*") With {
             .IncludeSubdirectories = False,
@@ -24,29 +27,30 @@ Partial Class MainGUI
         Next
     End Sub
 
-    Private Sub MessagesWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Created
-        Dim DirPath As String = Path.GetDirectoryName(e.FullPath)
-        Dim Sender As String = Path.GetFileName(DirPath)
-        Dim RecipientChannel As String = Path.GetFileName(Path.GetDirectoryName(DirPath))
-        Dim NotificationType As Notifications.Notifications
-        If RecipientChannel = Channels.Common AndAlso Sender <> My.Settings.Username Then
-            NotificationType = Notifications.Notifications.PublicMessage
-        ElseIf RecipientChannel = My.Settings.Username Then
-            NotificationType = Notifications.Notifications.PrivateMessage
-        Else
+    Private Sub MessagesWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles MessagesWatcher.Changed
+        Dim dirPath As String = Path.GetDirectoryName(e.FullPath)
+
+        Dim sender As String = Path.GetFileName(dirPath)
+        If sender = My.Settings.Username Then
             Exit Sub
         End If
-        Dim message As Message = MessagesManager.LoadMessage(e.FullPath)
-        If Sender = Channels.Current OrElse (RecipientChannel = Channels.Current AndAlso Channels.Current = Channels.Common) Then
-            Me.Output.AddMessage(message)
-        Else
-            If RecipientChannel = Channels.Common Then
-                MessagesManager.CommonNewQueue.Enqueue(message) ' TODO
-            Else
-                MessagesManager.AddPrivateNew(RecipientChannel, message)
-            End If
+
+        Dim recipientChannel As String = Path.GetFileName(Path.GetDirectoryName(dirPath))
+        If recipientChannel <> Channels.Common AndAlso recipientChannel <> My.Settings.Username Then
+            Exit Sub
         End If
-        Notify(NotificationType, Sender)
+
+        Dim message As Message = MessagesManager.LoadMessage(e.FullPath)
+        Dim notificationType As Notifications.Notifications
+        If recipientChannel = Channels.Common Then
+            MessagesManager.AddCommonNew(message)
+            notificationType = Notifications.Notifications.PublicMessage
+        Else
+            MessagesManager.AddPrivateNew(recipientChannel, message)
+            notificationType = Notifications.Notifications.PrivateMessage
+        End If
+
+        Notify(notificationType, sender)
     End Sub
 
     Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Created

@@ -136,10 +136,8 @@ Public NotInheritable Class MainGUI
         Select Case command
             Case Nothing : Return SendMessage(MessageType.Normal)
             Case "me" : Return SendMessage(MessageType.Reflexive)
-            Case "ping"
-                If Input.Text.Length > 6 AndAlso PingPong.PingFile(Input.Text.Substring(6).TrimEnd(), False) Then
-                    Input.Clear()
-                End If
+            Case "ping" : Return Input.Text.Length > 6 AndAlso
+                    PingPong.PingFile(Input.Text.Substring(6).TrimEnd(), False)
             Case "exit", "close" : Me.Close()
             Case "online" : Users.MyUser.SetStatus(UserStatus.Online)
             Case "offline" : Users.MyUser.SetStatus(UserStatus.Offline)

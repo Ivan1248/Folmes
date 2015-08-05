@@ -74,12 +74,12 @@ Partial Class MainGUI
         Dim Foo As User = Users.Others.Find(Function(u) u.Name = Name)
         If Foo Is Nothing Then
             Users.Others.Add(New User(e.FullPath))
-            Notify(Notifications.NotificationType.Joined, Name)
+            Notify(NotificationType.Joined, Name)
         Else
             Dim PrevStatus As Boolean = Foo.IsOnline()
             Foo.RefreshStatus()
             If PrevStatus <> Foo.IsOnline() Then
-                Notify(If(Not PrevStatus, Notifications.NotificationType.LoggedIn, Notifications.NotificationType.LoggedOut), Name)
+                Notify(If(Not PrevStatus, NotificationType.LoggedIn, NotificationType.LoggedOut), Name)
             End If
         End If
     End Sub

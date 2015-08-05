@@ -8,12 +8,12 @@ Public MustInherit Class PingPong
     Private Shared Sub Reset() Handles _timeoutTimer.Tick
         _timeoutTimer.Stop()
         _pingTime = 0
-        MainGUI.Output.AddMessage("PingPong: timeout.")
+        MainGUI.Output.AddMessage("Ping-pong:: timeout.")
     End Sub
 
     Public Shared Function PingFile(username As String, pong As Boolean) As Boolean
         If Not pong AndAlso _pingTime <> 0 Then
-            Return True
+            Return False
         End If
         If Users.IsOnline(username) OrElse username = My.Settings.Username Then
             Dim dir As String = Path.Combine(Dirs.PingPong, username)
@@ -23,14 +23,14 @@ Public MustInherit Class PingPong
             _timeoutTimer.Start()
             Return True
         Else
-            MsgBox("Cannot ping " & username & ". User is not online.")
+            MainGUI.Output.AddMessage("Cannot ping " & username & ". User is not online.")
             Return False
         End If
     End Function
 
     Public Shared Sub GetFileRtt()
         _timeoutTimer.Stop()
-        MainGUI.Output.AddMessage("PingPong: MessageFile_RTT = " & (DateTime.UtcNow.Ticks \ 10000 - _pingTime) & "ms")
+        MainGUI.Output.AddMessage("Ping-pong: File_RTT = " & (DateTime.UtcNow.Ticks \ 10000 - _pingTime) & "ms")
         _pingTime = 0
     End Sub
 

@@ -2,7 +2,7 @@
 Imports Microsoft.VisualBasic.Devices
 
 Public Module Notifications
-    Enum Notifications As Integer
+    Enum NotificationType As Integer
         PublicMessage = 0
         PrivateMessage = 1
         LoggedIn = 2
@@ -10,42 +10,41 @@ Public Module Notifications
         Joined = 4
     End Enum
 
-    Public Sub Notify(kind As Notifications, msg As String)
+    Public Sub Notify(kind As NotificationType, msg As String)
         FlashIcon()
         If GetActiveWindow <> MainGUI.Handle Then
-            Dim notifs As New BitArray(New Integer() {My.Settings.Notifications})
+            Dim notifs As New BitArray({My.Settings.Notifications})
             Dim sound As New Audio
             Select Case kind
-                Case Notifications.PublicMessage 'nova poruka
+                Case NotificationType.PublicMessage
                     If notifs(0) Then
                         ShowNotification("New message", " " & msg)
                     End If
                     If notifs(1) Then
                         sound.Play("C:\Windows\Media\Speech On.wav")
                     End If
-                Case Notifications.PrivateMessage 'privatna poruka 
+                Case NotificationType.PrivateMessage
                     If notifs(2) Then
                         ShowNotification("New private message", " " & msg)
                     End If
                     If notifs(3) Then
                         sound.Play("C:\Windows\Media\Speech On.wav")
                     End If
-                Case Notifications.LoggedIn 'prijava
+                Case NotificationType.LoggedIn
                     If notifs(4) Then
                         ShowNotification("User logged in", " " & msg & " logged in to Dropbox Messenger")
                     End If
                     If notifs(5) Then
                         sound.Play("C:\Windows\Media\Speech On.wav")
                     End If
-                Case Notifications.LoggedOut 'odjava   
+                Case NotificationType.LoggedOut
                     If notifs(6) And MainGUI.WindowState = FormWindowState.Minimized Then
                         ShowNotification("User logged out", " " & msg & " logged out from Dropbox Messenger")
                     End If '
                     If notifs(7) Then
                         sound.Play("C:\Windows\Media\Speech Off.wav")
                     End If
-                Case Notifications.Joined _
-                    'novi korisnik                                                                               '
+                Case NotificationType.Joined
                     If notifs(5) Then
                         sound.Play("C:\Windows\Media\Speech On.wav")
                     End If

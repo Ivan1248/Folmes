@@ -131,7 +131,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="_Modules_constant\MessageFile.vb" />
-    <Compile Include="_Modules_constant\PingPong.vb" />
+    <Compile Include="_Modules_variable\PingPong.vb" />
     <Compile Include="_Modules_variable\Users.vb" />
     <Compile Include="_GUI\Style\ToolStripColorTable.vb" />
     <Compile Include="_ToReDo\Channels.vb" />

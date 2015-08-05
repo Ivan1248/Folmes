@@ -21,7 +21,7 @@ Public Class User
     Public Sub RefreshStatus()
         Using fs As FileStream = UserFile()
             fs.Seek(0, SeekOrigin.Begin)
-            Status = If(fs.CanRead, UserStatus.Offline, CType(fs.ReadByte(), UserStatus))
+            Status = If(fs.CanRead, CType(fs.ReadByte(), UserStatus), UserStatus.Offline)
         End Using
     End Sub
 

@@ -6,8 +6,6 @@ Partial Class MainGUI
     Private WithEvents PingPongWatcher As FileSystemWatcher
     Private WithEvents UsersWatcher As FileSystemWatcher
 
-    Private WithEvents BW As New BackgroundWorker()
-
     Private Sub LoadFSWatchers()
         MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & Extension.Message) With {
             .IncludeSubdirectories = True,
@@ -41,20 +39,18 @@ Partial Class MainGUI
         End If
 
         Dim message As Message = MessagesManager.LoadMessage(e.FullPath)
-        Dim notificationType As Notifications.Notifications
         If recipientChannel = Channels.Common Then
             MessagesManager.AddCommonNew(message)
-            notificationType = Notifications.Notifications.PublicMessage
+            Notify(NotificationType.PublicMessage, sender)
         Else
             MessagesManager.AddPrivateNew(recipientChannel, message)
-            notificationType = Notifications.Notifications.PrivateMessage
+            Notify(NotificationType.PrivateMessage, sender)
         End If
-
-        Notify(notificationType, sender)
     End Sub
 
     Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Created
-        If Path.GetFileName(Path.GetDirectoryName(e.FullPath)) <> My.Settings.Username Then
+        Dim recipient As String = Path.GetFileName(Path.GetDirectoryName(e.FullPath))
+        If recipient <> My.Settings.Username Then
             Exit Sub
         End If
         File.Delete(e.FullPath)
@@ -78,12 +74,12 @@ Partial Class MainGUI
         Dim Foo As User = Users.Others.Find(Function(u) u.Name = Name)
         If Foo Is Nothing Then
             Users.Others.Add(New User(e.FullPath))
-            Notify(Notifications.Notifications.Joined, Name)
+            Notify(Notifications.NotificationType.Joined, Name)
         Else
             Dim PrevStatus As Boolean = Foo.IsOnline()
             Foo.RefreshStatus()
             If PrevStatus <> Foo.IsOnline() Then
-                Notify(If(Not PrevStatus, Notifications.Notifications.LoggedIn, Notifications.Notifications.LoggedOut), Name)
+                Notify(If(Not PrevStatus, Notifications.NotificationType.LoggedIn, Notifications.NotificationType.LoggedOut), Name)
             End If
         End If
     End Sub

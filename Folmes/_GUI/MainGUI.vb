@@ -34,7 +34,6 @@ Public NotInheritable Class MainGUI
             'Učitavanje datoteka i poruka
             Users.Initialize()
             Users.MyUser.SetStatus(UserStatus.Online)
-            'TODO: Users.SetStatus(My.Settings.Username, Users.Status.Online)
             With Output
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()

@@ -7,26 +7,30 @@ Public Class User
     Public Name As String
     Public Status As UserStatus
     Private InfoFilePath As String
+
     Sub New(userDirectory As String)
         Me.Name = Path.GetFileName(userDirectory)
         Me.InfoFilePath = Path.Combine(userDirectory, Files.Extension.UserInfo)
         RefreshStatus()
     End Sub
 
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Private Function UserFile() As FileStream
-        Return New FileStream(InfoFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite, InfoFileSize)
-    End Function
-
     Public Sub RefreshStatus()
-        Using fs As FileStream = UserFile()
-            fs.Seek(0, SeekOrigin.Begin)
-            Status = If(fs.CanRead, CType(fs.ReadByte(), UserStatus), UserStatus.Offline)
+        Using fs As New FileStream(InfoFilePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite, InfoFileSize)
+            If fs.CanRead Then
+                fs.Seek(0, SeekOrigin.Begin)
+                Dim a As Integer = fs.ReadByte()
+                Try
+                    Status = CType(a, UserStatus)
+                    Exit Sub
+                Catch
+                End Try
+            End If
+            Status = UserStatus.Offline
         End Using
     End Sub
 
     Public Sub SetStatus(status As UserStatus)
-        Using fs As FileStream = UserFile()
+        Using fs As FileStream = New FileStream(InfoFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, InfoFileSize)
             fs.Seek(0, SeekOrigin.Begin)
             fs.WriteByte(status)
             fs.Flush()
@@ -39,7 +43,6 @@ Public Class User
 End Class
 
 Public Enum UserStatus As Byte
-    Online = 0
-    Offline = 1
-    Away = 2
+    Offline = 0
+    Online = 1
 End Enum

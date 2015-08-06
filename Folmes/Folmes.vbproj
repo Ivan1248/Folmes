@@ -197,6 +197,7 @@
     </Compile>
     <Compile Include="_Types\MessageQueue.vb" />
     <Compile Include="_Types\User.vb" />
+    <Compile Include="_Unused\IRC.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="_GUI\AboutBox.resx">
@@ -277,7 +278,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="obj\x86\Debug\" />
-    <Folder Include="_Unused\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\X.png" />

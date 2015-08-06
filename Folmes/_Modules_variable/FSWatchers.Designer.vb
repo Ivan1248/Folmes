@@ -13,7 +13,7 @@ Partial Class MainGUI
         }
         PingPongWatcher = New FileSystemWatcher(Path.Combine(Dirs.PingPong, My.Settings.Username), "*.*") With {
             .IncludeSubdirectories = False,
-            .NotifyFilter = NotifyFilters.FileName
+            .NotifyFilter = NotifyFilters.LastWrite
         }
         UsersWatcher = New FileSystemWatcher(Dirs.Users, "*.*") With {
             .IncludeSubdirectories = True,
@@ -48,7 +48,7 @@ Partial Class MainGUI
         End If
     End Sub
 
-    Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Created
+    Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Changed
         Dim recipient As String = Path.GetFileName(Path.GetDirectoryName(e.FullPath))
         If recipient <> My.Settings.Username Then
             Exit Sub
@@ -64,6 +64,10 @@ Partial Class MainGUI
 
     Private Sub UsersWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UsersWatcher.Changed
         If e.ChangeType <> WatcherChangeTypes.Changed Then
+            Exit Sub
+        End If
+        If e.Name <> Extension.UserInfo Then
+            File.Delete(e.FullPath)
             Exit Sub
         End If
         Dim Dir As String = Path.GetDirectoryName(e.FullPath)

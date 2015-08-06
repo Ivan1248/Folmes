@@ -3,12 +3,12 @@
 Public MustInherit Class PingPong
     Private Shared _pingTime As Long = 0
 
-    Private Shared WithEvents _timeoutTimer As New Timer() With {.Interval = 10000}
+    Private Shared WithEvents _timeoutTimer As New Timer() With {.Interval = 20000}
 
     Private Shared Sub Reset() Handles _timeoutTimer.Tick
         _timeoutTimer.Stop()
         _pingTime = 0
-        MainGUI.Output.AddMessage("Ping-pong:: timeout.")
+        MainGUI.Output.AddMessage("Ping-pong: timeout.")
     End Sub
 
     Public Shared Function PingFile(username As String, pong As Boolean) As Boolean
@@ -18,7 +18,9 @@ Public MustInherit Class PingPong
         If Users.IsOnline(username) OrElse username = My.Settings.Username Then
             Dim dir As String = Path.Combine(Dirs.PingPong, username)
             Dirs.Create(dir)
-            File.Create(Path.Combine(dir, My.Settings.Username & If(pong, Extension.Pong, Extension.Ping))).Close()
+            Using fs As FileStream = File.Create(Path.Combine(dir, My.Settings.Username & If(pong, Extension.Pong, Extension.Ping)), 1)
+                fs.WriteByte(0) ' necessary for detection
+            End Using
             _pingTime = DateTime.UtcNow.Ticks \ 10000
             _timeoutTimer.Start()
             Return True

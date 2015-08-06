@@ -24,9 +24,8 @@ Namespace GUI.Controls
         Public Sub RaiseContextMenu()
             RaiseEvent ContextMenu()
         End Sub
-        Public Event ProcessStartClick(data As String)
-        Public Sub RaiseProcessStartClick(data As String)
-            RaiseEvent ProcessStartClick(data)
+        Public Sub ProcessStart(data As String)
+            Process.Start(data)
         End Sub
 #End Region
 

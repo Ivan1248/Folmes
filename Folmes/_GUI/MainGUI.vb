@@ -201,11 +201,7 @@ Public NotInheritable Class MainGUI
 
 #End Region
 
-#Region "Called from Script.js"
-
-    Public Sub ProcessStart_OutputProcessStartClick(data As String) Handles Output.ProcessStartClick
-        Process.Start(data)
-    End Sub
+#Region "Output context menu"
 
     Public Sub ContextMenu_OutputContextMenu() Handles Output.ContextMenu
         OutputContMenu.Show(Me, Me.PointToClient(MousePosition))

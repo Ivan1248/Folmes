@@ -4,7 +4,7 @@
         Const Message As String = ".fmsg"
         Const Ping As String = ".ping"
         Const Pong As String = ".pong"
-        Const UserInfo As String = ".info"      ' TODO: make obsolete
+        Const UserInfo As String = ".info"
     End Structure
 
 End Module

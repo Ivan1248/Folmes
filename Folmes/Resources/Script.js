@@ -10,8 +10,8 @@ function getSelectedText() {
 
 var messageDisplay = window.external;
 
-function fileClick(data) {
-    window.external.RaiseProcessStartClick(data);
+function linkClick(data) {
+    window.external.ProcessStart(data);
 }
 
 function contMenu() {

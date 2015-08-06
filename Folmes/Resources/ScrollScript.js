@@ -3,6 +3,8 @@ var maxPageYOffset;
 var scrollTrackSpace;
 var scrollerRelMouseY;
 var scroller;
+var prevDocHeight;
+
 
 function setScrollerPos(y) {
     scroller.style.top = (y < 0 ? "0" : y < scrollTrackSpace ? y : scrollTrackSpace) + "px";
@@ -26,7 +28,7 @@ function smoothScrollToTarget() {
     updateScrollerPos();
 }
 
-function wheelScroll(e) { // handles window.onmousewheel
+function wheelScroll(e) {
     var delta = e.wheelDelta ? e.wheelDelta / 120 : -e.detail / 3;
     scrollTarget -= delta * 50;
     if (scrollTarget < 0) scrollTarget = 0;
@@ -37,7 +39,7 @@ function wheelScroll(e) { // handles window.onmousewheel
     }
 }
 
-function refreshScroller() { // handles, window.onresize
+function refreshScroller() {
     var doc = document,
         docHeight = doc.documentElement.scrollHeight,
         windowHeight = window.innerHeight,
@@ -65,7 +67,9 @@ function dragNscroll(e) {
     window.scrollTo(0, scrollVal);
 }
 
-function initializeScroller() { // handles window.onload
+window.addEventListener("load", initializeScroller);
+
+function initializeScroller() {
     var container = document.getElementById("container");
     scroller = document.createElement("div");
     scroller.id = "scroller";
@@ -75,6 +79,7 @@ function initializeScroller() { // handles window.onload
     container.parentElement.appendChild(scrollerTrack);
 
     scroller.onmousedown = function (e) {
+        //refreshScroller();
         scrollerRelMouseY = e.clientY - parseInt(scroller.style.top, 10);
         document.addEventListener("mousemove", dragNscroll);
         document.onselectstart = function () { e.preventDefault(); return false; }; // disable text selection
@@ -85,9 +90,7 @@ function initializeScroller() { // handles window.onload
     });
     window.addEventListener("mousewheel", wheelScroll);
     window.addEventListener("resize", refreshScroller);
-    window.addEventListener("DOMNodeInserted", refreshScroller, false);
+    window.addEventListener("DOMNodeInserted", refreshScroller);
 
     refreshScroller();
 }
-
-window.addEventListener("load", initializeScroller);

@@ -47,7 +47,7 @@ Module Attachments
                             Try
                                 Directory.CreateDirectory(Dirs.Attachments)
                                 File.Copy(filepath, Path.Combine(Dirs.Attachments, filename), True)
-                                If IsImage(filepath) Then
+                                If IsImageFile(filepath) Then
                                     MakeFileThumbnail(filepath, filename)
                                 End If
                             Catch
@@ -69,7 +69,7 @@ Module Attachments
         Return True
     End Function
 
-    Public Function IsImage(fpath As String) As Boolean
+    Public Function IsImageFile(fpath As String) As Boolean
         Return {".jpg", ".png", ".bmp", ".jpeg", ".gif", ".tiff"}.Contains(Path.GetExtension(fpath).ToLower())
     End Function
 

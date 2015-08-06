@@ -1,4 +1,6 @@
-﻿Imports System.Text
+﻿Imports System.Globalization
+Imports System.Net
+Imports System.Text
 
 Public MustInherit Class Html
 
@@ -43,11 +45,15 @@ Public MustInherit Class Html
                 lastEnd = urlSpan.Item2
                 Dim uri As String = content.Substring(start, lastEnd - start + 1)
 
-                sb.Append("<span class=""url"" OnClick=""clickO('")
-                sb.Append(uri).Append("')"">")
-                If IsImage(uri) Then sb.Append("<img src =""")
-                sb.Append(uri)
-                If IsImage(uri) Then sb.Append("""></img>")
+                sb.Append("<span class=""url"" OnClick=""linkClick('").Append(uri).Append("')"">")
+                If IsImageFile(uri) OrElse IsImageUrl(uri) Then
+                    sb.Append("<img src=""").Append(uri)
+                    sb.Append(""" alt=""").Append(uri)
+                    sb.Append(""" onload=""refreshScroller()")
+                    sb.Append("""></img>")
+                Else
+                    sb.Append(uri)
+                End If
                 sb.Append("</span>") 'SLIKA !!!
                 i = lastEnd + 1
             Else
@@ -74,7 +80,7 @@ Public MustInherit Class Html
         Dim l As Integer = dotIndex - 1
         Dim r As Integer = dotIndex + 1
 
-        If l < 0 OrElse r >= str.Length OrElse Not IsAsciiLetter(str(l)) OrElse Not IsAsciiLetter(str(r)) Then
+        If l < 0 OrElse r >= str.Length OrElse Not IsAsciiLetterOrDigit(str(l)) OrElse Not IsAsciiLetterOrDigit(str(r)) Then
             Return erroret
         End If
         l -= 1
@@ -83,7 +89,7 @@ Public MustInherit Class Html
                 l += 1
                 Exit While
             End If
-            If IsAsciiLetter(str(l)) Then : l -= 1
+            If IsAsciiLetterOrDigit(str(l)) Then : l -= 1
             ElseIf l - 3 > 0 AndAlso str(l - 2) = ":"c AndAlso str(l - 1) = "/"c AndAlso str(l) = "/"c Then : l -= 3
             Else : Return erroret
             End If
@@ -94,7 +100,7 @@ Public MustInherit Class Html
                 r -= 1
                 Exit While
             End If
-            If IsAsciiLetter(str(r)) OrElse Char.IsDigit(str(r)) OrElse "-_.~!*'();:@&=+$,/?%#[]".Contains(str(r)) Then : r += 1
+            If IsAsciiLetterOrDigit(str(r)) OrElse "-_.~!*'();:@&=+$,/?%#[]".Contains(str(r)) Then : r += 1
             ElseIf str(r) = "."c AndAlso Not "/.".Contains(str(r - 1)) Then : r += 1
             ElseIf str(r) = "/"c AndAlso str(r - 1) <> "/"c Then : r += 1
             Else : Return erroret
@@ -103,8 +109,20 @@ Public MustInherit Class Html
         Return New Tuple(Of Integer, Integer)(l, r)
     End Function
 
-    Private Shared Function IsAsciiLetter(c As Char) As Boolean
-        Return (c >= "A"c AndAlso c <= "Z"c) OrElse (c >= "a"c AndAlso c <= "z"c)
+    Private Shared Function IsAsciiLetterOrDigit(c As Char) As Boolean
+        Return (c >= "A"c AndAlso c <= "Z"c) OrElse (c >= "a"c AndAlso c <= "z"c) OrElse (c >= "0"c AndAlso c <= "9"c)
     End Function
 
+    Private Shared Function IsImageUrl(url As String) As Boolean
+        Dim req As HttpWebRequest = CType(HttpWebRequest.Create(url), HttpWebRequest)
+        req.Method = "HEAD"
+        req.Timeout = 1000
+        Try
+        Using resp As WebResponse = req.GetResponse()
+                Return resp.ContentType.ToLower(CultureInfo.InvariantCulture).StartsWith("image/")
+            End Using
+        Catch
+            Return False
+        End Try
+    End Function
 End Class

@@ -49,14 +49,10 @@ Partial Class MainGUI
     End Sub
 
     Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Changed
-        Dim recipient As String = Path.GetFileName(Path.GetDirectoryName(e.FullPath))
-        If recipient <> My.Settings.Username Then
-            Exit Sub
-        End If
         File.Delete(e.FullPath)
         If Path.GetExtension(e.Name) = Extension.Ping Then
             Dim Sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
-            PingPong.PingFile(Sender, True)
+            PingPong.Pong(Sender)
         Else
             PingPong.GetFileRtt()
         End If
@@ -66,7 +62,7 @@ Partial Class MainGUI
         If e.ChangeType <> WatcherChangeTypes.Changed Then
             Exit Sub
         End If
-        If e.Name <> Extension.UserInfo Then
+        If e.Name <> Extension.UserInfo AndAlso File.Exists(e.FullPath) Then
             File.Delete(e.FullPath)
             Exit Sub
         End If

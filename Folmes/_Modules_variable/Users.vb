@@ -41,7 +41,11 @@ Public MustInherit Class Users
 
     Public Shared Function IsOnline(username As String) As Boolean
         Dim user As User = Others.Find(Function(u) u.Name = username)
-        Return If(user IsNot Nothing, user.IsOnline(), False)
+        If user IsNot Nothing Then
+            Return user.IsOnline()
+        Else
+            Return username = My.Settings.Username
+        End If
     End Function
 
 End Class

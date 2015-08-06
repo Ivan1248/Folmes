@@ -137,7 +137,7 @@ Public NotInheritable Class MainGUI
             Case Nothing : Return SendMessage(MessageType.Normal)
             Case "me" : Return SendMessage(MessageType.Reflexive)
             Case "ping" : Return Input.Text.Length > 6 AndAlso
-                    PingPong.PingFile(Input.Text.Substring(6).TrimEnd(), False)
+                    PingPong.Ping(Input.Text.Substring(6).TrimEnd())
             Case "exit", "close" : Me.Close()
             Case "online" : Users.MyUser.SetStatus(UserStatus.Online)
             Case "offline" : Users.MyUser.SetStatus(UserStatus.Offline)

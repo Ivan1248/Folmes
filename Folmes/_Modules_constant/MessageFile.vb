@@ -1,4 +1,5 @@
 ﻿Imports System.Text
+Imports System.IO
 
 Public MustInherit Class MessageFile
     Public Shared Sub Create(filePath As String, msg As Message)
@@ -6,15 +7,15 @@ Public MustInherit Class MessageFile
         sb.Append(ChrW(msg.Type))
         sb.AppendLine(msg.Sender)
         sb.AppendLine(msg.Content)
-        Dim fs As New IO.FileStream(filePath, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.Read)
-        Using sw As New IO.StreamWriter(fs) With {.AutoFlush = False}
+        Dim fs As New FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)
+        Using sw As New StreamWriter(fs) With {.AutoFlush = False}
             sw.Write(sb)
         End Using
     End Sub
 
     Public Shared Function LoadMessage(fpath As String) As Message
-        Dim m As New Message() With {.Time = Convert.ToInt64(IO.Path.GetFileNameWithoutExtension(fpath), 16)}
-        Using sr As New IO.StreamReader(New IO.FileStream(fpath, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite))
+        Dim m As New Message() With {.Time = Convert.ToInt64(Path.GetFileNameWithoutExtension(fpath), 16)}
+        Using sr As New StreamReader(New FileStream(fpath, FileMode.Open, FileAccess.Read, FileShare.Read))
             m.Type = CType(sr.Read(), MessageType)
             m.Sender = sr.ReadLine()
             m.Content = sr.ReadLine()

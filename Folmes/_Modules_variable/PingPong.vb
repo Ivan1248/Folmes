@@ -11,17 +11,18 @@ Public MustInherit Class PingPong
         MainGUI.Output.AddMessage("Ping-pong: timeout.")
     End Sub
 
-    Public Shared Function PingFile(username As String, pong As Boolean) As Boolean
-        If Not pong AndAlso _pingTime <> 0 Then
+    Public Shared Function Ping(username As String) As Boolean
+        If _pingTime <> 0 Then
+            MainGUI.Output.AddMessage("Pinging in progress.")
             Return False
         End If
         If Users.IsOnline(username) OrElse username = My.Settings.Username Then
             Dim dir As String = Path.Combine(Dirs.PingPong, username)
             Dirs.Create(dir)
-            Using fs As FileStream = File.Create(Path.Combine(dir, My.Settings.Username & If(pong, Extension.Pong, Extension.Ping)), 1)
+            Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & Extension.Ping), FileMode.Create, FileAccess.Write)
                 fs.WriteByte(0) ' necessary for detection
             End Using
-            _pingTime = DateTime.UtcNow.Ticks \ 10000
+            _pingTime = Date.UtcNow.Ticks \ 10000
             _timeoutTimer.Start()
             Return True
         Else
@@ -29,6 +30,16 @@ Public MustInherit Class PingPong
             Return False
         End If
     End Function
+
+    Public Shared Sub Pong(username As String)
+        If Not Users.IsOnline(username) Then Exit Sub
+        Dim dir As String = Path.Combine(Dirs.PingPong, username)
+        Dirs.Create(dir)
+        Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & Extension.Pong), FileMode.Create, FileAccess.Write)
+            fs.WriteByte(0) ' necessary for detection
+        End Using
+    End Sub
+
 
     Public Shared Sub GetFileRtt()
         _timeoutTimer.Stop()
@@ -40,9 +51,7 @@ Public MustInherit Class PingPong
         Dim dirPath As String = Path.Combine(Dirs.PingPong, My.Settings.Username)
         If Directory.Exists(dirPath) Then
             For Each pingFile As String In Directory.GetFiles(dirPath)
-                Select Case Path.GetExtension(pingFile)
-                    Case Extension.Ping, Extension.Pong : File.Delete(pingFile)
-                End Select
+                File.Delete(pingFile)
             Next
         End If
     End Sub

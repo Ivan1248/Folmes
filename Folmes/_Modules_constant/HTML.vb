@@ -114,11 +114,11 @@ Public MustInherit Class Html
     End Function
 
     Private Shared Function IsImageUrl(url As String) As Boolean
-        Dim req As HttpWebRequest = CType(HttpWebRequest.Create(url), HttpWebRequest)
-        req.Method = "HEAD"
-        req.Timeout = 1000
         Try
-        Using resp As WebResponse = req.GetResponse()
+            Dim req As HttpWebRequest = CType(HttpWebRequest.Create(url), HttpWebRequest)
+            req.Method = "HEAD"
+            req.Timeout = 1000
+            Using resp As WebResponse = req.GetResponse()
                 Return resp.ContentType.ToLower(CultureInfo.InvariantCulture).StartsWith("image/")
             End Using
         Catch

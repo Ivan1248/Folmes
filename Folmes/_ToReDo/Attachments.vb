@@ -58,7 +58,7 @@ Module Attachments
                         ElseIf a = -1 Then
                             Return True
                         Else
-                            sb.Append(Chr(a))
+                            sb.Append(ChrW(a))
                         End If
                     End While
                 ElseIf a = -1 Then

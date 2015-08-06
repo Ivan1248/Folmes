@@ -8,9 +8,9 @@ Public Class User
     Public Status As UserStatus
     Private InfoFilePath As String
 
-    Sub New(userDirectory As String)
-        Me.Name = Path.GetFileName(userDirectory)
-        Me.InfoFilePath = Path.Combine(userDirectory, Files.Extension.UserInfo)
+    Sub New(username As String)
+        Me.Name = username
+        Me.InfoFilePath = Path.Combine(Dirs.Users, username, Files.Extension.UserInfo)
         RefreshStatus()
     End Sub
 

@@ -51,8 +51,8 @@ Partial Class MainGUI
     Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Changed
         File.Delete(e.FullPath)
         If Path.GetExtension(e.Name) = Extension.Ping Then
-            Dim Sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
-            PingPong.Pong(Sender)
+            Dim sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
+            PingPong.Pong(sender)
         Else
             PingPong.GetFileRtt()
         End If
@@ -62,31 +62,29 @@ Partial Class MainGUI
         If e.ChangeType <> WatcherChangeTypes.Changed Then
             Exit Sub
         End If
-        If e.Name <> Extension.UserInfo AndAlso File.Exists(e.FullPath) Then
-            File.Delete(e.FullPath)
+        If Path.GetExtension(e.Name) <> Extension.UserInfo Then
             Exit Sub
         End If
-        Dim Dir As String = Path.GetDirectoryName(e.FullPath)
-        Dim Name As String = Path.GetFileNameWithoutExtension(Dir)
-        If Name = My.Settings.Username Then
+        Dim name As String = e.Name.Substring(0, e.Name.IndexOf("\"c))
+        If name = My.Settings.Username Then
             Exit Sub
         End If
-        Dim Foo As User = Users.Others.Find(Function(u) u.Name = Name)
-        If Foo Is Nothing Then
-            Users.Others.Add(New User(e.FullPath))
-            Notify(NotificationType.Joined, Name)
+        Dim user As User = Users.GetUser(name)
+        If user Is Nothing Then
+            Users.AddNew(name)
+            Notify(NotificationType.Joined, name)
         Else
-            Dim PrevStatus As Boolean = Foo.IsOnline()
-            Foo.RefreshStatus()
-            If PrevStatus <> Foo.IsOnline() Then
-                Notify(If(Not PrevStatus, NotificationType.LoggedIn, NotificationType.LoggedOut), Name)
+            Dim PrevStatus As Boolean = user.IsOnline()
+            user.RefreshStatus()
+            If PrevStatus <> user.IsOnline() Then
+                Notify(If(Not PrevStatus, NotificationType.LoggedIn, NotificationType.LoggedOut), name)
             End If
         End If
     End Sub
 
     Private Sub UsersWatcher_Deleted(sender As Object, e As FileSystemEventArgs) Handles UsersWatcher.Deleted
-        If e.Name IsNot Nothing Then Exit Sub ' not a directory
-        Users.Others.RemoveAt(Users.Others.FindIndex(Function(u) u.Name = e.Name))
+        If Not Directory.Exists(e.FullPath) Then Exit Sub ' not a directory
+        Users.Remove(e.Name)
         If Channels.Current = e.Name Then SwitchChannel(Channels.Common)
     End Sub
 End Class

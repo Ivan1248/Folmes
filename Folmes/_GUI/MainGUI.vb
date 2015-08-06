@@ -251,13 +251,4 @@ Public NotInheritable Class MainGUI
 
 #End Region
 
-    'Private Sub TSChat_Click(sender As Object, e As EventArgs) Handles TSChat.Click
-    'For Each chatbox As BoxIM In IMBoxes
-    'If chatbox.Channel = Name Then
-    'chatbox.Focus()
-    'Exit Sub
-    'End If
-    'Next
-    'OpenNewIM(CurrentChannel)
-    'End Sub
 End Class

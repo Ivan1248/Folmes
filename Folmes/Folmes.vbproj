@@ -119,6 +119,7 @@
     <Compile Include="_GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="_Modules_constant\InputParser.vb" />
     <Compile Include="_Modules_variable\MessagesManager.vb" />
     <Compile Include="_Types\Message.vb" />
     <Compile Include="_GUI\GUIChannels.Designer.vb">

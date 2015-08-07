@@ -25,7 +25,11 @@ Namespace GUI.Controls
             RaiseEvent ContextMenu()
         End Sub
         Public Sub ProcessStart(data As String)
-            Process.Start(data)
+            Try
+                Process.Start(data)
+            Catch
+                Console.Beep()
+            End Try
         End Sub
 #End Region
 

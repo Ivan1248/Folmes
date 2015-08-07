@@ -127,14 +127,15 @@ Public NotInheritable Class MainGUI
     End Function
 
     Friend Function SendMessage(messageType As MessageType) As Boolean
-        If Not DetectAndCopyFiles(Input.Text) Then Return False
-        Dim msg As New Message() _
-                With {.Sender = My.Settings.Username, .Type = messageType, .Time = DateTime.UtcNow.ToBinary()}
+        Dim msg As New Message()
+        msg.Sender = My.Settings.Username
+        msg.Type = messageType
+        msg.Time = Date.UtcNow.ToBinary()
         Select Case messageType
             Case MessageType.Normal, MessageType.FolmesDeclaration
-                msg.Content = Html.HtmlizeMessageContent(Input.Text)
+                msg.Content = HtmlConverter.HtmlizeInputAndCopyFiles(Input.Text)
             Case MessageType.Reflexive
-                msg.Content = Html.HtmlizeMessageContent(My.Settings.Username & Input.Text.Substring(3))
+                msg.Content = HtmlConverter.HtmlizeInputAndCopyFiles(My.Settings.Username & Input.Text.Substring(3))
         End Select
         MessagesManager.CreateMessageFile(Channels.Current, msg)
         Me.Output.AddMessage(msg)

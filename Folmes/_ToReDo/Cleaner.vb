@@ -71,7 +71,7 @@ Public Class Cleaner
     Private Sub LoadList()
         With New StringBuilder()    'kapacitet
             If Me._selected = CleanerMode.Files Then
-                For Each file_date As String() In GetFilesWithDates()
+                For Each file_date As String() In Attachments.GetFilesWithDates()
                     .Append("<div class=""item message""><div class=""time"">")
                     .Append(file_date(1)).Append("</div><span class=""file"" onclick=""linkClick('")
                     .Append(Replace(Path.Combine(Dirs.Attachments, file_date(0)), "\", "\\")).Append("')"">")

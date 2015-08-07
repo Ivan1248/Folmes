@@ -281,6 +281,7 @@
     <Folder Include="obj\x86\Debug\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Paleta.bmp" />
     <None Include="Resources\X.png" />
     <None Include="Resources\menu.png" />
     <EmbeddedResource Include="Resources\DBM.ico" />

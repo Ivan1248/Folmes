@@ -73,17 +73,7 @@ Partial Class Settings
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Username = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.C0 = New System.Windows.Forms.Button()
-        Me.C1 = New System.Windows.Forms.Button()
-        Me.C2 = New System.Windows.Forms.Button()
-        Me.C3 = New System.Windows.Forms.Button()
-        Me.C4 = New System.Windows.Forms.Button()
-        Me.C5 = New System.Windows.Forms.Button()
-        Me.C6 = New System.Windows.Forms.Button()
-        Me.C7 = New System.Windows.Forms.Button()
-        Me.C8 = New System.Windows.Forms.Button()
-        Me.C9 = New System.Windows.Forms.Button()
+        Me.ColorPickingPictureBox = New System.Windows.Forms.PictureBox()
         Me.GeneralSettingsPanel = New System.Windows.Forms.GroupBox()
         Me.HideFolderCB = New System.Windows.Forms.CheckBox()
         Me.LaunchOnStartup = New System.Windows.Forms.CheckBox()
@@ -112,7 +102,7 @@ Partial Class Settings
         Me.FlowLayoutPanel4.SuspendLayout()
         Me.UsernamePanel.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
-        Me.FlowLayoutPanel3.SuspendLayout()
+        CType(Me.ColorPickingPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GeneralSettingsPanel.SuspendLayout()
         Me.Tabs.SuspendLayout()
         Me.SuspendLayout()
@@ -684,7 +674,7 @@ Partial Class Settings
         Me.UsernamePanel.Location = New System.Drawing.Point(3, 3)
         Me.UsernamePanel.MinimumSize = New System.Drawing.Size(302, 0)
         Me.UsernamePanel.Name = "UsernamePanel"
-        Me.UsernamePanel.Size = New System.Drawing.Size(302, 107)
+        Me.UsernamePanel.Size = New System.Drawing.Size(302, 103)
         Me.UsernamePanel.TabIndex = 8
         Me.UsernamePanel.TabStop = False
         Me.UsernamePanel.Text = "User Settings"
@@ -695,12 +685,12 @@ Partial Class Settings
         Me.FlowLayoutPanel1.Controls.Add(Me.Label5)
         Me.FlowLayoutPanel1.Controls.Add(Me.Username)
         Me.FlowLayoutPanel1.Controls.Add(Me.Label7)
-        Me.FlowLayoutPanel1.Controls.Add(Me.FlowLayoutPanel3)
+        Me.FlowLayoutPanel1.Controls.Add(Me.ColorPickingPictureBox)
         Me.FlowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(3, 16)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(296, 88)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(296, 84)
         Me.FlowLayoutPanel1.TabIndex = 1
         '
         'Label5
@@ -716,7 +706,6 @@ Partial Class Settings
         '
         'Username
         '
-        Me.Username.Enabled = False
         Me.Username.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.Username.Location = New System.Drawing.Point(3, 19)
         Me.Username.MaxLength = 16
@@ -736,164 +725,15 @@ Partial Class Settings
         Me.Label7.TabIndex = 12
         Me.Label7.Text = "Username color:"
         '
-        'FlowLayoutPanel3
+        'ColorPickingPictureBox
         '
-        Me.FlowLayoutPanel3.AutoSize = True
-        Me.FlowLayoutPanel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.FlowLayoutPanel3.Controls.Add(Me.C0)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C1)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C2)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C3)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C4)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C5)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C6)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C7)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C8)
-        Me.FlowLayoutPanel3.Controls.Add(Me.C9)
-        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(3, 61)
-        Me.FlowLayoutPanel3.Name = "FlowLayoutPanel3"
-        Me.FlowLayoutPanel3.Padding = New System.Windows.Forms.Padding(2, 2, 0, 2)
-        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(222, 24)
-        Me.FlowLayoutPanel3.TabIndex = 13
-        '
-        'C0
-        '
-        Me.C0.BackColor = System.Drawing.Color.DarkGray
-        Me.C0.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C0.ForeColor = System.Drawing.Color.DarkGray
-        Me.C0.Location = New System.Drawing.Point(2, 2)
-        Me.C0.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C0.Name = "C0"
-        Me.C0.Size = New System.Drawing.Size(20, 20)
-        Me.C0.TabIndex = 0
-        Me.C0.UseMnemonic = False
-        Me.C0.UseVisualStyleBackColor = False
-        '
-        'C1
-        '
-        Me.C1.BackColor = System.Drawing.Color.FromArgb(CType(CType(171, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
-        Me.C1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(129, Byte), Integer), CType(CType(104, Byte), Integer))
-        Me.C1.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C1.Location = New System.Drawing.Point(24, 2)
-        Me.C1.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C1.Name = "C1"
-        Me.C1.Size = New System.Drawing.Size(20, 20)
-        Me.C1.TabIndex = 1
-        Me.C1.UseMnemonic = False
-        Me.C1.UseVisualStyleBackColor = False
-        '
-        'C2
-        '
-        Me.C2.BackColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(59, Byte), Integer))
-        Me.C2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(59, Byte), Integer))
-        Me.C2.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C2.Location = New System.Drawing.Point(46, 2)
-        Me.C2.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C2.Name = "C2"
-        Me.C2.Size = New System.Drawing.Size(20, 20)
-        Me.C2.TabIndex = 2
-        Me.C2.UseMnemonic = False
-        Me.C2.UseVisualStyleBackColor = False
-        '
-        'C3
-        '
-        Me.C3.BackColor = System.Drawing.Color.FromArgb(CType(CType(145, Byte), Integer), CType(CType(174, Byte), Integer), CType(CType(71, Byte), Integer))
-        Me.C3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(145, Byte), Integer), CType(CType(174, Byte), Integer), CType(CType(71, Byte), Integer))
-        Me.C3.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C3.Location = New System.Drawing.Point(68, 2)
-        Me.C3.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C3.Name = "C3"
-        Me.C3.Size = New System.Drawing.Size(20, 20)
-        Me.C3.TabIndex = 3
-        Me.C3.UseMnemonic = False
-        Me.C3.UseVisualStyleBackColor = False
-        '
-        'C4
-        '
-        Me.C4.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(184, Byte), Integer), CType(CType(126, Byte), Integer))
-        Me.C4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(184, Byte), Integer), CType(CType(126, Byte), Integer))
-        Me.C4.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C4.Location = New System.Drawing.Point(90, 2)
-        Me.C4.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C4.Name = "C4"
-        Me.C4.Size = New System.Drawing.Size(20, 20)
-        Me.C4.TabIndex = 4
-        Me.C4.UseMnemonic = False
-        Me.C4.UseVisualStyleBackColor = False
-        '
-        'C5
-        '
-        Me.C5.BackColor = System.Drawing.Color.FromArgb(CType(CType(8, Byte), Integer), CType(CType(181, Byte), Integer), CType(CType(197, Byte), Integer))
-        Me.C5.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(8, Byte), Integer), CType(CType(181, Byte), Integer), CType(CType(197, Byte), Integer))
-        Me.C5.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C5.Location = New System.Drawing.Point(112, 2)
-        Me.C5.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C5.Name = "C5"
-        Me.C5.Size = New System.Drawing.Size(20, 20)
-        Me.C5.TabIndex = 5
-        Me.C5.UseMnemonic = False
-        Me.C5.UseVisualStyleBackColor = False
-        '
-        'C6
-        '
-        Me.C6.BackColor = System.Drawing.Color.FromArgb(CType(CType(79, Byte), Integer), CType(CType(175, Byte), Integer), CType(CType(214, Byte), Integer))
-        Me.C6.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(8, Byte), Integer), CType(CType(181, Byte), Integer), CType(CType(197, Byte), Integer))
-        Me.C6.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C6.Location = New System.Drawing.Point(134, 2)
-        Me.C6.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C6.Name = "C6"
-        Me.C6.Size = New System.Drawing.Size(20, 20)
-        Me.C6.TabIndex = 6
-        Me.C6.UseMnemonic = False
-        Me.C6.UseVisualStyleBackColor = False
-        '
-        'C7
-        '
-        Me.C7.BackColor = System.Drawing.Color.FromArgb(CType(CType(12, Byte), Integer), CType(CType(90, Byte), Integer), CType(CType(253, Byte), Integer))
-        Me.C7.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(162, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.C7.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C7.Location = New System.Drawing.Point(156, 2)
-        Me.C7.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C7.Name = "C7"
-        Me.C7.Size = New System.Drawing.Size(20, 20)
-        Me.C7.TabIndex = 7
-        Me.C7.UseMnemonic = False
-        Me.C7.UseVisualStyleBackColor = False
-        '
-        'C8
-        '
-        Me.C8.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(12, Byte), Integer), CType(CType(251, Byte), Integer))
-        Me.C8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(143, Byte), Integer), CType(CType(200, Byte), Integer))
-        Me.C8.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C8.Location = New System.Drawing.Point(178, 2)
-        Me.C8.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C8.Name = "C8"
-        Me.C8.Size = New System.Drawing.Size(20, 20)
-        Me.C8.TabIndex = 7
-        Me.C8.UseMnemonic = False
-        Me.C8.UseVisualStyleBackColor = False
-        '
-        'C9
-        '
-        Me.C9.BackColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(129, Byte), Integer), CType(CType(168, Byte), Integer))
-        Me.C9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.C9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(129, Byte), Integer), CType(CType(168, Byte), Integer))
-        Me.C9.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.C9.Location = New System.Drawing.Point(200, 2)
-        Me.C9.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
-        Me.C9.Name = "C9"
-        Me.C9.Size = New System.Drawing.Size(20, 20)
-        Me.C9.TabIndex = 7
-        Me.C9.UseMnemonic = False
-        Me.C9.UseVisualStyleBackColor = False
+        Me.ColorPickingPictureBox.BackgroundImage = Global.Folmes.My.Resources.Resources.Paleta
+        Me.ColorPickingPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.ColorPickingPictureBox.Location = New System.Drawing.Point(3, 61)
+        Me.ColorPickingPictureBox.Name = "ColorPickingPictureBox"
+        Me.ColorPickingPictureBox.Size = New System.Drawing.Size(290, 20)
+        Me.ColorPickingPictureBox.TabIndex = 13
+        Me.ColorPickingPictureBox.TabStop = False
         '
         'GeneralSettingsPanel
         '
@@ -902,7 +742,7 @@ Partial Class Settings
         Me.GeneralSettingsPanel.Controls.Add(Me.LaunchOnStartup)
         Me.GeneralSettingsPanel.Controls.Add(Me.StartMinimized)
         Me.GeneralSettingsPanel.Controls.Add(Me.MinimizeToNotificationArea)
-        Me.GeneralSettingsPanel.Location = New System.Drawing.Point(3, 116)
+        Me.GeneralSettingsPanel.Location = New System.Drawing.Point(3, 112)
         Me.GeneralSettingsPanel.MinimumSize = New System.Drawing.Size(302, 0)
         Me.GeneralSettingsPanel.Name = "GeneralSettingsPanel"
         Me.GeneralSettingsPanel.Size = New System.Drawing.Size(302, 87)
@@ -1034,7 +874,7 @@ Partial Class Settings
         Me.UsernamePanel.PerformLayout()
         Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.FlowLayoutPanel1.PerformLayout()
-        Me.FlowLayoutPanel3.ResumeLayout(False)
+        CType(Me.ColorPickingPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GeneralSettingsPanel.ResumeLayout(False)
         Me.GeneralSettingsPanel.PerformLayout()
         Me.Tabs.ResumeLayout(False)
@@ -1067,17 +907,6 @@ Partial Class Settings
     Private Label5 As System.Windows.Forms.Label
     Private WithEvents Username As System.Windows.Forms.TextBox
     Private Label7 As System.Windows.Forms.Label
-    Private FlowLayoutPanel3 As System.Windows.Forms.FlowLayoutPanel
-    Private WithEvents C0 As System.Windows.Forms.Button
-    Private WithEvents C1 As System.Windows.Forms.Button
-    Private WithEvents C2 As System.Windows.Forms.Button
-    Private WithEvents C3 As System.Windows.Forms.Button
-    Private WithEvents C4 As System.Windows.Forms.Button
-    Private WithEvents C5 As System.Windows.Forms.Button
-    Private WithEvents C6 As System.Windows.Forms.Button
-    Private WithEvents C7 As System.Windows.Forms.Button
-    Private WithEvents C8 As System.Windows.Forms.Button
-    Private WithEvents C9 As System.Windows.Forms.Button
     Private Tabs As System.Windows.Forms.TabControl
     Private nOfMsgsLabel As System.Windows.Forms.Label
     Private FlowLayoutPanel4 As System.Windows.Forms.FlowLayoutPanel
@@ -1110,5 +939,5 @@ Partial Class Settings
     Private Panel2 As System.Windows.Forms.Panel
     Private Panel1 As System.Windows.Forms.Panel
     Private HideFolderCB As System.Windows.Forms.CheckBox
-
+    Friend WithEvents ColorPickingPictureBox As PictureBox
 End Class

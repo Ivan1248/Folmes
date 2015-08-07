@@ -12,6 +12,7 @@ Public Class Settings
         'General
         Username.Text = My.Settings.Username
         Username.ForeColor = _usernameColor
+        palette = New Bitmap(My.Resources.Paleta, ColorPickingPictureBox.Width, ColorPickingPictureBox.Height)
 
         MinimizeToNotificationArea.Checked = My.Settings.MinimizeToTray
         StartMinimized.Checked = My.Settings.StartMinimized
@@ -43,8 +44,16 @@ Public Class Settings
 #Region "General"
 
     'Username
-    Private Sub Color_Click(sender As Object, e As EventArgs) Handles C0.Click, C1.Click, C2.Click, C3.Click, C4.Click, C5.Click, C6.Click, C7.Click, C8.Click, C9.Click
-        Username.ForeColor = CType(sender, Button).BackColor
+    Private palette As Bitmap
+    Private Sub Color_Click(sender As Object, e As MouseEventArgs) Handles ColorPickingPictureBox.MouseDown, ColorPickingPictureBox.MouseMove
+        If e.Button <> MouseButtons.Left Then Exit Sub
+        Dim x As Integer = e.X
+        If x < 0 Then
+            x = 0
+        ElseIf x > palette.Width - 1 Then
+            x = palette.Width - 1
+        End If
+        Username.ForeColor = palette.GetPixel(x, 0)
     End Sub
 
     'General

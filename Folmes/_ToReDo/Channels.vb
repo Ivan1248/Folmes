@@ -24,9 +24,6 @@
     Public Shared Function AnyNewMessages(channel As String) As Boolean ' TODO prepraviti
         Dim last As ChannelLastReadTime = My.Settings.LastReadTimes.Find(Function(e) e.Channel = channel)
         If last Is Nothing Then Return True
-        'Dim msgFile As MessageFile = MessageFiles.IngoingPrivate.Find(Function(e) e.Sender = channel)
-        'If msgFile Is Nothing Then Return False
-        'Return msgFile.NewQueueLength > 0 OrElse msgFile.NextUnreadOldTime > last.Time
         Return False
     End Function
 

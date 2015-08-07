@@ -22,13 +22,32 @@
 
 #End Region
 
-        ' Ctrl+a
+#Region "Select All"
         Private Sub SelectAll_Input_KeyPress(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress
             If e.KeyChar = Chr(1) Then
                 DirectCast(sender, TextBox).SelectAll()
                 e.Handled = True
             End If
         End Sub
+#End Region
+
+#Region "DragDrop"
+
+        Private Shared Sub Input_DragEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
+            e.Effect = DragDropEffects.All
+        End Sub
+
+        Private Sub Input_DragDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
+            If (e.Data.GetDataPresent(DataFormats.Text)) Then
+                Me.AppendText(CStr(e.Data.GetData(DataFormats.Text)))
+            ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) Then
+                Dim filePath As String = CType(e.Data.GetData(DataFormats.FileDrop), String())(0)
+                Me.AppendText("[file:" & filePath & "]")
+            End If
+            Me.Focus()
+        End Sub
+
+#End Region
 
     End Class
 End Namespace

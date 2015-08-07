@@ -94,28 +94,6 @@ Public NotInheritable Class MainGUI
 
 #Region "Input + Input processing"
 
-#Region "DragDrop"
-
-    Private Shared Sub Input_DragEnter(sender As Object, e As DragEventArgs) Handles Input.DragEnter
-        e.Effect = DragDropEffects.All
-    End Sub
-
-    Private Sub Input_DragDrop(sender As Object, e As DragEventArgs) Handles Input.DragDrop
-        If (e.Data.GetDataPresent(DataFormats.Text)) Then
-            Input.AppendText(CStr(e.Data.GetData(DataFormats.Text)))
-        ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            Dim filePath As String = CType(e.Data.GetData(DataFormats.FileDrop), String())(0)
-            If File.Exists(filePath) Then
-                Input.AppendText("[file:" & filePath & "]")
-            Else
-                MsgBox("I don't accept folders.")
-            End If
-        End If
-        Input.Focus()
-    End Sub
-
-#End Region
-
     Private Sub Input_KeyDown(sender As Object, e As KeyEventArgs) Handles Input.KeyDown
         If e.KeyCode = Keys.Enter AndAlso Not e.Shift Then
             e.SuppressKeyPress = True
@@ -134,14 +112,16 @@ Public NotInheritable Class MainGUI
             command = Input.Text.Substring(1, If(I <> -1, I, Input.Text.Length) - 1)
         End If
         Select Case command
-            Case Nothing : Return SendMessage(MessageType.Normal)
-            Case "me" : Return SendMessage(MessageType.Reflexive)
-            Case "ping" : Return Input.Text.Length > 6 AndAlso
-                    PingPong.Ping(Input.Text.Substring(6).TrimEnd())
-            Case "exit", "close" : Me.Close()
-            Case "online" : Users.MyUser.SetStatus(UserStatus.Online)
-            Case "offline" : Users.MyUser.SetStatus(UserStatus.Offline)
-            Case Else : Return False
+            Case Nothing
+                Return SendMessage(MessageType.Normal)
+            Case "me"
+                Return SendMessage(MessageType.Reflexive)
+            Case "ping"
+                Return Input.Text.Length > 6 AndAlso PingPong.Ping(Input.Text.Substring(6).TrimEnd())
+            Case "exit", "close"
+                Me.Close()
+            Case Else
+                Return False
         End Select
         Return True
     End Function

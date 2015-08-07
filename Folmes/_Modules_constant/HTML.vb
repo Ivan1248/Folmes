@@ -13,7 +13,7 @@ Public MustInherit Class Html
     '        Return c = """" OrElse c = "<" OrElse c = ">" OrElse c = "\" OrElse Asc(c) < 33 OrElse Asc(c) > 122
     '    End Function
 
-    Public Shared Function HtmlizeMessageContent(content As String) As String 'NEDOSTAJU JOŠ SLIKE
+    Public Shared Function HtmlizeMessageContent(content As String) As String
         Dim sb As New StringBuilder(244) 'kapacitet
         Dim start As Integer
         Dim lastEnd As Integer = -1
@@ -54,7 +54,7 @@ Public MustInherit Class Html
                 Else
                     sb.Append(uri)
                 End If
-                sb.Append("</span>") 'SLIKA !!!
+                sb.Append("</span>")
                 i = lastEnd + 1
             Else
                 Dim esc As String
@@ -115,7 +115,7 @@ Public MustInherit Class Html
 
     Private Shared Function IsImageUrl(url As String) As Boolean
         Try
-            Dim req As HttpWebRequest = CType(HttpWebRequest.Create(url), HttpWebRequest)
+            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             req.Method = "HEAD"
             req.Timeout = 1000
             Using resp As WebResponse = req.GetResponse()

@@ -45,7 +45,7 @@ Public Class Settings
 
     'Username
     Private palette As Bitmap
-    Private Sub Color_Click(sender As Object, e As MouseEventArgs) Handles ColorPickingPictureBox.MouseDown, ColorPickingPictureBox.MouseMove
+    Private Sub Color_MouseDown(sender As Object, e As MouseEventArgs) Handles ColorPickingPictureBox.MouseDown, ColorPickingPictureBox.MouseMove
         If e.Button <> MouseButtons.Left Then Exit Sub
         Dim x As Integer = e.X
         If x < 0 Then

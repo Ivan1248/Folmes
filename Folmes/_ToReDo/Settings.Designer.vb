@@ -706,6 +706,7 @@ Partial Class Settings
         '
         'Username
         '
+        Me.Username.BackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
         Me.Username.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.Username.Location = New System.Drawing.Point(3, 19)
         Me.Username.MaxLength = 16

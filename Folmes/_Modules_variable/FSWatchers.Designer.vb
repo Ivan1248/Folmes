@@ -59,10 +59,12 @@ Partial Class MainGUI
     End Sub
 
     Private Sub UsersWatcher_Changed(sender As Object, e As FileSystemEventArgs) Handles UsersWatcher.Changed
+        If Directory.Exists(e.FullPath) Then Exit Sub ' directory
         If e.ChangeType <> WatcherChangeTypes.Changed Then
             Exit Sub
         End If
-        If Path.GetExtension(e.Name) <> Extension.UserStatus Then
+        Dim ext As String = Path.GetExtension(e.Name)
+        If ext <> Extension.UserStatus OrElse ext <> Extension.UserInfo Then
             Exit Sub
         End If
         Dim name As String = e.Name.Substring(0, e.Name.IndexOf("\"c))
@@ -74,11 +76,16 @@ Partial Class MainGUI
             Users.AddNew(name)
             Notify(NotificationType.Joined, name)
         Else
-            Dim PrevStatus As Boolean = user.IsOnline()
-            user.RefreshStatus()
-            If PrevStatus <> user.IsOnline() Then
-                Notify(If(Not PrevStatus, NotificationType.LoggedIn, NotificationType.LoggedOut), name)
-            End If
+            Select Case ext
+                Case Extension.UserStatus
+                    Dim PrevStatus As Boolean = user.IsOnline()
+                    user.RefreshStatus()
+                    If PrevStatus <> user.IsOnline() Then
+                        Notify(If(Not PrevStatus, NotificationType.LoggedIn, NotificationType.LoggedOut), name)
+                    End If
+                Case Extension.UserInfo
+                    user.RefreshInfo()
+            End Select
         End If
     End Sub
 

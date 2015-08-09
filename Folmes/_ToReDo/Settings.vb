@@ -94,10 +94,10 @@ Public Class Settings
     Private Sub DefaultAppearance_Click(sender As Object, e As EventArgs) Handles DefaultAppearance.Click
         FontSize.Value = 12
         FontSizeLabel.Text = "12"
-        ThumbnailHeight.Value = 5
-        ImageHeightLabel.Text = "120"
-        nOfMsgs.Value = 4
-        nOfMsgsLabel.Text = "20"
+        ThumbnailHeight.Value = 3
+        ImageHeightLabel.Text = "80"
+        nOfMsgs.Value = 6
+        nOfMsgsLabel.Text = "30"
     End Sub
 
 #End Region
@@ -117,7 +117,8 @@ Public Class Settings
     Public Sub Apply()
         With My.Settings
             'General
-            .UsernameColor = System.Drawing.ColorTranslator.ToHtml(Username.ForeColor)
+            Users.MyUser.Color = ColorTranslator.ToHtml(Username.ForeColor)
+            Users.MyUser.SaveInfo()
             .MinimizeToTray = MinimizeToNotificationArea.Checked
             .StartMinimized = StartMinimized.Checked
             RunOnStartup(LaunchOnStartup.Checked)
@@ -131,10 +132,6 @@ Public Class Settings
 
             'Notifications
             .Notifications = NotificationCheckboxesValue()
-
-            'Box.ReloadTimer.Start()
-            ''Omogućuje učitavanje poruka odmah
-            'TREBA PONOVO UČITATI PORUKE
         End With
     End Sub
 
@@ -157,7 +154,7 @@ Public Class Settings
 
     Private Sub ResetButton_Click(sender As Object, e As EventArgs) Handles ResetButton.Click
         My.Settings.Reset()
-        Users.MyUser.SetStatus(UserStatus.Offline)
+        Users.MyUser.SetAndSaveStatus(UserStatus.Offline)
         RunOnStartup(False)
         Application.Exit()
     End Sub

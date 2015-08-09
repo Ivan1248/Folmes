@@ -33,7 +33,7 @@
                 If Output.LoadCachedChannelHtml(channel) Then
                     MessagesManager.LoadNew(channel)
                 Else
-                    MessagesManager.LoadInitial(channel)
+                    MessagesManager.LoadInitialAndDeleteOld(channel)
                 End If
                 .Text = channel
             End With

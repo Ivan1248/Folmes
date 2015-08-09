@@ -7,7 +7,7 @@ Public MustInherit Class Users
 
     Public Shared Sub Initialize()
         For Each userDir As String In Directory.GetDirectories(Dirs.Users)
-            Dim user As New User(Path.GetFileName(userDir))
+            Dim user As New User(Path.GetFileName(userDir), UserKind.OldReal)
             If user.Name <> My.Settings.Username Then
                 Others.Add(user)
             Else
@@ -18,11 +18,12 @@ Public MustInherit Class Users
     End Sub
 
     Public Shared Function GetUser(name As String) As User
+        If name = My.Settings.Username Then Return MyUser
         Return Others.Find(Function(u) u.Name = name)
     End Function
 
     Public Shared Sub AddNew(name As String)
-        Others.Add(New User(name))
+        Others.Add(New User(name, UserKind.OldReal))
     End Sub
 
     Public Shared Sub Remove(username As String)
@@ -33,7 +34,8 @@ Public MustInherit Class Users
     Public Shared Function Create(username As String) As User
         Dirs.Create(Path.Combine(Dirs.PrivateMessages, username))
         Dirs.Create(Path.Combine(Dirs.Users, username))
-        Return New User(My.Settings.Username)
+        Return New User(My.Settings.Username, UserKind.NewReal)
+
     End Function
 
     Public Shared Sub Delete(username As String)

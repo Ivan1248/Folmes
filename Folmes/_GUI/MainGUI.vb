@@ -33,12 +33,12 @@ Public NotInheritable Class MainGUI
 
             'Učitavanje datoteka i poruka
             Users.Initialize()
-            Users.MyUser.SetStatus(UserStatus.Online)
+            Users.MyUser.SetAndSaveStatus(UserStatus.Online)
             With Output
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()
                             RemoveHandler Output.Initialized, messagesLoad
-                            MessagesManager.LoadInitial(Channels.Common)
+                            MessagesManager.LoadInitialAndDeleteOld(Channels.Common)
                         End Sub
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})
@@ -82,8 +82,7 @@ Public NotInheritable Class MainGUI
     Private Shared Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Try
             If My.Settings.Username <> Nothing Then
-                'SetOnlineStatus(False)
-                Users.MyUser.SetStatus(UserStatus.Offline)
+                Users.MyUser.SetAndSaveStatus(UserStatus.Offline)
                 Channels.SetLastRead()
             End If
         Catch ex As Exception
@@ -128,7 +127,7 @@ Public NotInheritable Class MainGUI
 
     Friend Function SendMessage(messageType As MessageType) As Boolean
         Dim msg As New Message()
-        msg.Sender = My.Settings.Username
+        msg.Sender = Users.MyUser
         msg.Type = messageType
         msg.Time = Date.UtcNow.ToBinary()
         Select Case messageType

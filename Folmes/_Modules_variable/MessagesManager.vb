@@ -43,7 +43,7 @@ Public MustInherit Class MessagesManager
         Return 0
     End Function
     Delegate Sub LoadSub(m As Message)
-    Public Shared Sub LoadInitial(channel As String) ' TODO optimizirati - ne mora se sortirati cijeli niz
+    Public Shared Sub LoadInitialAndDeleteOld(channel As String) ' TODO optimizirati - ne mora se sortirati cijeli niz
         Dim msgFilePaths As List(Of String)
         If channel = Channels.Common Then
             msgFilePaths = New List(Of String)(Directory.GetFiles(Dirs.CommonChannel,
@@ -99,14 +99,13 @@ Public MustInherit Class MessagesManager
     Public Shared Sub CreateMessageFile(channel As String, msg As Message)
         Dim dirPath As String
         If channel = Channels.Common Then
-            dirPath = Path.Combine(Dirs.CommonChannel, msg.Sender)
+            dirPath = Path.Combine(Dirs.CommonChannel, msg.Sender.Name)
         Else
-            dirPath = Path.Combine(Dirs.PrivateMessages, channel, msg.Sender)
+            dirPath = Path.Combine(Dirs.PrivateMessages, channel, msg.Sender.Name)
         End If
         Dirs.Create(dirPath)
         Dim filePath As String = Path.Combine(dirPath, Convert.ToString(msg.Time, 16) & Extension.Message)
         MessageFile.Create(filePath, msg)
-        'TODO: ++
     End Sub
 
 End Class

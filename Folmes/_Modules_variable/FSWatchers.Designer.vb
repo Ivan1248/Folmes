@@ -62,7 +62,7 @@ Partial Class MainGUI
         If e.ChangeType <> WatcherChangeTypes.Changed Then
             Exit Sub
         End If
-        If Path.GetExtension(e.Name) <> Extension.UserInfo Then
+        If Path.GetExtension(e.Name) <> Extension.UserStatus Then
             Exit Sub
         End If
         Dim name As String = e.Name.Substring(0, e.Name.IndexOf("\"c))

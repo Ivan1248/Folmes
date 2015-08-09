@@ -1,5 +1,5 @@
 ﻿Public Class Message
-    Public Sender As String
+    Public Sender As User
     Public Type As MessageType
     Public Content As String
     Public Time As Long

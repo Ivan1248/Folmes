@@ -164,7 +164,7 @@ Namespace GUI.Controls
 
 #End Region
 
-
+#Region "Caching"
         Private ReadOnly _cachedChannelHtmls As New List(Of CachedChannelHtml)
         Private _htmlMessages As New HtmlMessageList()  'For inserting ordered by datetime
 
@@ -197,10 +197,12 @@ Namespace GUI.Controls
                 _htmlMessages = New HtmlMessageList()
             End If
         End Function
+#End Region
 
+#Region "Messages adding"
         Public Sub AddMessage(declaration As String)
             Dim m As New Message
-            m.Time = DateTime.UtcNow.ToBinary()
+            m.Time = Date.UtcNow.ToBinary()
             m.Content = declaration
             m.Type = MessageType.FolmesDeclaration
             AddMessage(m)
@@ -219,7 +221,12 @@ Namespace GUI.Controls
             Dim messageElement As HtmlElement = Document.CreateElement("DIV")
             With messageElement.AppendChild(Document.CreateElement("DIV"))
                 .SetAttribute("className", "time")
-                .InnerText = Date.FromBinary(message.Time).ToLocalTime.ToString("dd.MM.yyyy. HH:mm")
+                Dim time As Date = Date.FromBinary(message.Time).ToLocalTime
+                If (Date.Now - time).TotalHours > 24 Then
+                    .InnerText = time.ToString("dd.MM.yyyy. HH:mm")
+                Else
+                    .InnerText = time.ToString("HH:mm")
+                End If
             End With
             messageElement.SetAttribute("className", "message")
             Select Case message.Type
@@ -227,13 +234,12 @@ Namespace GUI.Controls
                     If message.Type = MessageType.Highlighted Then messageElement.SetAttribute("className", "hl message")
                     With messageElement.AppendChild(Document.CreateElement("SPAN"))
                         .SetAttribute("className", "name")
-                        .SetAttribute("style", "color:" & My.Settings.UsernameColor) 'zamijeniti boju
-                        .InnerText = message.Sender
+                        .Style = "color:" & message.Sender.Color
+                        .InnerText = message.Sender.Name
                     End With
                 Case MessageType.FolmesDeclaration
                     With messageElement.AppendChild(Document.CreateElement("SPAN"))
                         .SetAttribute("className", "name")
-                        .SetAttribute("style", "color:#aaaa00") 'zamijeniti boju
                         .InnerText = "Folmes"
                     End With
             End Select
@@ -244,4 +250,5 @@ Namespace GUI.Controls
             Return messageElement
         End Function
     End Class
+#End Region
 End Namespace

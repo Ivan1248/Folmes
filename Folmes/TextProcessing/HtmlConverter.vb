@@ -5,12 +5,8 @@ Imports System.Text
 
 Public MustInherit Class HtmlConverter
 
-    Public Shared Function HtmlizeInputAndCopyFiles(input As String) As String
+    Public Shared Function HtmlizeInputAndGetFiles(input As String, ByRef attachedFiles As List(Of String)) As String
         Dim spans As List(Of InputParser.Span) = InputParser.Parse(input)
-        Return HtmlizeParsedInputAndCopyFiles(input, spans)
-    End Function
-
-    Private Shared Function HtmlizeParsedInputAndCopyFiles(input As String, spans As List(Of InputParser.Span)) As String
         Dim sb As New StringBuilder(512) 'kapacitet
         For Each s As InputParser.Span In spans
             Select Case s.Type
@@ -20,7 +16,7 @@ Public MustInherit Class HtmlConverter
                     HtmlizeUri(input, s, sb)
                 Case InputParser.SpanType.File
                     HtmlizeFileTag(input, s, sb)
-                    Attachments.CopyFile(s.GetSubstring(input))
+                    'attachedFiles.Add(s.GetSubstring(input))
             End Select
         Next
         Return sb.ToString
@@ -46,7 +42,7 @@ Public MustInherit Class HtmlConverter
     Private Shared Sub HtmlizeUri(text As String, span As InputParser.Span, ByRef sb As StringBuilder)
         Dim uri As String = text.Substring(span.Left, span.Right - span.Left + 1)
         sb.Append("<span class=""url"" OnClick=""linkClick('").Append(uri).Append("')"">")
-        If Attachments.IsImageFile(uri) OrElse IsImageUrl(uri) Then
+        If Files.IsImageFile(uri) OrElse IsImageUrl(uri) Then
             sb.Append("<img src=""").Append(uri)
             sb.Append(""" alt=""").Append(uri)
             sb.Append(""" onload=""refreshScroller()")
@@ -59,11 +55,23 @@ Public MustInherit Class HtmlConverter
 
     Private Shared Sub HtmlizeFileTag(str As String, span As InputParser.Span, ByRef sb As StringBuilder)
         Dim fileName As String = Path.GetFileName(span.GetSubstring(str))
-        sb.Append("<span class=""file"" onclick=""linkClick('")
+        Dim isImage As Boolean = Files.IsImageFile(fileName)
+
+        If isImage Then
+            sb.Append("<img src=""").Append(Path.Combine(Dirs.Thumbnails, fileName))
+            sb.Append(""" alt=""").Append(fileName)
+        Else
+            sb.Append("<span src=""").Append(Path.Combine(Dirs.Thumbnails, fileName))
+        End If
+        sb.Append(""" class=""file"" onclick=""linkClick('")
         sb.Append(Replace(Path.Combine(Dirs.Attachments, fileName), "\", "\\"))
         sb.Append("')"">")
-        sb.Append(fileName)
-        sb.Append("</span>")
+        If isImage Then
+            sb.Append("</img>")
+        Else
+            sb.Append(fileName)
+            sb.Append("</span>")
+        End If
     End Sub
 
     Private Shared Function IsImageUrl(url As String) As Boolean

@@ -12,9 +12,13 @@ Public NotInheritable Class MainGUI
 #Region "Učitavanje"
 
     Private Sub Box_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Me.BeginInvoke(DirectCast(AddressOf InitializeEverything, MethodInvoker))
+    End Sub
+
+    Private Sub InitializeEverything()
         Try
             'Postavke i još neke sitnice
-            LoadSettings()
+            LoadWindowDimensionsSettings()
             Me.Icon = New Icon(Assembly.GetExecutingAssembly.GetManifestResourceStream("Folmes.DBM.ico"))
             TrayIcon.Icon = Me.Icon        'druge ikone
 
@@ -56,23 +60,22 @@ Public NotInheritable Class MainGUI
         End Try
     End Sub
 
-    Private Sub LoadSettings()
+    Private Sub LoadWindowDimensionsSettings()
         If My.Settings.StartMinimized Then
             Me.WindowState = FormWindowState.Minimized
             If My.Settings.MinimizeToTray Then Me.ShowInTaskbar = False
             FlashIcon()
         End If
-        Me.Size = My.Settings.WindowSize
+        'Me.Size = My.Settings.WindowSize
         InputBGPanel.Height = My.Settings.InputHeight
     End Sub
 
     Private Sub Skin() Handles Me.Load
-        'Skin() za CCPContMenu i CopyContMenu u bazi
         TS.Renderer = New ToolStripProfessionalRenderer(New ToolstripColorTable)
         CType(TS.Renderer, ToolStripProfessionalRenderer).RoundedEdges = False
 
-        InputContMenu.Renderer = New ToolStripProfessionalRenderer(New ToolstripColorTable)
-        OutputContMenu.Renderer = New ToolStripProfessionalRenderer(New ToolstripColorTable)
+        InputContMenu.Renderer = TS.Renderer
+        OutputContMenu.Renderer = TS.Renderer
     End Sub
 
 #End Region
@@ -127,16 +130,20 @@ Public NotInheritable Class MainGUI
 
     Friend Function SendMessage(messageType As MessageType) As Boolean
         Dim msg As New Message()
+        Dim attachedFiles As New List(Of String)
         msg.Sender = Users.MyUser
         msg.Type = messageType
         msg.Time = Date.UtcNow.ToBinary()
         Select Case messageType
             Case MessageType.Normal, MessageType.FolmesDeclaration
-                msg.Content = HtmlConverter.HtmlizeInputAndCopyFiles(Input.Text)
+                msg.Content = HtmlConverter.HtmlizeInputAndGetFiles(Input.Text, attachedFiles)
             Case MessageType.Reflexive
-                msg.Content = HtmlConverter.HtmlizeInputAndCopyFiles(My.Settings.Username & Input.Text.Substring(3))
+                msg.Content = HtmlConverter.HtmlizeInputAndGetFiles(My.Settings.Username & Input.Text.Substring(3), attachedFiles)
         End Select
         MessagesManager.CreateMessageFile(Channels.Current, msg)
+        For Each af As String In attachedFiles
+            Files.SendFile(af)
+        Next
         Me.Output.AddMessage(msg)
         Return True
     End Function

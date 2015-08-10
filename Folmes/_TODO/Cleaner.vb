@@ -71,7 +71,7 @@ Public Class Cleaner
     Private Sub LoadList()
         With New StringBuilder()    'kapacitet
             If Me._selected = CleanerMode.Files Then
-                For Each file_date As String() In Attachments.GetFilesWithDates()
+                For Each file_date As String() In GetSentFilesWithDates()
                     .Append("<div class=""item message""><div class=""time"">")
                     .Append(file_date(1)).Append("</div><span class=""file"" onclick=""linkClick('")
                     .Append(Replace(Path.Combine(Dirs.Attachments, file_date(0)), "\", "\\")).Append("')"">")
@@ -89,5 +89,17 @@ Public Class Cleaner
             Output.Document.GetElementById("container").InnerHtml = .ToString ' = Output.MsgContainer
         End With
     End Sub
+
+    Public Shared Function GetSentFilesWithDates() As List(Of String()) 'zastarjelo
+        GetSentFilesWithDates = New List(Of String())
+        For Each fl As FileInfo In New DirectoryInfo(Dirs.Attachments).GetFiles()
+            GetSentFilesWithDates.Add({fl.Name, FormatDate(fl.LastWriteTime.ToLocalTime)})
+        Next
+    End Function
+
+    Private Shared Function FormatDate(theDate As Date) As String
+        Dim hourFormat As String = theDate.ToShortTimeString
+        Return If(theDate.Date <> Date.Today, theDate.ToShortDateString & " " & hourFormat, hourFormat)
+    End Function
 
 End Class

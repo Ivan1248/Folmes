@@ -32,8 +32,8 @@ Public MustInherit Class MessagesManager
     End Sub
 
     Private Shared Function MessageFileComparison(file1 As String, file2 As String) As Integer
-        Dim a As Integer = file1.Length - Extension.Message.Length - 16
-        Dim b As Integer = file2.Length - Extension.Message.Length - 16
+        Dim a As Integer = file1.Length - Files.Extension.Message.Length - 16
+        Dim b As Integer = file2.Length - Files.Extension.Message.Length - 16
         For i As Integer = 0 To 15
             Select Case Asc(file1(a + i)) - Asc(file2(b + i))
                 Case Is > 0 : Return 1
@@ -47,7 +47,7 @@ Public MustInherit Class MessagesManager
         Dim msgFilePaths As List(Of String)
         If channel = Channels.Common Then
             msgFilePaths = New List(Of String)(Directory.GetFiles(Dirs.CommonChannel,
-                                                              "*" & Extension.Message, SearchOption.AllDirectories))
+                                                              "*" & Files.Extension.Message, SearchOption.AllDirectories))
         Else
             Dim messagesPath As String = Path.Combine(Dirs.PrivateMessages, channel, My.Settings.Username)
             Dirs.Create(messagesPath)
@@ -104,7 +104,7 @@ Public MustInherit Class MessagesManager
             dirPath = Path.Combine(Dirs.PrivateMessages, channel, msg.Sender.Name)
         End If
         Dirs.Create(dirPath)
-        Dim filePath As String = Path.Combine(dirPath, Convert.ToString(msg.Time, 16) & Extension.Message)
+        Dim filePath As String = Path.Combine(dirPath, Convert.ToString(msg.Time, 16) & Files.Extension.Message)
         MessageFile.Create(filePath, msg)
     End Sub
 

@@ -1,5 +1,4 @@
-﻿Imports System.ComponentModel
-Imports System.IO
+﻿Imports System.IO
 
 Partial Class MainGUI
     Private WithEvents MessagesWatcher As FileSystemWatcher
@@ -7,7 +6,7 @@ Partial Class MainGUI
     Private WithEvents UsersWatcher As FileSystemWatcher
 
     Private Sub LoadFSWatchers()
-        MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & Extension.Message) With {
+        MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & Files.Extension.Message) With {
             .IncludeSubdirectories = True,
             .NotifyFilter = NotifyFilters.LastWrite
         }
@@ -50,7 +49,7 @@ Partial Class MainGUI
 
     Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Changed
         File.Delete(e.FullPath)
-        If Path.GetExtension(e.Name) = Extension.Ping Then
+        If Path.GetExtension(e.Name) = Files.Extension.Ping Then
             Dim sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
             PingPong.Pong(sender)
         Else
@@ -64,7 +63,7 @@ Partial Class MainGUI
             Exit Sub
         End If
         Dim ext As String = Path.GetExtension(e.Name)
-        If ext <> Extension.UserStatus OrElse ext <> Extension.UserInfo Then
+        If ext <> Files.Extension.UserStatus OrElse ext <> Files.Extension.UserInfo Then
             Exit Sub
         End If
         Dim name As String = e.Name.Substring(0, e.Name.IndexOf("\"c))
@@ -77,14 +76,14 @@ Partial Class MainGUI
             Notify(NotificationType.Joined, name)
         Else
             Select Case ext
-                Case Extension.UserStatus
+                Case Files.Extension.UserStatus
                     Dim PrevStatus As Boolean = user.IsOnline()
                     user.RefreshStatus()
                     If PrevStatus <> user.IsOnline() Then
                         Notify(If(Not PrevStatus, NotificationType.LoggedIn, NotificationType.LoggedOut), name)
                     End If
-                Case Extension.UserInfo
-                    user.RefreshInfo()
+                Case Files.Extension.UserInfo
+                    user.RefreshSettings()
             End Select
         End If
     End Sub

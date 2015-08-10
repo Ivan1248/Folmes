@@ -19,7 +19,7 @@ Public MustInherit Class PingPong
         If Users.IsOnline(username) OrElse username = My.Settings.Username Then
             Dim dir As String = Path.Combine(Dirs.PingPong, username)
             Dirs.Create(dir)
-            Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & Extension.Ping), FileMode.Create, FileAccess.Write)
+            Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & Files.Extension.Ping), FileMode.Create, FileAccess.Write)
                 fs.WriteByte(0) ' necessary for detection
             End Using
             _pingTime = Date.UtcNow.Ticks \ 10000
@@ -35,7 +35,7 @@ Public MustInherit Class PingPong
         If Not Users.IsOnline(username) Then Exit Sub
         Dim dir As String = Path.Combine(Dirs.PingPong, username)
         Dirs.Create(dir)
-        Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & Extension.Pong), FileMode.Create, FileAccess.Write)
+        Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & Files.Extension.Pong), FileMode.Create, FileAccess.Write)
             fs.WriteByte(0) ' necessary for detection
         End Using
     End Sub

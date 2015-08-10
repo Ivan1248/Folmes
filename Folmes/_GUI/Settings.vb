@@ -118,7 +118,7 @@ Public Class Settings
         With My.Settings
             'General
             Users.MyUser.Color = ColorTranslator.ToHtml(Username.ForeColor)
-            Users.MyUser.SaveInfo()
+            Users.MyUser.SaveSettings()
             .MinimizeToTray = MinimizeToNotificationArea.Checked
             .StartMinimized = StartMinimized.Checked
             RunOnStartup(LaunchOnStartup.Checked)

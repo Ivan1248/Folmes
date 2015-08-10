@@ -29,7 +29,7 @@ Public MustInherit Class InputParser
         Parse = New List(Of Span)
         Dim nonFileBeginning As Integer = 0
         Dim i As Integer
-        For i = 0 To input.Length - 8 - 1
+        For i = 0 To input.Length - 7 - 1
             If input(i) <> "["c Then Continue For
 
             Dim j As Integer = i + 1
@@ -41,7 +41,7 @@ Public MustInherit Class InputParser
                 Continue For
             End If
 
-            For j = 0 To input.Length - 1
+            For j = j To input.Length - 1
                 If input(j) = "]"c Then
                     If nonFileBeginning < i Then
                         FindURIsAndText(input, New Span(nonFileBeginning, i - 1), Parse)

@@ -73,6 +73,7 @@ Namespace GUI.Controls
 
         Private Sub RemoveOldestHtmlMessage()
             Document.InvokeScript("removeFirst")
+            _htmlMessages.RemoveOldest()
         End Sub
 
 #End Region
@@ -211,7 +212,6 @@ Namespace GUI.Controls
         Public Sub AddMessage(message As Message)
             If _htmlMessages.Count >= My.Settings.NofMsgs Then
                 RemoveOldestHtmlMessage()
-                _htmlMessages.RemoveOldest()
             End If
             Dim messageElement As HtmlElement = CreateHtmlMessage(message)
             _htmlMessages.InsertElement(messageElement, message.Time, _msgContainer)

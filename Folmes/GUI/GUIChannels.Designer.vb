@@ -25,21 +25,6 @@
         PubPrivChSeparator.Visible = showSeparator
     End Sub
 
-    Private Sub SwitchChannel(channel As String)
-        If channel <> Channels.Current Then
-            Me.Output.CacheChannelHtml(Channels.Current)
-            With TSChannels
-                Channels.Switch(channel)
-                If Output.LoadCachedChannelHtml(channel) Then
-                    MessagesManager.LoadNew(channel)
-                Else
-                    MessagesManager.LoadInitialAndDeleteOld(channel)
-                End If
-                .Text = channel
-            End With
-        End If
-    End Sub
-
     Private Sub TSChannels_Opening(sender As Object, e As EventArgs) Handles TSChannels.DropDownOpening
         ReloadPrivateChannelsToMenu()
     End Sub

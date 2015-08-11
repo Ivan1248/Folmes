@@ -41,11 +41,11 @@ Public MustInherit Class PingPong
     End Sub
 
 
-    Public Shared Sub GetFileRtt()
+    Public Shared Function GetFileRtt() As Long
         _timeoutTimer.Stop()
-        MainGUI.Output.AddMessage("Ping-pong: File_RTT = " & (DateTime.UtcNow.Ticks \ 10000 - _pingTime) & "ms")
         _pingTime = 0
-    End Sub
+        Return Date.UtcNow.Ticks \ 10000 - _pingTime
+    End Function
 
     Public Shared Sub CleanPing()
         Dim dirPath As String = Path.Combine(Dirs.PingPong, My.Settings.Username)

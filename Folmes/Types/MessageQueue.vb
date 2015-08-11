@@ -21,6 +21,10 @@
         Count -= 1
     End Function
 
+    Public Function Peek() As Message
+        Return _array(_oldest)
+    End Function
+
     Public Sub Enqueue(message As Message)
         _newest = Incr(_newest)
         _array(_newest) = message

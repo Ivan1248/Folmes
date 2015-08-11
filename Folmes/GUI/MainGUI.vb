@@ -11,6 +11,22 @@ Public NotInheritable Class MainGUI
 
 #Region "Učitavanje"
 
+    Dim WithEvents sfci As New SharedFolderCI
+
+    Sub fsi_NewCommonMessage(message As Message) Handles sfci.NewCommonMessage
+        NewMessagesManager.AddCommon(message)
+        Notify(NotificationType.PublicMessage, Nothing)
+    End Sub
+
+    Sub fsi_NewPrivateMessage(message As Message) Handles sfci.NewPrivateMessage
+        NewMessagesManager.AddPrivate(message.Sender.Name, message)
+        Notify(NotificationType.PrivateMessage, message.Sender.Name)
+    End Sub
+
+    Sub fsi_PongReceived(rtt_in_ms As Long) Handles sfci.PongReceived
+        Output.AddMessage("Ping-pong: File_RTT = " & rtt_in_ms & "ms")
+    End Sub
+
     Private Sub Box_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.BeginInvoke(DirectCast(AddressOf InitializeEverything, MethodInvoker))
     End Sub
@@ -24,7 +40,8 @@ Public NotInheritable Class MainGUI
 
             'Stvaranje direktorija i učitavanje FSW
             Dirs.AssureMainDirectories()
-            LoadFSWatchers()
+            sfci.Start(Me)
+            AddHandler UsersWatcher.Deleted, AddressOf UsersWatcher_Deleted
 
             'Prvo pokretenje? i učitavanje kanala u izbornik
             If My.Settings.Username = Nothing AndAlso FirstRun.ShowDialog() <> DialogResult.OK Then
@@ -32,7 +49,6 @@ Public NotInheritable Class MainGUI
                 End
             End If
             Me.Text &= " - " & My.Settings.Username
-            PingPong.CleanPing()
             Dirs.Create(Path.Combine(Dirs.PrivateMessages, My.Settings.Username))
 
             'Učitavanje datoteka i poruka
@@ -42,7 +58,8 @@ Public NotInheritable Class MainGUI
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()
                             RemoveHandler Output.Initialized, messagesLoad
-                            MessagesManager.LoadInitialAndDeleteOld(Channels.Common)
+                            sfci.GetOldMessages(Channels.Common, My.Settings.NofMsgs, AddressOf Output.AddMessage)
+                            'MessagesManager.LoadInitialAndDeleteOld(Channels.Common, AddressOf Output.AddMessage)
                         End Sub
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})
@@ -79,6 +96,24 @@ Public NotInheritable Class MainGUI
     End Sub
 
 #End Region
+
+    Private Sub UsersWatcher_Deleted(username As String) ' Handles UsersWatcher.Deleted
+        Users.Remove(username)
+        If Channels.Current = username Then SwitchChannel(Channels.Common)
+    End Sub
+
+    Private Sub SwitchChannel(channel As String)
+        If channel <> Channels.Current Then
+            Me.Output.CacheChannelHtml(Channels.Current)
+            Channels.Switch(channel)
+            If Output.LoadCachedChannelHtml(channel) Then
+                NewMessagesManager.Load(channel)
+            Else
+                sfci.GetOldMessages(channel, My.Settings.NofMsgs, AddressOf Output.AddMessage)
+            End If
+            TSChannels.Text = channel
+        End If
+    End Sub
 
 #Region "Closing"
 
@@ -119,7 +154,7 @@ Public NotInheritable Class MainGUI
             Case "me"
                 Return SendMessage(MessageType.Reflexive)
             Case "ping"
-                Return Input.Text.Length > 6 AndAlso PingPong.Ping(Input.Text.Substring(6).TrimEnd())
+                Return Input.Text.Length > 6 AndAlso sfci.Ping(Input.Text.Substring(6).TrimEnd())
             Case "exit", "close"
                 Me.Close()
             Case Else
@@ -127,6 +162,8 @@ Public NotInheritable Class MainGUI
         End Select
         Return True
     End Function
+
+    Public Delegate Sub MessageLoadingSub(msg As Message)
 
     Friend Function SendMessage(messageType As MessageType) As Boolean
         Dim msg As New Message()
@@ -140,7 +177,8 @@ Public NotInheritable Class MainGUI
             Case MessageType.Reflexive
                 msg.Content = HtmlConverter.HtmlizeInputAndGetFiles(My.Settings.Username & Input.Text.Substring(3), attachedFiles)
         End Select
-        MessagesManager.CreateMessageFile(Channels.Current, msg)
+
+        sfci.SendMessage(Channels.Current, msg)
         For Each af As String In attachedFiles
             Files.SendFile(af)
         Next

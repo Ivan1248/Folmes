@@ -116,68 +116,66 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="_Interfaces\ICommunication.vb" />
-    <Compile Include="_GUI\Controls\InputTextBox.vb">
+    <Compile Include="Communication\SFCommunicationInterface\MessageFile.vb" />
+    <Compile Include="Communication\SFCommunicationInterface\SFCI - FSW.vb" />
+    <Compile Include="Communication\SFCommunicationInterface\SFCI.vb" />
+    <Compile Include="Communication\ICommunication.vb" />
+    <Compile Include="GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TextProcessing\InputParser.vb" />
-    <Compile Include="_Modules\MessagesManager.vb" />
+    <Compile Include="Modules\MessagesManager.vb" />
     <Compile Include="Types\Message.vb" />
-    <Compile Include="_GUI\GUIChannels.Designer.vb">
+    <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_GUI\Controls\MessagesDisplay.vb">
+    <Compile Include="GUI\Controls\MessagesDisplay.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="_GUI\Controls\NFToolStrip.vb">
+    <Compile Include="GUI\Controls\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="_Communication\File\MessageFile.vb" />
-    <Compile Include="_Communication\File\PingPong.vb" />
-    <Compile Include="_Modules\Users.vb" />
-    <Compile Include="_GUI\Style\ToolStripColorTable.vb" />
-    <Compile Include="_TODO\Channels.vb" />
-    <Compile Include="_GUI\Notifications.vb" />
-    <Compile Include="_Communication\File\Files.vb" />
-    <Compile Include="_Communication\File\Dirs.vb" />
+    <Compile Include="Communication\SFCommunicationInterface\PingPong.vb" />
+    <Compile Include="Modules\Users.vb" />
+    <Compile Include="GUI\Style\ToolStripColorTable.vb" />
+    <Compile Include="TODO\Channels.vb" />
+    <Compile Include="GUI\Notifications.vb" />
+    <Compile Include="Communication\SFCommunicationInterface\Files.vb" />
+    <Compile Include="Communication\SFCommunicationInterface\Dirs.vb" />
     <Compile Include="TextProcessing\HtmlConverter.vb" />
-    <Compile Include="_Communication\File\FSWatchers.Designer.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="_GUI\AboutBox.Designer.vb">
+    <Compile Include="Communication\SFCommunicationInterface\UsersWatcher.vb" />
+    <Compile Include="GUI\AboutBox.Designer.vb">
       <DependentUpon>AboutBox.vb</DependentUpon>
     </Compile>
-    <Compile Include="_GUI\AboutBox.vb">
+    <Compile Include="GUI\AboutBox.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_TODO\Cleaner.Designer.vb">
+    <Compile Include="TODO\Cleaner.Designer.vb">
       <DependentUpon>Cleaner.vb</DependentUpon>
     </Compile>
-    <Compile Include="_TODO\Cleaner.vb">
+    <Compile Include="TODO\Cleaner.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_GUI\FirstRun.Designer.vb">
+    <Compile Include="GUI\FirstRun.Designer.vb">
       <DependentUpon>FirstRun.vb</DependentUpon>
     </Compile>
-    <Compile Include="_GUI\FirstRun.vb">
+    <Compile Include="GUI\FirstRun.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_GUI\Help.Designer.vb">
+    <Compile Include="GUI\Help.Designer.vb">
       <DependentUpon>Help.vb</DependentUpon>
     </Compile>
-    <Compile Include="_GUI\Help.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="_GUI\MainGUI.Designer.vb">
+    <Compile Include="GUI\Help.vb" />
+    <Compile Include="GUI\MainGUI.Designer.vb">
       <DependentUpon>MainGUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="_GUI\MainGUI.vb">
+    <Compile Include="GUI\MainGUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_GUI\Settings.vb">
+    <Compile Include="GUI\Settings.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_GUI\Settings.Designer.vb">
+    <Compile Include="GUI\Settings.Designer.vb">
       <DependentUpon>Settings.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
@@ -198,27 +196,27 @@
     </Compile>
     <Compile Include="Types\MessageQueue.vb" />
     <Compile Include="Types\User.vb" />
-    <Compile Include="_Communication\IRC\IRC.vb" />
+    <Compile Include="Communication\IRCCommunicationInterface\IRC.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="_GUI\AboutBox.resx">
+    <EmbeddedResource Include="GUI\AboutBox.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="_TODO\Cleaner.resx">
+    <EmbeddedResource Include="TODO\Cleaner.resx">
       <DependentUpon>Cleaner.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="_GUI\Settings.resx">
+    <EmbeddedResource Include="GUI\Settings.resx">
       <DependentUpon>Settings.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="_GUI\FirstRun.resx">
+    <EmbeddedResource Include="GUI\FirstRun.resx">
       <DependentUpon>FirstRun.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="_GUI\Help.resx">
+    <EmbeddedResource Include="GUI\Help.resx">
       <DependentUpon>Help.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="_GUI\MainGUI.resx">
+    <EmbeddedResource Include="GUI\MainGUI.resx">
       <DependentUpon>MainGUI.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -275,16 +273,13 @@
   <ItemGroup>
     <None Include="Resources\users.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="obj\x86\Debug\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\Paleta.bmp" />
     <None Include="Resources\X.png" />
     <None Include="Resources\menu.png" />
     <EmbeddedResource Include="Resources\DBM.ico" />
     <None Include="Resources\folder.png" />
-    <None Include="Resources\chat.png" />
     <Content Include="INFO.txt" />
     <Content Include="Resources\CleanerScripts.js" />
     <None Include="Resources\newmsg_online.png" />
@@ -292,21 +287,8 @@
     <None Include="Resources\online.png" />
     <None Include="Resources\new.png" />
     <None Include="Resources\new-online.png" />
-    <None Include="Resources\msg-open.png" />
-    <None Include="Resources\msg-unopen.png" />
     <None Include="Resources\tools.png" />
     <None Include="Resources\help.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="NATUPNPLib">
-      <Guid>{1C565858-F302-471E-B409-F180AA4ABEC6}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

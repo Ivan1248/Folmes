@@ -61,16 +61,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property chat() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("chat", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Looks up a localized string similar to document.documentElement.onclick = function (e) {
         '''    e = window.event ? event.srcElement : e.target;
         '''    if (e.className &amp;&amp; e.className.indexOf(&apos;item&apos;) != -1) {
@@ -209,15 +199,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to body { background-color:#1e1e1e; color:#a9a9a9; font-family:&quot;Segoe UI&quot;,Arial,sans-serif; margin:0; overflow:hidden; padding-top:2px; word-wrap:break-word; }
-        '''img { cursor:pointer; display:block; max-width:100%; }
+        '''  Looks up a localized string similar to body { background-color:#1e1e1e; color:#a9a9a9; font:caption; margin:0; overflow:hidden; padding-top:2px; word-wrap:break-word; }
+        '''img { cursor:pointer; display:block; max-width:100%;}
         '''
         '''::selection { background:rgba(255,255,255,0.1); color:#ddd; }
         '''a:link,a:visited,.url { color:#48b; cursor:pointer; text-decoration:none; transition:color .0s ease; }
         '''a:hover,.url:hover { color:#5ad; cursor:pointer; }
         '''a:active { color:#48b; }
         '''
-        '''.file { background-color:#333; border:inset 1px # [rest of string was truncated]&quot;;.
+        '''.file { background-color:#333; border:inset 1px #333; cursor:pointer; padding [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property Style() As String
             Get

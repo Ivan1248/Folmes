@@ -42,11 +42,11 @@ Partial Public Class SharedFolderCI
 
     Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Changed
         File.Delete(e.FullPath)
+        Dim sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
         If Path.GetExtension(e.Name) = PingPongFile.Extension.Ping Then
-            Dim sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
-            PingPong.Pong(sender)
+            Pong(sender)
         Else
-            RaiseEvent PongReceived(PingPong.GetFileRtt())
+            RaiseEvent PongReceived(GetRtt(sender))
         End If
     End Sub
 

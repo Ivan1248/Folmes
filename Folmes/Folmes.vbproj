@@ -119,7 +119,7 @@
     <Compile Include="CommunicationInterfaces\IRCCI\IRCCI.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\MessageFile.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPong.vb" />
-    <Compile Include="CommunicationInterfaces\SharedFolderCI\SFCI - FSW.vb" />
+    <Compile Include="CommunicationInterfaces\SharedFolderCI\FSWatchers.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\SharedFolderCI.vb" />
     <Compile Include="CommunicationInterfaces\ICommunicationInterface.vb" />
     <Compile Include="GUI\Controls\InputTextBox.vb">

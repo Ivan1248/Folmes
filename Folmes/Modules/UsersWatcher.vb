@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 
 Public MustInherit Class UsersWatcher
-    Private Shared WithEvents fsw As New FileSystemWatcher With {
+    Private Shared WithEvents fsw As New FileSystemWatcher(Dirs.Users) With {
         .IncludeSubdirectories = True,
         .NotifyFilter = NotifyFilters.LastWrite Or NotifyFilters.DirectoryName
     }
@@ -19,7 +19,7 @@ Public MustInherit Class UsersWatcher
             Exit Sub
         End If
         Dim ext As String = IO.Path.GetExtension(e.Name)
-        If ext <> UserFile.Extension.UserStatus OrElse ext <> UserFile.Extension.UserInfo Then
+        If ext <> UserFile.Extension.UserStatus AndAlso ext <> UserFile.Extension.UserInfo Then
             Exit Sub
         End If
         Dim name As String = e.Name.Substring(0, e.Name.IndexOf("\"c))

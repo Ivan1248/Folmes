@@ -4,10 +4,8 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
     Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
     Public Event NewPrivateMessage(message As Message) Implements ICommunicationInterface.NewPrivateMessage
     Public Event PongReceived(rtt_in_ms As Long) Implements ICommunicationInterface.PongReceived
-    Public Event PongTimeout() Implements ICommunicationInterface.PongTimeout
+    Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
     Public Event PingError(message As String) Implements ICommunicationInterface.PingError
-
-    'TODO: automatic deletion of old message files
 
     Private Structure ChannelNewMessagesStart
         Dim Channel As String
@@ -18,7 +16,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
 
     Public Sub Start(SynchronizingObject As Form) Implements ICommunicationInterface.Start
         EnableFSWatchers(SynchronizingObject)
-        PingPong.CleanPing()
+        CleanPing()
     End Sub
 
     Public Sub SendMessage(channel As String, message As Message) Implements ICommunicationInterface.SendMessage
@@ -34,7 +32,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
     End Sub
 
     Public Sub Ping(username As String) Implements ICommunicationInterface.Ping
-        PingPong.Ping(username)
+        _Ping(username)
     End Sub
 
     Public Sub GetOldMessages(channel As String, count As Integer, loadSubRef As ICommunicationInterface.MessageLoadingSub) Implements ICommunicationInterface.GetOldMessages

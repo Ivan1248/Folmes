@@ -2,7 +2,7 @@
     Event NewPrivateMessage(message As Message)
     Event NewCommonMessage(message As Message)
     Event PongReceived(rtt_in_ms As Long)
-    Event PongTimeout()
+    Event PongTimeout(username As String)
     Event PingError(message As String)
 
     Sub Start(SynchronizingObject As Form)

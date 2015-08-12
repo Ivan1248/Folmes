@@ -5,8 +5,8 @@ Public Class IRCCI : Implements ICommunicationInterface
     Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
     Public Event NewPrivateMessage(message As Message) Implements ICommunicationInterface.NewPrivateMessage
     Public Event PongReceived(rtt_in_ms As Long) Implements ICommunicationInterface.PongReceived
-    Public Event PongTimeout() Implements ICommunicationInterface.PongTimeout
     Public Event PingError(message As String) Implements ICommunicationInterface.PingError
+    Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
 
     Public Sub Start(SynchronizingObject As Form) Implements ICommunicationInterface.Start
         Throw New NotImplementedException()

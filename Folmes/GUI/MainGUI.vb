@@ -41,6 +41,7 @@ Public NotInheritable Class MainGUI
             'Stvaranje direktorija i učitavanje FSW
             Dirs.AssureMainDirectories()
             sfci.Start(Me)
+            UsersWatcher.Start()
             AddHandler UsersWatcher.Deleted, AddressOf UsersWatcher_Deleted
 
             'Prvo pokretenje? i učitavanje kanala u izbornik

@@ -12,35 +12,26 @@ Public MustInherit Class PingPong
         'MainGUI.Output.AddMessage("Ping-pong: timeout.")
     End Sub
 
-    Public Shared Function Ping(username As String) As Boolean
+    Public Shared Sub Ping(username As String)
         If _pingTime <> 0 Then
             'MainGUI.Output.AddMessage("Pinging in progress.")
-            Return False
         End If
-        If Users.IsOnline(username) OrElse username = My.Settings.Username Then
-            Dim dir As String = Path.Combine(Dirs.PingPong, username)
-            Dirs.Create(dir)
-            Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & PingPongFile.Extension.Ping), FileMode.Create, FileAccess.Write)
-                fs.WriteByte(0) ' necessary for detection
-            End Using
-            _pingTime = Date.UtcNow.Ticks \ 10000
-            _timeoutTimer.Start()
-            Return True
-        Else
-            'MainGUI.Output.AddMessage("Cannot ping " & username & ". User is not online.")
-            Return False
-        End If
-    End Function
+        Dim dir As String = Path.Combine(Dirs.PingPong, username)
+        Dirs.Create(dir)
+        Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & PingPongFile.Extension.Ping), FileMode.Create, FileAccess.Write)
+            fs.WriteByte(0) ' necessary for detection
+        End Using
+        _pingTime = Date.UtcNow.Ticks \ 10000
+        _timeoutTimer.Start()
+    End Sub
 
     Public Shared Sub Pong(username As String)
-        If Not Users.IsOnline(username) Then Exit Sub
         Dim dir As String = Path.Combine(Dirs.PingPong, username)
         Dirs.Create(dir)
         Using fs As New FileStream(Path.Combine(dir, My.Settings.Username & PingPongFile.Extension.Pong), FileMode.Create, FileAccess.Write)
             fs.WriteByte(0) ' necessary for detection
         End Using
     End Sub
-
 
     Public Shared Function GetFileRtt() As Long
         _timeoutTimer.Stop()

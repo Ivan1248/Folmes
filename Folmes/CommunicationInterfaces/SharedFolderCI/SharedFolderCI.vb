@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports Folmes
 
 Partial Public Class SharedFolderCI : Implements ICommunicationInterface
     Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
@@ -25,18 +24,18 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
     Public Sub SendMessage(channel As String, message As Message) Implements ICommunicationInterface.SendMessage
         Dim dirPath As String
         If channel = Channels.Common Then
-            dirPath = Path.Combine(Dirs.CommonChannel, message.Sender.Name)
+            dirPath = Path.Combine(Dirs.CommonChannel, message.Sender)
         Else
-            dirPath = Path.Combine(Dirs.PrivateMessages, channel, message.Sender.Name)
+            dirPath = Path.Combine(Dirs.PrivateMessages, channel, message.Sender)
         End If
         Dirs.Create(dirPath)
         Dim filePath As String = Path.Combine(dirPath, Convert.ToString(message.Time, 16) & MessageFile.Extension)
         MessageFile.Create(filePath, message)
     End Sub
 
-    Public Function Ping(username As String) As Boolean Implements ICommunicationInterface.Ping
-        Return PingPong.Ping(username)
-    End Function
+    Public Sub Ping(username As String) Implements ICommunicationInterface.Ping
+        PingPong.Ping(username)
+    End Sub
 
     Public Sub GetOldMessages(channel As String, count As Integer, loadSubRef As ICommunicationInterface.MessageLoadingSub) Implements ICommunicationInterface.GetOldMessages
         Dim msgFilePaths As List(Of String)

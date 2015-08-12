@@ -144,7 +144,7 @@
     <Compile Include="TODO\Channels.vb" />
     <Compile Include="GUI\Notifications.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\Files.vb" />
-    <Compile Include="CommunicationInterfaces\SharedFolderCI\Dirs.vb" />
+    <Compile Include="Modules\Dirs.vb" />
     <Compile Include="TextProcessing\HtmlConverter.vb" />
     <Compile Include="Modules\UsersWatcher.vb" />
     <Compile Include="GUI\AboutBox.Designer.vb">

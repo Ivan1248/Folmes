@@ -20,8 +20,8 @@ Public MustInherit Class Dirs
         Create(Messages)
         Create(CommonChannel)
         Create(PrivateMessages)
-        Create(Users)
         Create(Path.Combine(PingPong, My.Settings.Username))
+        Create(Users)
     End Sub
 
     Public Shared Sub HideFolmesFolder(hide As Boolean)

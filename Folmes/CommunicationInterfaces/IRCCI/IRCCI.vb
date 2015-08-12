@@ -20,7 +20,7 @@ Public Class IRCCI : Implements ICommunicationInterface
         Throw New NotImplementedException()
     End Sub
 
-    Public Function Ping(username As String) As Boolean Implements ICommunicationInterface.Ping
+    Public Sub Ping(username As String) Implements ICommunicationInterface.Ping
         Throw New NotImplementedException()
-    End Function
+    End Sub
 End Class

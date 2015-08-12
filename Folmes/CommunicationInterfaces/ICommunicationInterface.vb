@@ -9,7 +9,7 @@
 
     Sub SendMessage(channel As String, message As Message)
 
-    Function Ping(username As String) As Boolean
+    Sub Ping(username As String)
 
     Delegate Sub MessageLoadingSub(m As Message)
 

@@ -234,8 +234,11 @@ Namespace GUI.Controls
                     If message.Type = MessageType.Highlighted Then messageElement.SetAttribute("className", "hl message")
                     With messageElement.AppendChild(Document.CreateElement("SPAN"))
                         .SetAttribute("className", "name")
-                        .Style = "color:" & message.Sender.Color
-                        .InnerText = message.Sender.Name
+                        Dim user As User = Users.GetUser(message.Sender)
+                        If user IsNot Nothing Then
+                            .Style = "color:" & user.Color
+                        End If
+                        .InnerText = message.Sender
                     End With
                 Case MessageType.FolmesDeclaration
                     With messageElement.AppendChild(Document.CreateElement("SPAN"))

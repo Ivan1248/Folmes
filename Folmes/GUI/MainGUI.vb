@@ -19,8 +19,8 @@ Public NotInheritable Class MainGUI
     End Sub
 
     Sub fsi_NewPrivateMessage(message As Message) Handles sfci.NewPrivateMessage
-        NewMessageQueues.AddPrivate(message.Sender.Name, message)
-        Notify(NotificationType.PrivateMessage, message.Sender.Name)
+        NewMessageQueues.AddPrivate(message.Sender, message)
+        Notify(NotificationType.PrivateMessage, message.Sender)
     End Sub
 
     Sub fsi_PongReceived(rtt_in_ms As Long) Handles sfci.PongReceived
@@ -137,6 +137,8 @@ Public NotInheritable Class MainGUI
             If Input.Text IsNot String.Empty Then
                 If ProcessInput() Then
                     Input.Clear()
+                Else
+                    Input.SelectAll()
                 End If
             End If
         End If
@@ -154,7 +156,16 @@ Public NotInheritable Class MainGUI
             Case "me"
                 Return SendMessage(MessageType.Reflexive)
             Case "ping"
-                Return Input.Text.Length > 6 AndAlso sfci.Ping(Input.Text.Substring(6).TrimEnd())
+                If Input.Text.Length > 6 Then
+                    Dim username As String = Input.Text.Substring(6).TrimEnd()
+                    If Users.IsOnline(username) OrElse username = My.Settings.Username Then
+                        sfci.Ping(Input.Text.Substring(6).TrimEnd())
+                        Return True
+                    Else
+                        Output.AddMessage("Cannot ping " & username & ". User is not online.")
+                        Return False
+                    End If
+                End If
             Case "exit", "close"
                 Me.Close()
             Case Else
@@ -168,7 +179,7 @@ Public NotInheritable Class MainGUI
     Friend Function SendMessage(messageType As MessageType) As Boolean
         Dim msg As New Message()
         Dim attachedFiles As New List(Of String)
-        msg.Sender = Users.MyUser
+        msg.Sender = My.Settings.Username
         msg.Type = messageType
         msg.Time = Date.UtcNow.ToBinary()
         Select Case messageType

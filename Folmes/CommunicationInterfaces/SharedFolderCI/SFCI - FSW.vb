@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports Folmes
 
 Partial Public Class SharedFolderCI
     Private WithEvents MessagesWatcher As FileSystemWatcher

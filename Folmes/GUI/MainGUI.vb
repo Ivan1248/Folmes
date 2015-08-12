@@ -14,12 +14,12 @@ Public NotInheritable Class MainGUI
     Dim WithEvents sfci As New SharedFolderCI
 
     Sub fsi_NewCommonMessage(message As Message) Handles sfci.NewCommonMessage
-        NewMessagesManager.AddCommon(message)
+        NewMessageQueues.AddCommon(message)
         Notify(NotificationType.PublicMessage, Nothing)
     End Sub
 
     Sub fsi_NewPrivateMessage(message As Message) Handles sfci.NewPrivateMessage
-        NewMessagesManager.AddPrivate(message.Sender.Name, message)
+        NewMessageQueues.AddPrivate(message.Sender.Name, message)
         Notify(NotificationType.PrivateMessage, message.Sender.Name)
     End Sub
 
@@ -107,7 +107,7 @@ Public NotInheritable Class MainGUI
             Me.Output.CacheChannelHtml(Channels.Current)
             Channels.Switch(channel)
             If Output.LoadCachedChannelHtml(channel) Then
-                NewMessagesManager.Load(channel)
+                NewMessageQueues.LoadMessages(channel)
             Else
                 sfci.GetOldMessages(channel, My.Settings.NofMsgs, AddressOf Output.AddMessage)
             End If

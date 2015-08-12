@@ -19,7 +19,7 @@ Public MustInherit Class UsersWatcher
             Exit Sub
         End If
         Dim ext As String = IO.Path.GetExtension(e.Name)
-        If ext <> Files.Extension.UserStatus OrElse ext <> Files.Extension.UserInfo Then
+        If ext <> UserFile.Extension.UserStatus OrElse ext <> UserFile.Extension.UserInfo Then
             Exit Sub
         End If
         Dim name As String = e.Name.Substring(0, e.Name.IndexOf("\"c))
@@ -32,13 +32,13 @@ Public MustInherit Class UsersWatcher
             Notify(NotificationType.Joined, name)
         Else
             Select Case ext
-                Case Files.Extension.UserStatus
+                Case UserFile.Extension.UserStatus
                     Dim PrevStatus As Boolean = user.IsOnline()
                     user.RefreshStatus()
                     If PrevStatus <> user.IsOnline() Then
                         Notify(If(Not PrevStatus, NotificationType.LoggedIn, NotificationType.LoggedOut), name)
                     End If
-                Case Files.Extension.UserInfo
+                Case UserFile.Extension.UserInfo
                     user.RefreshSettings()
             End Select
         End If

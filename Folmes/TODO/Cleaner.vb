@@ -49,9 +49,9 @@ Public Class Cleaner
     Public Sub DeleteUser(ByVal username As String)
         Dim userPth As String = Path.Combine(Dirs.PrivateMessages, username)
         Directory.Delete(userPth, True)
-        File.Delete(userPth & Files.Extension.Message)
+        File.Delete(userPth & MessageFile.Extension)
         For Each dir As String In Dirs.GetUserDirs()
-            File.Delete(dir + "\" & username & Files.Extension.Message)
+            File.Delete(dir + "\" & username & MessageFile.Extension)
         Next
     End Sub
 

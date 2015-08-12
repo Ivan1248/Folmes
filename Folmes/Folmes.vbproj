@@ -116,15 +116,18 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Communication\SFCommunicationInterface\MessageFile.vb" />
-    <Compile Include="Communication\SFCommunicationInterface\SFCI - FSW.vb" />
-    <Compile Include="Communication\SFCommunicationInterface\SFCI.vb" />
-    <Compile Include="Communication\ICommunication.vb" />
+    <Compile Include="CommunicationInterfaces\IRCCI\IRCCI.vb" />
+    <Compile Include="CommunicationInterfaces\SharedFolderCI\MessageFile.vb" />
+    <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPong.vb" />
+    <Compile Include="CommunicationInterfaces\SharedFolderCI\SFCI - FSW.vb" />
+    <Compile Include="CommunicationInterfaces\SharedFolderCI\SharedFolderCI.vb" />
+    <Compile Include="CommunicationInterfaces\ICommunicationInterface.vb" />
     <Compile Include="GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Modules\UserFile.vb" />
     <Compile Include="TextProcessing\InputParser.vb" />
-    <Compile Include="Modules\MessagesManager.vb" />
+    <Compile Include="Modules\NewMessageQueues.vb" />
     <Compile Include="Types\Message.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
@@ -135,15 +138,15 @@
     <Compile Include="GUI\Controls\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Communication\SFCommunicationInterface\PingPong.vb" />
+    <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPongFile.vb" />
     <Compile Include="Modules\Users.vb" />
     <Compile Include="GUI\Style\ToolStripColorTable.vb" />
     <Compile Include="TODO\Channels.vb" />
     <Compile Include="GUI\Notifications.vb" />
-    <Compile Include="Communication\SFCommunicationInterface\Files.vb" />
-    <Compile Include="Communication\SFCommunicationInterface\Dirs.vb" />
+    <Compile Include="CommunicationInterfaces\SharedFolderCI\Files.vb" />
+    <Compile Include="CommunicationInterfaces\SharedFolderCI\Dirs.vb" />
     <Compile Include="TextProcessing\HtmlConverter.vb" />
-    <Compile Include="Communication\SFCommunicationInterface\UsersWatcher.vb" />
+    <Compile Include="Modules\UsersWatcher.vb" />
     <Compile Include="GUI\AboutBox.Designer.vb">
       <DependentUpon>AboutBox.vb</DependentUpon>
     </Compile>
@@ -196,7 +199,7 @@
     </Compile>
     <Compile Include="Types\MessageQueue.vb" />
     <Compile Include="Types\User.vb" />
-    <Compile Include="Communication\IRCCommunicationInterface\IRC.vb" />
+    <Compile Include="CommunicationInterfaces\IRCCI\IRC.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\AboutBox.resx">

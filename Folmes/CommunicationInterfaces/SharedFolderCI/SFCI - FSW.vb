@@ -6,7 +6,7 @@ Partial Public Class SharedFolderCI
     Private WithEvents PingPongWatcher As FileSystemWatcher
 
     Sub EnableFSWatchers(SynchronizingObject As Form)
-        MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & Files.Extension.Message) With {
+        MessagesWatcher = New FileSystemWatcher(Dirs.Messages, "*" & MessageFile.Extension) With {
             .IncludeSubdirectories = True,
             .NotifyFilter = NotifyFilters.LastWrite,
             .EnableRaisingEvents = True,
@@ -43,7 +43,7 @@ Partial Public Class SharedFolderCI
 
     Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Changed
         File.Delete(e.FullPath)
-        If Path.GetExtension(e.Name) = Files.Extension.Ping Then
+        If Path.GetExtension(e.Name) = PingPongFile.Extension.Ping Then
             Dim sender As String = e.Name.Substring(0, e.Name.IndexOf("."c))
             PingPong.Pong(sender)
         Else

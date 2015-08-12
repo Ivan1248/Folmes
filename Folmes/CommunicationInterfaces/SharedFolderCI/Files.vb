@@ -3,13 +3,6 @@ Imports System.IO
 Imports System.Text
 
 Public MustInherit Class Files
-    Structure Extension
-        Const Message As String = ".fmsg"
-        Const Ping As String = ".ping"
-        Const Pong As String = ".pong"
-        Const UserStatus As String = ".st"
-        Const UserInfo As String = ".info"
-    End Structure
 
     Public Const MaxImageHeight As Integer = 64
 

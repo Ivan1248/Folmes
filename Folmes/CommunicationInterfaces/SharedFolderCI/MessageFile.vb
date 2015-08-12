@@ -2,6 +2,8 @@
 Imports System.IO
 
 Public MustInherit Class MessageFile
+    Public Const Extension As String = ".fmsg"
+
     Public Shared Sub Create(filePath As String, msg As Message)
         Dim sb As New StringBuilder
         sb.Append(ChrW(msg.Type))

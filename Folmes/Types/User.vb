@@ -11,8 +11,8 @@ Public Class User
     Sub New(username As String, kind As UserKind)
         Me.Name = username
         If kind = UserKind.OldReal OrElse kind = UserKind.NewReal Then
-            Me.StatusFilePath = Path.Combine(Dirs.Users, username, Files.Extension.UserStatus)
-            Me.SettingsFilePath = Path.Combine(Dirs.Users, username, Files.Extension.UserInfo)
+            Me.StatusFilePath = Path.Combine(Dirs.Users, username, UserFile.Extension.UserStatus)
+            Me.SettingsFilePath = Path.Combine(Dirs.Users, username, UserFile.Extension.UserInfo)
             If kind = UserKind.NewReal Then
                 Me.Status = UserStatus.Online
                 Me.SaveSettings()

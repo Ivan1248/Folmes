@@ -2,6 +2,8 @@
 
 Public Class IRCCI : Implements ICommunicationInterface
 
+
+
     Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
     Public Event NewPrivateMessage(message As Message) Implements ICommunicationInterface.NewPrivateMessage
     Public Event PongReceived(rtt_in_ms As Long) Implements ICommunicationInterface.PongReceived

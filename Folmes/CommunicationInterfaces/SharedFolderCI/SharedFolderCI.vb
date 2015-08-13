@@ -1,11 +1,6 @@
 ﻿Imports System.IO
 
 Partial Public Class SharedFolderCI : Implements ICommunicationInterface
-    Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
-    Public Event NewPrivateMessage(message As Message) Implements ICommunicationInterface.NewPrivateMessage
-    Public Event PongReceived(rtt_in_ms As Long) Implements ICommunicationInterface.PongReceived
-    Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
-    Public Event PingError(message As String) Implements ICommunicationInterface.PingError
 
     Private Structure ChannelNewMessagesStart
         Dim Channel As String
@@ -13,6 +8,13 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
     End Structure
 
     Private ChannelNewMessagesStarts As New List(Of ChannelNewMessagesStart)
+
+
+    Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
+    Public Event NewPrivateMessage(message As Message) Implements ICommunicationInterface.NewPrivateMessage
+    Public Event PongReceived(rtt_in_ms As Long) Implements ICommunicationInterface.PongReceived
+    Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
+    Public Event PingError(message As String) Implements ICommunicationInterface.PingError
 
     Public Sub Start(SynchronizingObject As Form) Implements ICommunicationInterface.Start
         EnableFSWatchers(SynchronizingObject)
@@ -27,8 +29,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
             dirPath = Path.Combine(Dirs.PrivateMessages, channel, message.Sender)
         End If
         Dirs.Create(dirPath)
-        Dim filePath As String = Path.Combine(dirPath, Convert.ToString(message.Time, 16) & MessageFile.Extension)
-        MessageFile.Create(filePath, message)
+        MessageFile.Create(dirPath, message)
     End Sub
 
     Public Sub Ping(username As String) Implements ICommunicationInterface.Ping
@@ -48,7 +49,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
             Dirs.Create(messagesPath)
             msgFilePaths.AddRange(Directory.GetFiles(messagesPath))
         End If
-        msgFilePaths.Sort(AddressOf MessageFileComparison)
+        msgFilePaths.Sort(AddressOf MessageFile.Comparison)
         Dim oldestToDisplay As Integer = Math.Max(0, msgFilePaths.Count - 1 - count)
         Dim NewBeginningTime As Long = Long.MaxValue
         For Each cnms As ChannelNewMessagesStart In ChannelNewMessagesStarts
@@ -68,17 +69,5 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
             End Try
         Next
     End Sub
-
-    Private Shared Function MessageFileComparison(file1 As String, file2 As String) As Integer
-        Dim a As Integer = file1.Length - MessageFile.Extension.Length - 16
-        Dim b As Integer = file2.Length - MessageFile.Extension.Length - 16
-        For i As Integer = 0 To 15
-            Select Case Asc(file1(a + i)) - Asc(file2(b + i))
-                Case Is > 0 : Return 1
-                Case Is < 0 : Return -1
-            End Select
-        Next
-        Return 0
-    End Function
 
 End Class

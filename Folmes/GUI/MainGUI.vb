@@ -9,29 +9,7 @@ Public NotInheritable Class MainGUI
 
     '//////// Učitavanje i zatvaranje, prijava i odjava /////////////////////////////////////
 
-#Region "Učitavanje"
-
-    Dim WithEvents sfci As New SharedFolderCI
-
-    Sub fsi_NewCommonMessage(message As Message) Handles sfci.NewCommonMessage
-        NewMessageQueues.AddCommon(message)
-        Notify(NotificationType.PublicMessage, Nothing)
-    End Sub
-
-    Sub fsi_NewPrivateMessage(message As Message) Handles sfci.NewPrivateMessage
-        NewMessageQueues.AddPrivate(message.Sender, message)
-        Notify(NotificationType.PrivateMessage, message.Sender)
-    End Sub
-
-    Sub fsi_PongReceived(rtt_in_ms As Long) Handles sfci.PongReceived
-        Output.AddMessage("Ping-pong: File_RTT = " & rtt_in_ms & "ms")
-    End Sub
-
     Private Sub Box_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Me.BeginInvoke(DirectCast(AddressOf InitializeEverything, MethodInvoker))
-    End Sub
-
-    Private Sub InitializeEverything()
         Try
             'Postavke i još neke sitnice
             LoadWindowDimensionsSettings()
@@ -78,6 +56,25 @@ Public NotInheritable Class MainGUI
         End Try
     End Sub
 
+#Region "SharedFolderCI"
+    Dim WithEvents sfci As New SharedFolderCI
+
+    Sub sfci_NewCommonMessage(message As Message) Handles sfci.NewCommonMessage
+        NewMessageQueues.AddCommon(message)
+        Notify(NotificationType.PublicMessage, Nothing)
+    End Sub
+
+    Sub sfci_NewPrivateMessage(message As Message) Handles sfci.NewPrivateMessage
+        NewMessageQueues.AddPrivate(message.Sender, message)
+        Notify(NotificationType.PrivateMessage, message.Sender)
+    End Sub
+
+    Sub sfci_PongReceived(rtt_in_ms As Long) Handles sfci.PongReceived
+        Output.AddMessage("Ping-pong: File_RTT = " & rtt_in_ms & "ms")
+    End Sub
+
+#End Region
+
     Private Sub LoadWindowDimensionsSettings()
         If My.Settings.StartMinimized Then
             Me.WindowState = FormWindowState.Minimized
@@ -95,8 +92,6 @@ Public NotInheritable Class MainGUI
         InputContMenu.Renderer = TS.Renderer
         OutputContMenu.Renderer = TS.Renderer
     End Sub
-
-#End Region
 
     Private Sub UsersWatcher_Deleted(username As String) ' Handles UsersWatcher.Deleted
         Users.Remove(username)

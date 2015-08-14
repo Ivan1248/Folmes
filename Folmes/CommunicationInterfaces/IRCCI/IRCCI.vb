@@ -2,7 +2,7 @@
 
 Public Class IRCCI : Implements ICommunicationInterface
 
-
+    Dim client As IrcClient
 
     Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
     Public Event NewPrivateMessage(message As Message) Implements ICommunicationInterface.NewPrivateMessage
@@ -11,7 +11,8 @@ Public Class IRCCI : Implements ICommunicationInterface
     Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
 
     Public Sub Start(SynchronizingObject As Form) Implements ICommunicationInterface.Start
-        Throw New NotImplementedException()
+        client = New IrcClient()
+        client.Run()
     End Sub
 
     Public Sub GetOldMessages(channel As String, count As Integer, loadSubRef As ICommunicationInterface.MessageLoadingSub) Implements ICommunicationInterface.GetOldMessages

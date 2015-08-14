@@ -7,6 +7,10 @@ Imports Folmes.GUI.Controls
 Public NotInheritable Class MainGUI
     'public = common (synonyms)
 
+    Dim WithEvents sfci As New SharedFolderCI
+    Dim WithEvents ircci As New IRCCI
+
+
     '//////// Učitavanje i zatvaranje, prijava i odjava /////////////////////////////////////
 
     Private Sub Box_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -57,7 +61,6 @@ Public NotInheritable Class MainGUI
     End Sub
 
 #Region "SharedFolderCI"
-    Dim WithEvents sfci As New SharedFolderCI
 
     Sub sfci_NewCommonMessage(message As Message) Handles sfci.NewCommonMessage
         NewMessageQueues.AddCommon(message)
@@ -279,6 +282,10 @@ Public NotInheritable Class MainGUI
         Me.Activate()
         Me.ShowInTaskbar = True
         Me.WindowState = FormWindowState.Normal
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        ircci.Start(Me)
     End Sub
 
 #End Region

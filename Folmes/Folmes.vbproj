@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommunicationInterfaces\IRCCI\IRCCI.vb" />
+    <Compile Include="CommunicationInterfaces\IRCCI\IrcClient.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\MessageFile.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPong.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\FSWatchers.vb" />
@@ -199,7 +200,6 @@
     </Compile>
     <Compile Include="Types\MessageQueue.vb" />
     <Compile Include="Types\User.vb" />
-    <Compile Include="CommunicationInterfaces\IRCCI\IRCClient.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\AboutBox.resx">

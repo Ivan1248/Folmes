@@ -4,15 +4,16 @@ Imports System.Net.Sockets
 Public Class IrcClient
     Dim server As String = "irc.freenode.net"
     Dim port As Integer = 6667
-    Dim sock As New TcpClient()
+    Dim sock As TcpClient
     Dim input As TextReader
     Dim output As TextWriter
     Dim channel As String = "#Folmes"
     Dim username As String = "FolmesTest"
-    Dim owner As String = "Unknown"
 
     Sub Run()
-        'Connect to irc server and get input and output text streams from TcpClient.
+        sock = New TcpClient
+
+        ' Connect to the irc server and get input and output text streams from TcpClient.
         sock.Connect(server, port)
         If Not sock.Connected Then
             Console.WriteLine("Failed to connect!")
@@ -21,34 +22,28 @@ Public Class IrcClient
         input = New StreamReader(sock.GetStream())
         output = New StreamWriter(sock.GetStream())
 
-        'Starting USER and NICK login commands 
-        output.WriteLine("USER " & username & " 8 * :" & owner) ' 8 - invisible
+        ' USER and NICK initial commands 
+        output.WriteLine("USER " & username & " 8 * :" & username) ' 8 - invisible
         output.WriteLine("NICK " & username)
         output.Flush()
 
-        'Process each line received from irc server
         Dim buf As String
 
+        ' Wait for welcome message
+        Do
+            buf = input.ReadLine()
+            Console.WriteLine(buf)
+        Loop While buf.Split(" "c)(1) <> "001"
+
+        ' Set mode and join channel
+        output.WriteLine("MODE " & username & " +C")
+        output.WriteLine("JOIN " & channel)
+        output.Flush()
+
+        ' Process each line received from irc server
         While True
             buf = input.ReadLine()
 
-            ' IRC commands come in one of these formats:
-            '                * :NICK!USER@HOST COMMAND ARGS ... :DATA\r\n
-            '                * :SERVER COMAND ARGS ... :DATA\r\n
-            '                
-            'After server sends 001 command, we can set mode to bot and join a channel
-            If buf.Split(" "c)(1) = "001" Then
-                output.WriteLine("MODE " & username & " +C")
-                output.WriteLine("JOIN " & channel)
-                output.Flush()
-                Exit While
-            End If
-        End While
-
-        While True
-            buf = input.ReadLine()
-
-            'Display received irc message
             Console.WriteLine(buf)
 
             'Send pong reply to any ping messages

@@ -252,6 +252,6 @@ Namespace GUI.Controls
             End With
             Return messageElement
         End Function
-    End Class
 #End Region
+    End Class
 End Namespace

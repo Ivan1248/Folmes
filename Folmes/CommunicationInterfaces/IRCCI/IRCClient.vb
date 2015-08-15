@@ -54,6 +54,18 @@ Public Class IrcClient
             If buf(0) <> ":"c Then
                 Continue While
             End If
+            If buf.Contains("yo") Then
+                output.WriteLine("PRIVMSG " & username & " :" & "test")
+                output.Flush()
+            End If
+
+
         End While
     End Sub
+
+    Sub SendMessage(recipient As String, message As Message)
+        output.WriteLine("PRIVMSG " & recipient & " :" & "test")
+        output.Flush()
+    End Sub
+
 End Class

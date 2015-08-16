@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="CommunicationInterfaces\IRCCI\IRCCI.vb" />
     <Compile Include="CommunicationInterfaces\IRCCI\IrcClient.vb" />
+    <Compile Include="CommunicationInterfaces\IRCCI\ThreadSafeQueue.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\MessageFile.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPong.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\FSWatchers.vb" />
@@ -126,6 +127,7 @@
     <Compile Include="GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Modules\Converter.vb" />
     <Compile Include="Modules\UserFile.vb" />
     <Compile Include="TextProcessing\InputParser.vb" />
     <Compile Include="Modules\NewMessageQueues.vb" />
@@ -142,7 +144,7 @@
     <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPongFile.vb" />
     <Compile Include="Modules\Users.vb" />
     <Compile Include="GUI\Style\ToolStripColorTable.vb" />
-    <Compile Include="TODO\Channels.vb" />
+    <Compile Include="Modules\Channels.vb" />
     <Compile Include="GUI\Notifications.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\Files.vb" />
     <Compile Include="Modules\Dirs.vb" />
@@ -154,10 +156,10 @@
     <Compile Include="GUI\AboutBox.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TODO\Cleaner.Designer.vb">
+    <Compile Include="GUI\Cleaner.Designer.vb">
       <DependentUpon>Cleaner.vb</DependentUpon>
     </Compile>
-    <Compile Include="TODO\Cleaner.vb">
+    <Compile Include="GUI\Cleaner.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\FirstRun.Designer.vb">
@@ -206,7 +208,7 @@
       <DependentUpon>AboutBox.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TODO\Cleaner.resx">
+    <EmbeddedResource Include="GUI\Cleaner.resx">
       <DependentUpon>Cleaner.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings.resx">

@@ -221,6 +221,7 @@ Namespace GUI.Controls
             Dim messageElement As HtmlElement = Document.CreateElement("DIV")
             With messageElement.AppendChild(Document.CreateElement("DIV"))
                 .SetAttribute("className", "time")
+
                 Dim time As Date = Date.FromBinary(message.Time).ToLocalTime
                 If (Date.Now - time).TotalHours > 24 Then
                     .InnerText = time.ToString("dd.MM.yyyy. HH:mm")

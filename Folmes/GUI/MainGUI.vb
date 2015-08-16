@@ -23,6 +23,7 @@ Public NotInheritable Class MainGUI
             'Stvaranje direktorija i učitavanje FSW
             Dirs.AssureMainDirectories()
             sfci.Start(Me)
+            ircci.Start(Me)
             UsersWatcher.Start()
             AddHandler UsersWatcher.Deleted, AddressOf UsersWatcher_Deleted
 
@@ -42,7 +43,6 @@ Public NotInheritable Class MainGUI
                         Sub()
                             RemoveHandler Output.Initialized, messagesLoad
                             sfci.GetOldMessages(Channels.Common, My.Settings.NofMsgs, AddressOf Output.AddMessage)
-                            'MessagesManager.LoadInitialAndDeleteOld(Channels.Common, AddressOf Output.AddMessage)
                         End Sub
                 AddHandler .Initialized, messagesLoad
                 .Initialize({})
@@ -285,7 +285,7 @@ Public NotInheritable Class MainGUI
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        ircci.Start(Me)
+        ircci.SendMessage("Ivan_", New Message With {.Content = Input.Text, .Sender = My.Settings.Username, .Time = Date.UtcNow.ToBinary})
     End Sub
 
 #End Region

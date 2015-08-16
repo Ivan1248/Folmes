@@ -11,6 +11,7 @@
             _clickTimer.Start()
         End Sub
 
+
         Private Sub Input_Click(sender As Object, e As EventArgs) Handles Me.Click
             If _inTripleClickInterval Then Me.SelectAll()
         End Sub

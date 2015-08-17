@@ -24,18 +24,22 @@ Public Class IRCCI : Implements ICommunicationInterface
     Public Sub SendMessage(channel As String, message As Message) Implements ICommunicationInterface.SendMessage
         Dim sb As New StringBuilder()
         sb.Append("PRIVMSG {0} :")
-        sb.Append(Converter.Int64ToBase32String(message.Time))
-        sb.Append(" ").Append(CInt(message.Type).ToString)
-        sb.Append(If(channel = Channels.Common, "C"c, "P"c))
-        sb.Append(" ").Append(message.Content.Replace(vbNewLine, "[newline]"))
-        Dim IrcCommandF As String = sb.ToString
+
         If channel = Channels.Common Then
-            For Each u As User In Users.Others
-                _client.SendCommand(String.Format(IrcCommandF, u.Name))
+            If Users.Others.Count = 0 Then Exit Sub
+            sb.Append(Users.Others(0).Name)
+            For i As Integer = 1 To Users.Others.Count - 1
+                sb.Append(","c).Append(Users.Others(i).Name)
             Next
         Else
-            _client.SendCommand(String.Format(IrcCommandF, channel))
+            sb.Append(channel)
         End If
+        sb.Append(" :")
+        sb.Append(channel)
+        sb.Append(Converter.Int64ToBase32String(message.Time))
+        sb.Append(" ").Append(CInt(message.Type).ToString)
+        sb.Append(" ").Append(message.Content.Replace(vbNewLine, "[newline]"))
+        _client.SendCommand(sb.ToString())
     End Sub
 
     Public Sub Ping(username As String) Implements ICommunicationInterface.Ping

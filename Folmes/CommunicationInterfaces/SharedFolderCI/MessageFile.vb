@@ -7,7 +7,7 @@ Public MustInherit Class MessageFile
     Public Shared Sub Create(dirPath As String, msg As Message)
         Dim filePath As String = Path.Combine(dirPath, Converter.Int64ToBase32String(msg.Time) & Extension)
         Dim sb As New StringBuilder
-        sb.Append(ChrW(msg.Type))
+        sb.Append(ChrW(msg.Flags))
         sb.AppendLine(msg.Sender)
         sb.AppendLine(msg.Content)
         Dim fs As New FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)
@@ -19,7 +19,7 @@ Public MustInherit Class MessageFile
     Public Shared Function LoadMessage(fpath As String) As Message
         Dim m As New Message() With {.Time = Converter.Base32StringToInt64(Path.GetFileNameWithoutExtension(fpath))}
         Using sr As New StreamReader(New FileStream(fpath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            m.Type = CType(sr.Read(), MessageType)
+            m.Flags = CType(sr.Read(), MessageFlags)
             Dim username As String = sr.ReadLine()
             m.Sender = username
             m.Content = sr.ReadLine()

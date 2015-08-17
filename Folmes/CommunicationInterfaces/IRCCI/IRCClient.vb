@@ -1,14 +1,13 @@
 ﻿Imports System.IO
 Imports System.Net.Sockets
+Imports System.Runtime.Remoting.Messaging
 Imports System.Threading
 
 Public Class IrcClient
     Dim inputQueue As New ThreadSafeQueue(Of String)
     ReadOnly outputQueue As New ThreadSafeQueue(Of String)
 
-    Public Event Connected()
-    Public Event NewMessageReceived()
-
+    Public Event MessageReceived()
 
     Dim server As String = "irc.freenode.net"
     Dim port As Integer = 6667
@@ -68,8 +67,6 @@ conn:   sock = New TcpClient
             output.WriteLine("JOIN " & channel)
             output.Flush()
 
-            RaiseEvent Connected()
-
             ' Process each line received from the server
             While True
                 ' While no data is received, wait and send queued data if there is any
@@ -98,10 +95,14 @@ conn:   sock = New TcpClient
 
                 ' https://tools.ietf.org/html/rfc2812#page-5 / message format
 
-                If buf.Contains("yo") Then
-                    output.WriteLine("PRIVMSG " & username & ",Ivan_" & " :" & "test")
-                    output.Flush()
-                End If
+                'If buf.Contains("yo") Then
+                '    output.WriteLine("PRIVMSG " & username & " :" & "yo")
+                '    output.Flush()
+                'End If
+
+                Dim m As Message = FolmesIrcMesage.GetMessage(buf)
+                RaiseEvent MessageReceived(m)
+
             End While
         End Using
     End Sub

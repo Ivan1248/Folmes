@@ -1,13 +1,14 @@
 ﻿Public Class Message
     Public Sender As String
-    Public Type As MessageType
+    Public Flags As MessageFlags
     Public Content As String
     Public Time As Long
 End Class
 
-Public Enum MessageType As Short
-    Normal
-    Highlighted
-    FolmesDeclaration
-    Reflexive
+Public Enum MessageFlags As Integer
+    FolmesSystemMessage = 1
+    Privat = 2
+    MeIs = 4
+    Irc = 8
+    Highlighted = 16
 End Enum

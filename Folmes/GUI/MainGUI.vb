@@ -52,7 +52,7 @@ Public NotInheritable Class MainGUI
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
                 Me.Output.AddMessage(
-                    New Message With {.Type = MessageType.FolmesDeclaration,
+                    New Message With {.Flags = MessageFlags.FolmesSystemMessage,
                                         .Content = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
@@ -151,9 +151,9 @@ Public NotInheritable Class MainGUI
         End If
         Select Case command
             Case Nothing
-                Return SendMessage(MessageType.Normal)
+                Return SendMessage(0)
             Case "me"
-                Return SendMessage(MessageType.Reflexive)
+                Return SendMessage(MessageFlags.MeIs)
             Case "ping"
                 If Input.Text.Length > 6 Then
                     Dim username As String = Input.Text.Substring(6).TrimEnd()
@@ -175,18 +175,18 @@ Public NotInheritable Class MainGUI
 
     Public Delegate Sub MessageLoadingSub(msg As Message)
 
-    Friend Function SendMessage(messageType As MessageType) As Boolean
+    Friend Function SendMessage(messageType As MessageFlags) As Boolean
         Dim msg As New Message()
         Dim attachedFiles As New List(Of String)
         msg.Sender = My.Settings.Username
-        msg.Type = messageType
+        msg.Flags = messageType
         msg.Time = Date.UtcNow.ToBinary()
-        Select Case messageType
-            Case MessageType.Normal, MessageType.FolmesDeclaration
-                msg.Content = HtmlConverter.HtmlizeInputAndGetFiles(Input.Text, attachedFiles)
-            Case MessageType.Reflexive
-                msg.Content = HtmlConverter.HtmlizeInputAndGetFiles(My.Settings.Username & Input.Text.Substring(3), attachedFiles)
-        End Select
+
+        If (messageType And MessageFlags.MeIs) = 0 Then
+            msg.Content = HtmlConverter.HtmlizeInputAndGetFiles(Input.Text, attachedFiles)
+        Else
+            msg.Content = HtmlConverter.HtmlizeInputAndGetFiles(My.Settings.Username & Input.Text.Substring(3), attachedFiles)
+        End If
 
         sfci.SendMessage(Channels.Current, msg)
         For Each af As String In attachedFiles
@@ -285,7 +285,7 @@ Public NotInheritable Class MainGUI
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        ircci.SendMessage("Ivan_", New Message With {.Content = Input.Text, .Sender = My.Settings.Username, .Time = Date.UtcNow.ToBinary})
+        ircci.SendMessage("Ivan__", New Message With {.Content = Input.Text, .Sender = My.Settings.Username, .Time = Date.UtcNow.ToBinary})
     End Sub
 
 #End Region

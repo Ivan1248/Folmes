@@ -116,6 +116,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommunicationInterfaces\IRCCI\FolmesIrcMesage.vb" />
     <Compile Include="CommunicationInterfaces\IRCCI\IRCCI.vb" />
     <Compile Include="CommunicationInterfaces\IRCCI\IrcClient.vb" />
     <Compile Include="CommunicationInterfaces\IRCCI\ThreadSafeQueue.vb" />

@@ -205,7 +205,7 @@ Namespace GUI.Controls
             Dim m As New Message
             m.Time = Date.UtcNow.ToBinary()
             m.Content = declaration
-            m.Type = MessageType.FolmesDeclaration
+            m.Flags = MessageFlags.FolmesSystemMessage
             AddMessage(m)
         End Sub
 
@@ -230,26 +230,25 @@ Namespace GUI.Controls
                 End If
             End With
             messageElement.SetAttribute("className", "message")
-            Select Case message.Type
-                Case MessageType.Normal, MessageType.Highlighted
-                    If message.Type = MessageType.Highlighted Then messageElement.SetAttribute("className", "hl message")
-                    With messageElement.AppendChild(Document.CreateElement("SPAN"))
-                        .SetAttribute("className", "name")
-                        Dim user As User = Users.GetUser(message.Sender)
-                        If user IsNot Nothing Then
-                            .Style = "color:" & user.Color
-                        End If
-                        .InnerText = message.Sender
-                    End With
-                Case MessageType.FolmesDeclaration
-                    With messageElement.AppendChild(Document.CreateElement("SPAN"))
-                        .SetAttribute("className", "name")
-                        .InnerText = "Folmes"
-                    End With
-            End Select
+            If (message.Flags And MessageFlags.FolmesSystemMessage) = 0 Then
+                If (message.Flags And MessageFlags.Highlighted) > 0 Then messageElement.SetAttribute("className", "hl message")
+                With messageElement.AppendChild(Document.CreateElement("SPAN"))
+                    .SetAttribute("className", "name")
+                    Dim user As User = Users.GetUser(message.Sender)
+                    If user IsNot Nothing Then
+                        .Style = "color:" & user.Color
+                    End If
+                    .InnerText = message.Sender
+                End With
+            Else
+                With messageElement.AppendChild(Document.CreateElement("SPAN"))
+                    .SetAttribute("className", "name")
+                    .InnerText = "Folmes"
+                End With
+            End If
             With messageElement.AppendChild(Document.CreateElement("SPAN"))
                 .SetAttribute("className", "content")
-                .InnerHtml = If(message.Type = MessageType.Reflexive, "*", String.Empty) & message.Content
+                .InnerHtml = If((message.Flags And MessageFlags.MeIs) > 0, "*", String.Empty) & message.Content
             End With
             Return messageElement
         End Function

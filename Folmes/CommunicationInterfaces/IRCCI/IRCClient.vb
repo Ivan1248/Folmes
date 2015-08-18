@@ -1,13 +1,12 @@
 ﻿Imports System.IO
 Imports System.Net.Sockets
-Imports System.Runtime.Remoting.Messaging
 Imports System.Threading
 
 Public Class IrcClient
-    Dim inputQueue As New ThreadSafeQueue(Of String)
-    ReadOnly outputQueue As New ThreadSafeQueue(Of String)
+    Dim sendingQueue As New ThreadSafeQueue(Of String)
 
-    Public Event MessageReceived()
+    Public Event Connected(nickName As String)
+    Public Event MessageReceived(message As Message)
 
     Dim server As String = "irc.freenode.net"
     Dim port As Integer = 6667
@@ -20,9 +19,12 @@ Public Class IrcClient
     Dim channel As String = "#Folmes"
     Dim username As String = "Ivan"
 
+    Dim thr As Thread
+
     Public Sub Run()
-        Dim t As New Thread(New ThreadStart(Sub() RunLoop()))
-        t.Start()
+        thr = New Thread(New ThreadStart(Sub() RunLoop()))
+        thr.IsBackground = True
+        thr.Start()
     End Sub
 
     Private Sub RunLoop()
@@ -67,12 +69,14 @@ conn:   sock = New TcpClient
             output.WriteLine("JOIN " & channel)
             output.Flush()
 
+            RaiseEvent Connected(username)
+
             ' Process each line received from the server
             While True
                 ' While no data is received, wait and send queued data if there is any
                 While Not stream.DataAvailable
-                    While outputQueue.Count > 0
-                        output.WriteLine(outputQueue.Dequeue)
+                    While sendingQueue.Count > 0
+                        output.WriteLine(sendingQueue.Dequeue)
                         output.Flush()
                     End While
                     Thread.Sleep(20)
@@ -100,8 +104,10 @@ conn:   sock = New TcpClient
                 '    output.Flush()
                 'End If
 
-                Dim m As Message = FolmesIrcMesage.GetMessage(buf)
-                RaiseEvent MessageReceived(m)
+                Dim m As Message = IrcMesage.GetMessageFromCommand(buf)
+                If m IsNot Nothing Then
+                    RaiseEvent MessageReceived(m)
+                End If
 
             End While
         End Using
@@ -114,7 +120,12 @@ conn:   sock = New TcpClient
     End Sub
 
     Public Sub SendCommand(command As String)
-        outputQueue.Enqueue(command)
+        If command Is Nothing Then Exit Sub
+        sendingQueue.Enqueue(command)
+    End Sub
+    Public Sub Close(command As String)
+        If command Is Nothing Then Exit Sub
+        sendingQueue.Enqueue(command)
     End Sub
 
 End Class

@@ -125,6 +125,9 @@
     <Compile Include="CommunicationInterfaces\SharedFolderCI\FSWatchers.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\SharedFolderCI.vb" />
     <Compile Include="CommunicationInterfaces\ICommunicationInterface.vb" />
+    <Compile Include="Datatypes\Message.vb" />
+    <Compile Include="Datatypes\MessageQueue.vb" />
+    <Compile Include="Datatypes\User.vb" />
     <Compile Include="GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -132,7 +135,6 @@
     <Compile Include="Modules\UserFile.vb" />
     <Compile Include="TextProcessing\InputParser.vb" />
     <Compile Include="Modules\NewMessageQueues.vb" />
-    <Compile Include="Types\Message.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -201,8 +203,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Types\MessageQueue.vb" />
-    <Compile Include="Types\User.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\AboutBox.resx">

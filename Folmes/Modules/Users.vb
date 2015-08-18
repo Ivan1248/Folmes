@@ -17,9 +17,14 @@ Public MustInherit Class Users
         If MyUser Is Nothing Then MyUser = Create(My.Settings.Username)
     End Sub
 
-    Public Shared Function GetUser(name As String) As User
+    Public Shared Function GetByName(name As String) As User
         If name = My.Settings.Username Then Return MyUser
         Return Others.Find(Function(u) u.Name = name)
+    End Function
+
+    Public Shared Function GetByIrcNick(nick As String) As User
+        If nick = MyUser.IrcNick Then Return MyUser
+        Return Others.Find(Function(u) u.IrcNick = nick)
     End Function
 
     Public Shared Sub AddNew(name As String)

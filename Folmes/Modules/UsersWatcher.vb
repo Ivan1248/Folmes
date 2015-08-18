@@ -26,7 +26,7 @@ Public MustInherit Class UsersWatcher
         If name = My.Settings.Username Then
             Exit Sub
         End If
-        Dim user As User = Users.GetUser(name)
+        Dim user As User = Users.GetByName(name)
         If user Is Nothing Then
             Users.AddNew(name)
             Notify(NotificationType.Joined, name)
@@ -39,7 +39,7 @@ Public MustInherit Class UsersWatcher
                         Notify(If(Not PrevStatus, NotificationType.LoggedIn, NotificationType.LoggedOut), name)
                     End If
                 Case UserFile.Extension.UserInfo
-                    user.RefreshSettings()
+                    user.RefreshInfo()
             End Select
         End If
     End Sub

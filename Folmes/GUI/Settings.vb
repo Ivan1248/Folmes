@@ -118,7 +118,7 @@ Public Class Settings
         With My.Settings
             'General
             Users.MyUser.Color = ColorTranslator.ToHtml(Username.ForeColor)
-            Users.MyUser.SaveSettings()
+            Users.MyUser.SaveInfo()
             .MinimizeToTray = MinimizeToNotificationArea.Checked
             .StartMinimized = StartMinimized.Checked
             RunOnStartup(LaunchOnStartup.Checked)
@@ -154,7 +154,7 @@ Public Class Settings
 
     Private Sub ResetButton_Click(sender As Object, e As EventArgs) Handles ResetButton.Click
         My.Settings.Reset()
-        Users.MyUser.SetAndSaveStatus(UserStatus.Offline)
+        Users.MyUser.SetAndSaveStatus(UserFlags.Offline)
         RunOnStartup(False)
         Application.Exit()
     End Sub

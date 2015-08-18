@@ -33,11 +33,8 @@ Partial Public Class SharedFolderCI
         End If
 
         Dim message As Message = MessageFile.LoadMessage(e.FullPath)
-        If recipientChannel = Channels.Common Then
-            RaiseEvent NewCommonMessage(message)
-        Else
-            RaiseEvent NewPrivateMessage(message)
-        End If
+
+        RaiseEvent NewMessage(message)
     End Sub
 
     Private Sub PingPongWatcher_Created(senderObject As Object, e As FileSystemEventArgs) Handles PingPongWatcher.Changed

@@ -10,8 +10,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
     Private ChannelNewMessagesStarts As New List(Of ChannelNewMessagesStart)
 
 
-    Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
-    Public Event NewPrivateMessage(message As Message) Implements ICommunicationInterface.NewPrivateMessage
+    Public Event NewMessage(message As Message) Implements ICommunicationInterface.NewMessage
     Public Event PongReceived(rtt_in_ms As Long) Implements ICommunicationInterface.PongReceived
     Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
     Public Event PingError(message As String) Implements ICommunicationInterface.PingError

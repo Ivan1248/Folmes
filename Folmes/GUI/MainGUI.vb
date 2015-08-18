@@ -37,7 +37,7 @@ Public NotInheritable Class MainGUI
 
             'Učitavanje datoteka i poruka
             Users.Initialize()
-            Users.MyUser.SetAndSaveStatus(UserStatus.Online)
+            Users.MyUser.SetAndSaveStatus(UserFlags.Online_Folder)
             With Output
                 Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
                         Sub()
@@ -60,20 +60,25 @@ Public NotInheritable Class MainGUI
         End Try
     End Sub
 
-#Region "SharedFolderCI"
+#Region "Communication interfaces"
 
-    Sub sfci_NewCommonMessage(message As Message) Handles sfci.NewCommonMessage
-        NewMessageQueues.AddCommon(message)
-        Notify(NotificationType.PublicMessage, Nothing)
-    End Sub
-
-    Sub sfci_NewPrivateMessage(message As Message) Handles sfci.NewPrivateMessage
-        NewMessageQueues.AddPrivate(message.Sender, message)
-        Notify(NotificationType.PrivateMessage, message.Sender)
+    Sub NewMessage(message As Message) Handles sfci.NewMessage, ircci.NewMessage
+        If (message.Flags And MessageFlags.Privat) = 0 Then
+            NewMessageQueues.AddCommon(message)
+            Notify(NotificationType.PublicMessage, Nothing)
+        Else
+            NewMessageQueues.AddPrivate(message.Sender, message)
+            Notify(NotificationType.PrivateMessage, message.Sender)
+        End If
     End Sub
 
     Sub sfci_PongReceived(rtt_in_ms As Long) Handles sfci.PongReceived
         Output.AddMessage("Ping-pong: File_RTT = " & rtt_in_ms & "ms")
+    End Sub
+
+    Sub ircci_Connected(ircNick As String) Handles ircci.Conected
+        Users.MyUser.IrcNick = ircNick
+        Users.MyUser.SaveInfo()
     End Sub
 
 #End Region
@@ -119,7 +124,7 @@ Public NotInheritable Class MainGUI
     Private Shared Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Try
             If My.Settings.Username <> Nothing Then
-                Users.MyUser.SetAndSaveStatus(UserStatus.Offline)
+                Users.MyUser.SetAndSaveStatus(UserFlags.Offline)
                 Channels.SetLastRead()
             End If
         Catch ex As Exception
@@ -189,6 +194,8 @@ Public NotInheritable Class MainGUI
         End If
 
         sfci.SendMessage(Channels.Current, msg)
+        ircci.SendMessage(Channels.Current, msg)
+
         For Each af As String In attachedFiles
             Files.SendFile(af)
         Next

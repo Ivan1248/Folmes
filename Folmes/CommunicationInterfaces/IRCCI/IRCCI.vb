@@ -1,15 +1,16 @@
-﻿Imports System.Text
-
+﻿
 Public Class IRCCI : Implements ICommunicationInterface
 
     Dim WithEvents _client As IrcClient
     Dim _synchronizingObject As Form
 
-    Public Event NewCommonMessage(message As Message) Implements ICommunicationInterface.NewCommonMessage
-    Public Event NewPrivateMessage(message As Message) Implements ICommunicationInterface.NewPrivateMessage
+    Public Event NewMessage(message As Message) Implements ICommunicationInterface.NewMessage
     Public Event PongReceived(rtt_in_ms As Long) Implements ICommunicationInterface.PongReceived
     Public Event PingError(message As String) Implements ICommunicationInterface.PingError
     Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
+
+    Public Event Conected(IrcNick As String)
+
 
     Public Sub Start(SynchronizingObject As Form) Implements ICommunicationInterface.Start
         _client = New IrcClient()
@@ -22,19 +23,23 @@ Public Class IRCCI : Implements ICommunicationInterface
     End Sub
 
     Public Sub SendMessage(channel As String, message As Message) Implements ICommunicationInterface.SendMessage
-        _client.SendCommand(FolmesIrcMesage.GetCommand(channel, message))
+        _client.SendCommand(IrcMesage.GetCommand(channel, message))
     End Sub
 
     Public Sub Ping(username As String) Implements ICommunicationInterface.Ping
         Throw New NotImplementedException()
     End Sub
 
-    Public Sub InvokeOnSynchronizingObject(a As Action)
-        If _synchronizingObject.InvokeRequired() Then
-            _synchronizingObject.BeginInvoke(a)
-        Else
-            a()
-        End If
+    Private Sub MessageRecieved(message As Message) Handles _client.MessageReceived
+        _synchronizingObject.BeginInvoke(Sub() RaiseEvent NewMessage(message))
+    End Sub
+
+    Private Sub RaiseMessageRecievedEvent(message As Message) Handles _client.MessageReceived
+        _synchronizingObject.BeginInvoke(Sub() RaiseEvent NewMessage(message))
+    End Sub
+
+    Private Sub RaiseConnectedEvent(nick As String) Handles _client.Connected
+        _synchronizingObject.BeginInvoke(Sub() RaiseEvent Conected(nick))
     End Sub
 
 End Class

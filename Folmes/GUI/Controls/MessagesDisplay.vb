@@ -97,45 +97,108 @@ Namespace GUI.Controls
             Dim _oldest As HtmlMessageListNode = Nothing
             Public Count As Integer = 0
 
-            Sub InsertElement(messageHtmlElement As HtmlElement, message As Message, container As HtmlElement)
-                Dim node As New HtmlMessageListNode(messageHtmlElement, message)
-                Count += 1
+            Sub InsertElement(message As Message, container As HtmlElement)
+                Dim preceeding As HtmlMessageListNode = Nothing
+                Dim succeeding As HtmlMessageListNode = Nothing
+                Dim position As HtmlMessagePosition
+
                 If _oldest Is Nothing Then ' nema ničega
-                    _newest = node
-                    _oldest = node
-                    container.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterBegin, messageHtmlElement)
+                    position = HtmlMessagePosition.Only
                 ElseIf message.Time >= _newest.Message.Time Then ' novija od najnovije
                     If message = _newest.Message Then
                         Exit Sub
                     End If
-                    _newest.Succeeding = node
-                        node.Preceeding = _newest
-                        _newest = node
-                        container.InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, messageHtmlElement)
-                    ElseIf message.Time < _oldest.Message.Time Then ' starija od najstarije
-                        node.Succeeding = _oldest
-                        _oldest.Preceeding = node
-                        _oldest = node
-                        container.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterBegin, messageHtmlElement)
-                    Else
-                        Dim current, preceeding As HtmlMessageListNode
-                    current = _newest
-                    preceeding = current.Preceeding
+                    preceeding = _newest
+                    position = HtmlMessagePosition.Newest
+                ElseIf message.Time < _oldest.Message.Time Then ' starija od najstarije
+                    succeeding = _oldest
+                    position = HtmlMessagePosition.Oldest
+                Else
+                    succeeding = _newest
+                    preceeding = succeeding.Preceeding
                     While message.Time < preceeding.Message.Time
-                        current = preceeding
+                        succeeding = preceeding
                         preceeding = preceeding.Preceeding
                     End While
                     'Now preceeding <= node < current
                     If message = preceeding.Message Then
                         Exit Sub
                     End If
-                    node.Preceeding = preceeding
-                    node.Succeeding = current
-                    current.Preceeding = node
-                    preceeding.Succeeding = node
-                    preceeding.MessageHtmlElement.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterEnd, messageHtmlElement)
+                    position = HtmlMessagePosition.In_between
                 End If
+
+                Dim node As New HtmlMessageListNode()
+                node.MessageHtmlElement = CreateHtmlMessage(message, container.Document)
+                node.Message = message
+
+                Select Case position
+                    Case HtmlMessagePosition.Newest
+                        _newest = node
+                        node.Preceeding = preceeding
+                        preceeding.Succeeding = node
+                        container.InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, node.MessageHtmlElement)
+                    Case HtmlMessagePosition.Oldest
+                        _oldest = node
+                        node.Succeeding = succeeding
+                        succeeding.Preceeding = node
+                        container.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterBegin, node.MessageHtmlElement)
+                    Case HtmlMessagePosition.In_between
+                        node.Preceeding = preceeding
+                        node.Succeeding = succeeding
+                        preceeding.Succeeding = node
+                        succeeding.Preceeding = node
+                        preceeding.MessageHtmlElement.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterEnd, node.MessageHtmlElement)
+                    Case HtmlMessagePosition.Only
+                        _newest = node
+                        _oldest = node
+                        container.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterBegin, node.MessageHtmlElement)
+                End Select
+
+                Count += 1
             End Sub
+
+            Enum HtmlMessagePosition
+                Oldest
+                Newest
+                Only
+                In_between
+            End Enum
+
+            Private Function CreateHtmlMessage(message As Message, document As HtmlDocument) As HtmlElement
+                Dim messageElement As HtmlElement = document.CreateElement("DIV")
+                With messageElement.AppendChild(document.CreateElement("DIV"))
+                    .SetAttribute("className", "time")
+
+                    Dim time As Date = Date.FromBinary(message.Time).ToLocalTime
+                    If (Date.Now - time).TotalHours > 24 Then
+                        .InnerText = time.ToString("dd.MM.yyyy. HH:mm")
+                    Else
+                        .InnerText = time.ToString("HH:mm")
+                    End If
+                End With
+                messageElement.SetAttribute("className", "message")
+                If (message.Flags And MessageFlags.FolmesSystemMessage) = 0 Then
+                    If (message.Flags And MessageFlags.Highlighted) > 0 Then messageElement.SetAttribute("className", "hl message")
+                    With messageElement.AppendChild(document.CreateElement("SPAN"))
+                        .SetAttribute("className", "name")
+                        Dim user As User = Users.GetByName(message.Sender)
+                        If user IsNot Nothing Then
+                            .Style = "color:" & user.Color
+                        End If
+                        .InnerText = message.Sender
+                    End With
+                Else
+                    With messageElement.AppendChild(document.CreateElement("SPAN"))
+                        .SetAttribute("className", "name")
+                        .InnerText = "Folmes"
+                    End With
+                End If
+                With messageElement.AppendChild(document.CreateElement("SPAN"))
+                    .SetAttribute("className", "content")
+                    .InnerHtml = If((message.Flags And MessageFlags.MeIs) > 0, "*", String.Empty) & message.Content
+                End With
+                Return messageElement
+            End Function
 
             Sub RemoveOldest()
                 Count -= 1
@@ -159,16 +222,29 @@ Namespace GUI.Controls
 
             Private Class HtmlMessageListNode
                 Public MessageHtmlElement As HtmlElement
-                Public ReadOnly Message As Message
+                Public Message As Message
                 Public Preceeding As HtmlMessageListNode = Nothing
                 Public Succeeding As HtmlMessageListNode = Nothing
-
-                Sub New(messageHtmlElement As HtmlElement, message As Message)
-                    Me.MessageHtmlElement = messageHtmlElement
-                    Me.Message = message
-                End Sub
             End Class
         End Class
+
+#End Region
+
+#Region "Message-adding"
+        Public Sub AddMessage(declaration As String)
+            Dim m As New Message
+            m.Time = Date.UtcNow.ToBinary()
+            m.Content = declaration
+            m.Flags = MessageFlags.FolmesSystemMessage
+            AddMessage(m)
+        End Sub
+
+        Public Sub AddMessage(message As Message)
+            If _htmlMessages.Count >= My.Settings.NofMsgs Then
+                RemoveOldestHtmlMessage()
+            End If
+            _htmlMessages.InsertElement(message, _msgContainer)
+        End Sub
 
 #End Region
 
@@ -207,58 +283,5 @@ Namespace GUI.Controls
         End Function
 #End Region
 
-#Region "Messages adding"
-        Public Sub AddMessage(declaration As String)
-            Dim m As New Message
-            m.Time = Date.UtcNow.ToBinary()
-            m.Content = declaration
-            m.Flags = MessageFlags.FolmesSystemMessage
-            AddMessage(m)
-        End Sub
-
-        Public Sub AddMessage(message As Message)
-            If _htmlMessages.Count >= My.Settings.NofMsgs Then
-                RemoveOldestHtmlMessage()
-            End If
-            Dim messageElement As HtmlElement = CreateHtmlMessage(message)
-            _htmlMessages.InsertElement(messageElement, message, _msgContainer)
-        End Sub
-
-        Private Function CreateHtmlMessage(message As Message) As HtmlElement
-            Dim messageElement As HtmlElement = Document.CreateElement("DIV")
-            With messageElement.AppendChild(Document.CreateElement("DIV"))
-                .SetAttribute("className", "time")
-
-                Dim time As Date = Date.FromBinary(message.Time).ToLocalTime
-                If (Date.Now - time).TotalHours > 24 Then
-                    .InnerText = time.ToString("dd.MM.yyyy. HH:mm")
-                Else
-                    .InnerText = time.ToString("HH:mm")
-                End If
-            End With
-            messageElement.SetAttribute("className", "message")
-            If (message.Flags And MessageFlags.FolmesSystemMessage) = 0 Then
-                If (message.Flags And MessageFlags.Highlighted) > 0 Then messageElement.SetAttribute("className", "hl message")
-                With messageElement.AppendChild(Document.CreateElement("SPAN"))
-                    .SetAttribute("className", "name")
-                    Dim user As User = Users.GetByName(message.Sender)
-                    If user IsNot Nothing Then
-                        .Style = "color:" & user.Color
-                    End If
-                    .InnerText = message.Sender
-                End With
-            Else
-                With messageElement.AppendChild(Document.CreateElement("SPAN"))
-                    .SetAttribute("className", "name")
-                    .InnerText = "Folmes"
-                End With
-            End If
-            With messageElement.AppendChild(Document.CreateElement("SPAN"))
-                .SetAttribute("className", "content")
-                .InnerHtml = If((message.Flags And MessageFlags.MeIs) > 0, "*", String.Empty) & message.Content
-            End With
-            Return messageElement
-        End Function
-#End Region
     End Class
 End Namespace

@@ -1,2 +1,2 @@
 # Folmes
-A program for messaging using shared folders (with IRC support in the future, hopefully).
+A messaging program that uses shared folders and the IRC protocol.

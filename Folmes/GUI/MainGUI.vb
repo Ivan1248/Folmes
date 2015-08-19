@@ -10,7 +10,6 @@ Public NotInheritable Class MainGUI
     Dim WithEvents sfci As New SharedFolderCI
     Dim WithEvents ircci As New IRCCI
 
-
     '//////// Učitavanje i zatvaranje, prijava i odjava /////////////////////////////////////
 
     Private Sub Box_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -22,10 +21,13 @@ Public NotInheritable Class MainGUI
 
             'Stvaranje direktorija i učitavanje FSW
             Dirs.AssureMainDirectories()
-            sfci.Start(Me)
-            ircci.Start(Me)
             UsersWatcher.Start()
             AddHandler UsersWatcher.Deleted, AddressOf UsersWatcher_Deleted
+
+            'Pokretenje CI
+            AddCIHandlers()
+            sfci.Start(Me)
+            ircci.Start(Me)
 
             'Prvo pokretenje? i učitavanje kanala u izbornik
             If My.Settings.Username = Nothing AndAlso FirstRun.ShowDialog() <> DialogResult.OK Then
@@ -61,8 +63,14 @@ Public NotInheritable Class MainGUI
     End Sub
 
 #Region "Communication interfaces"
+    Sub AddCIHandlers()
+        AddHandler sfci.NewMessage, AddressOf NewMessage
+        AddHandler ircci.NewMessage, AddressOf NewMessage
+        AddHandler sfci.PongReceived, AddressOf sfci_PongReceived
+        AddHandler ircci.Connected, AddressOf ircci_Connected
+    End Sub
 
-    Sub NewMessage(message As FolMessage) Handles sfci.NewMessage, ircci.NewMessage
+    Sub NewMessage(message As FolMessage)
         If (message.Flags And FolMessageFlags.Privat) = 0 Then
             NewMessageQueues.AddCommon(message)
             Notify(NotificationType.PublicMessage, Nothing)
@@ -72,11 +80,11 @@ Public NotInheritable Class MainGUI
         End If
     End Sub
 
-    Sub sfci_PongReceived(rtt_in_ms As Long) Handles sfci.PongReceived
+    Sub sfci_PongReceived(rtt_in_ms As Long)
         Output.AddMessage("Ping-pong: File_RTT = " & rtt_in_ms & "ms")
     End Sub
 
-    Sub ircci_Connected(ircNick As String) Handles ircci.Conected
+    Sub ircci_Connected(ircNick As String) Handles ircci.Connected
         Users.MyUser.IrcNick = ircNick
         Users.MyUser.SaveInfo()
     End Sub

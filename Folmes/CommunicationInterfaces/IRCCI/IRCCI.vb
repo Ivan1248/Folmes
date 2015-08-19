@@ -9,7 +9,7 @@ Public Class IRCCI : Implements ICommunicationInterface
     Public Event PingError(message As String) Implements ICommunicationInterface.PingError
     Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
 
-    Public Event Conected(IrcNick As String)
+    Public Event Connected(IrcNick As String)
 
 
     Public Sub Start(SynchronizingObject As Form) Implements ICommunicationInterface.Start
@@ -39,7 +39,7 @@ Public Class IRCCI : Implements ICommunicationInterface
     End Sub
 
     Private Sub RaiseConnectedEvent(nick As String) Handles _client.Connected
-        _synchronizingObject.BeginInvoke(Sub() RaiseEvent Conected(nick))
+        _synchronizingObject.BeginInvoke(Sub() RaiseEvent Connected(nick))
     End Sub
 
     Public Sub SendMessage(recipientNick As String, message As String)

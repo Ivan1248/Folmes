@@ -1,7 +1,7 @@
 ﻿Imports System.Text
 
 Public MustInherit Class IrcMesage
-    Public Shared Function GetCommand(channel As String, message As Message) As String
+    Public Shared Function GetCommand(channel As String, message As FolMessage) As String
         Dim sb As New StringBuilder()
         Dim u As User
 
@@ -27,11 +27,11 @@ Public MustInherit Class IrcMesage
         sb.Append(" :")
         sb.Append(Converter.Int64ToBase32String(message.Time))
         sb.Append(" ").Append(CInt(message.Flags).ToString())
-        sb.Append(" ").Append(message.Content.Replace(vbNewLine, "[newline]"))
+        sb.Append(" ").Append(message.HtmlContent)
         Return sb.ToString()
     End Function
 
-    Public Shared Function GetMessageFromCommand(ircCommand As String) As Message
+    Public Shared Function GetMessageFromCommand(ircCommand As String) As FolMessage
         Dim sp As Integer() = {0, 0}
         sp(0) = ircCommand.IndexOf(" "c)
         sp(1) = ircCommand.IndexOf(" "c, sp(0) + 2)
@@ -40,23 +40,23 @@ Public MustInherit Class IrcMesage
             Return Nothing
         End If
 
-        GetMessageFromCommand = New Message()
+        GetMessageFromCommand = New FolMessage()
 
         Dim senderNick As String = ircCommand.Substring(1, ircCommand.IndexOf("!"c, 2) - 1)
         Dim sender As User = Users.GetByIrcNick(senderNick)
-        GetMessageFromCommand.Sender = If(sender Is Nothing, senderNick, sender.Name)
+        GetMessageFromCommand.Sender = If(sender Is Nothing, senderNick & "[IRC]", sender.Name)
 
         Dim timei As Integer = ircCommand.IndexOf(":"c, sp(1) + 2) + 1
         Dim flagsi As Integer = timei + 13 + 1
         Try
             Dim contenti As Integer = ircCommand.IndexOf(" "c, flagsi + 1) + 1
             GetMessageFromCommand.Time = Converter.Base32StringToInt64(ircCommand.Substring(timei, 13))
-            GetMessageFromCommand.Flags = CType(Integer.Parse(ircCommand.Substring(flagsi, contenti - flagsi - 1)), MessageFlags)
-            GetMessageFromCommand.Content = ircCommand.Substring(contenti)
+            GetMessageFromCommand.Flags = CType(Integer.Parse(ircCommand.Substring(flagsi, contenti - flagsi - 1)), FolMessageFlags)
+            GetMessageFromCommand.HtmlContent = ircCommand.Substring(contenti)
         Catch
             GetMessageFromCommand.Time = Date.UtcNow.ToBinary
-            GetMessageFromCommand.Flags = MessageFlags.NonFolmesIrc
-            GetMessageFromCommand.Content = ircCommand.Substring(timei)
+            GetMessageFromCommand.Flags = FolMessageFlags.NonFolmesIrc
+            GetMessageFromCommand.HtmlContent = ircCommand.Substring(timei)
         End Try
     End Function
 End Class

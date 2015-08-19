@@ -4,7 +4,7 @@ Public MustInherit Class NewMessageQueues
     Private Shared CommonChannel As New MessageQueue(My.Settings.NofMsgs)
     Private Shared PrivateChannel As New List(Of MessageQueue)
 
-    Public Shared Sub AddPrivate(channel As String, message As Message)
+    Public Shared Sub AddPrivate(channel As String, message As FolMessage)
         If Channels.Current = channel Then
             MainGUI.Output.AddMessage(message)
             Exit Sub
@@ -23,7 +23,7 @@ Public MustInherit Class NewMessageQueues
         mq1.Enqueue(message)
     End Sub
 
-    Public Shared Sub AddCommon(message As Message)
+    Public Shared Sub AddCommon(message As FolMessage)
         If Channels.Current = Channels.Common Then
             MainGUI.Output.AddMessage(message)
         Else

@@ -9,8 +9,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
 
     Private ChannelNewMessagesStarts As New List(Of ChannelNewMessagesStart)
 
-
-    Public Event NewMessage(message As Message) Implements ICommunicationInterface.NewMessage
+    Public Event NewMessage(message As FolMessage) Implements ICommunicationInterface.NewMessage
     Public Event PongReceived(rtt_in_ms As Long) Implements ICommunicationInterface.PongReceived
     Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
     Public Event PingError(message As String) Implements ICommunicationInterface.PingError
@@ -20,7 +19,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
         CleanPing()
     End Sub
 
-    Public Sub SendMessage(channel As String, message As Message) Implements ICommunicationInterface.SendMessage
+    Public Sub SendMessage(channel As String, message As FolMessage) Implements ICommunicationInterface.SendMessage
         Dim dirPath As String
         If channel = Channels.Common Then
             dirPath = Path.Combine(Dirs.CommonChannel, message.Sender)
@@ -35,7 +34,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
         _Ping(username)
     End Sub
 
-    Public Sub GetOldMessages(channel As String, count As Integer, loadSubRef As ICommunicationInterface.MessageLoadingSub) Implements ICommunicationInterface.GetOldMessages
+    Public Sub LoadOldMessages(channel As String, count As Integer, loadSubRef As ICommunicationInterface.MessageLoadingSub) Implements ICommunicationInterface.LoadOldMessages
         Dim msgFilePaths As List(Of String)
         If channel = Channels.Common Then
             msgFilePaths = New List(Of String)(Directory.GetFiles(Dirs.CommonChannel,
@@ -57,7 +56,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
             End If
         Next
         For i As Integer = oldestToDisplay To msgFilePaths.Count - 1
-            Dim msg As Message = MessageFile.LoadMessage(msgFilePaths(i))
+            Dim msg As FolMessage = MessageFile.LoadMessage(msgFilePaths(i))
             If msg.Time > NewBeginningTime Then Exit For
             loadSubRef(msg)
         Next

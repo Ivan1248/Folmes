@@ -6,7 +6,7 @@ Public Class IrcClient
     Dim sendingQueue As New ThreadSafeQueue(Of String)
 
     Public Event Connected(nickName As String)
-    Public Event MessageReceived(message As Message)
+    Public Event MessageReceived(message As FolMessage)
 
     Dim server As String = "irc.freenode.net"
     Dim port As Integer = 6667
@@ -104,7 +104,7 @@ conn:   sock = New TcpClient
                 '    output.Flush()
                 'End If
 
-                Dim m As Message = IrcMesage.GetMessageFromCommand(buf)
+                Dim m As FolMessage = IrcMesage.GetMessageFromCommand(buf)
                 If m IsNot Nothing Then
                     RaiseEvent MessageReceived(m)
                 End If

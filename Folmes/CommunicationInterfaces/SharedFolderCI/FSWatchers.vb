@@ -32,7 +32,7 @@ Partial Public Class SharedFolderCI
             Exit Sub
         End If
 
-        Dim message As Message = MessageFile.LoadMessage(e.FullPath)
+        Dim message As FolMessage = MessageFile.LoadMessage(e.FullPath)
 
         RaiseEvent NewMessage(message)
     End Sub

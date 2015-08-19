@@ -97,7 +97,7 @@ Namespace GUI.Controls
             Dim _oldest As HtmlMessageListNode = Nothing
             Public Count As Integer = 0
 
-            Sub InsertElement(message As Message, container As HtmlElement)
+            Sub InsertElement(message As FolMessage, container As HtmlElement)
                 Dim preceeding As HtmlMessageListNode = Nothing
                 Dim succeeding As HtmlMessageListNode = Nothing
                 Dim position As HtmlMessagePosition
@@ -130,21 +130,19 @@ Namespace GUI.Controls
                 Dim node As New HtmlMessageListNode()
                 node.MessageHtmlElement = CreateHtmlMessage(message, container.Document)
                 node.Message = message
+                node.Preceeding = preceeding
+                node.Succeeding = succeeding
 
                 Select Case position
                     Case HtmlMessagePosition.Newest
                         _newest = node
-                        node.Preceeding = preceeding
                         preceeding.Succeeding = node
                         container.InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, node.MessageHtmlElement)
                     Case HtmlMessagePosition.Oldest
                         _oldest = node
-                        node.Succeeding = succeeding
                         succeeding.Preceeding = node
                         container.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterBegin, node.MessageHtmlElement)
                     Case HtmlMessagePosition.In_between
-                        node.Preceeding = preceeding
-                        node.Succeeding = succeeding
                         preceeding.Succeeding = node
                         succeeding.Preceeding = node
                         preceeding.MessageHtmlElement.InsertAdjacentElement(HtmlElementInsertionOrientation.AfterEnd, node.MessageHtmlElement)
@@ -157,14 +155,14 @@ Namespace GUI.Controls
                 Count += 1
             End Sub
 
-            Enum HtmlMessagePosition
+            Private Enum HtmlMessagePosition
                 Oldest
                 Newest
                 Only
                 In_between
             End Enum
 
-            Private Function CreateHtmlMessage(message As Message, document As HtmlDocument) As HtmlElement
+            Private Function CreateHtmlMessage(message As FolMessage, document As HtmlDocument) As HtmlElement
                 Dim messageElement As HtmlElement = document.CreateElement("DIV")
                 With messageElement.AppendChild(document.CreateElement("DIV"))
                     .SetAttribute("className", "time")
@@ -177,8 +175,8 @@ Namespace GUI.Controls
                     End If
                 End With
                 messageElement.SetAttribute("className", "message")
-                If (message.Flags And MessageFlags.FolmesSystemMessage) = 0 Then
-                    If (message.Flags And MessageFlags.Highlighted) > 0 Then messageElement.SetAttribute("className", "hl message")
+                If (message.Flags And FolMessageFlags.FolmesSystemMessage) = 0 Then
+                    If (message.Flags And FolMessageFlags.Highlighted) > 0 Then messageElement.SetAttribute("className", "hl message")
                     With messageElement.AppendChild(document.CreateElement("SPAN"))
                         .SetAttribute("className", "name")
                         Dim user As User = Users.GetByName(message.Sender)
@@ -195,7 +193,7 @@ Namespace GUI.Controls
                 End If
                 With messageElement.AppendChild(document.CreateElement("SPAN"))
                     .SetAttribute("className", "content")
-                    .InnerHtml = If((message.Flags And MessageFlags.MeIs) > 0, "*", String.Empty) & message.Content
+                    .InnerHtml = If((message.Flags And FolMessageFlags.MeIs) > 0, "*", String.Empty) & message.HtmlContent
                 End With
                 Return messageElement
             End Function
@@ -222,7 +220,7 @@ Namespace GUI.Controls
 
             Private Class HtmlMessageListNode
                 Public MessageHtmlElement As HtmlElement
-                Public Message As Message
+                Public Message As FolMessage
                 Public Preceeding As HtmlMessageListNode = Nothing
                 Public Succeeding As HtmlMessageListNode = Nothing
             End Class
@@ -232,14 +230,14 @@ Namespace GUI.Controls
 
 #Region "Message-adding"
         Public Sub AddMessage(declaration As String)
-            Dim m As New Message
+            Dim m As New FolMessage
             m.Time = Date.UtcNow.ToBinary()
-            m.Content = declaration
-            m.Flags = MessageFlags.FolmesSystemMessage
+            m.HtmlContent = declaration
+            m.Flags = FolMessageFlags.FolmesSystemMessage
             AddMessage(m)
         End Sub
 
-        Public Sub AddMessage(message As Message)
+        Public Sub AddMessage(message As FolMessage)
             If _htmlMessages.Count >= My.Settings.NofMsgs Then
                 RemoveOldestHtmlMessage()
             End If

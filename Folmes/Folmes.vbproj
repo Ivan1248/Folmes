@@ -131,8 +131,8 @@
     <Compile Include="GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Modules\Converter.vb" />
-    <Compile Include="Modules\UserFile.vb" />
+    <Compile Include="Functions\Converter.vb" />
+    <Compile Include="Users\UserFile.vb" />
     <Compile Include="TextProcessing\InputParser.vb" />
     <Compile Include="Modules\NewMessageQueues.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
@@ -145,14 +145,14 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPongFile.vb" />
-    <Compile Include="Modules\Users.vb" />
+    <Compile Include="Users\Users.vb" />
     <Compile Include="GUI\Style\ToolStripColorTable.vb" />
     <Compile Include="Modules\Channels.vb" />
     <Compile Include="GUI\Notifications.vb" />
     <Compile Include="CommunicationInterfaces\SharedFolderCI\Files.vb" />
     <Compile Include="Modules\Dirs.vb" />
     <Compile Include="TextProcessing\HtmlConverter.vb" />
-    <Compile Include="Modules\UsersWatcher.vb" />
+    <Compile Include="Users\UsersWatcher.vb" />
     <Compile Include="GUI\AboutBox.Designer.vb">
       <DependentUpon>AboutBox.vb</DependentUpon>
     </Compile>

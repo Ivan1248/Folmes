@@ -1,5 +1,27 @@
-﻿Namespace GUI.Controls
+﻿Imports System.Runtime.InteropServices
+
+
+Namespace GUI.Controls
+
     Public Class InputTextBox : Inherits TextBox
+
+#Region "Mousewheel scrolling"
+        Private Const WM_VSCROLL As Integer = &H115
+        Private Const SB_LINEUP As Integer = 0
+        Private Const SB_LINEDOWN As Integer = 1
+
+        <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+        Private Shared Function SendMessage(hwnd As IntPtr, wMsg As Integer, wParam As IntPtr, lParam As IntPtr) As Integer
+        End Function
+
+        Sub MouseScroll(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
+            If e.Delta > 0 Then
+                SendMessage(Me.Handle, WM_VSCROLL, CType(SB_LINEUP, IntPtr), IntPtr.Zero)
+            Else
+                SendMessage(Me.Handle, WM_VSCROLL, CType(SB_LINEDOWN, IntPtr), IntPtr.Zero)
+            End If
+        End Sub
+#End Region
 
 #Region "Tripleclick"
 

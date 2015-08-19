@@ -1,12 +1,12 @@
 ﻿Imports Folmes.GUI
 Imports Folmes.GUI.Controls
 
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class MainGUI
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -23,14 +23,13 @@ Partial Class MainGUI
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainGUI))
         Me.Button2 = New System.Windows.Forms.Button()
         Me.InputBGPanel = New System.Windows.Forms.Panel()
         Me.InputPaddingPanel = New System.Windows.Forms.Panel()
-        Me.Input = New Folmes.GUI.Controls.InputTextBox()
         Me.InputContMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CutBtn = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyBtn = New System.Windows.Forms.ToolStripMenuItem()
@@ -57,6 +56,7 @@ Partial Class MainGUI
         Me.TSChannels = New System.Windows.Forms.ToolStripDropDownButton()
         Me.PublicChannel = New System.Windows.Forms.ToolStripMenuItem()
         Me.PubPrivChSeparator = New System.Windows.Forms.ToolStripSeparator()
+        Me.Input = New Folmes.GUI.Controls.InputTextBox()
         Me.InputBGPanel.SuspendLayout()
         Me.InputPaddingPanel.SuspendLayout()
         Me.InputContMenu.SuspendLayout()
@@ -77,10 +77,10 @@ Partial Class MainGUI
         Me.Button2.ForeColor = System.Drawing.Color.DarkGray
         Me.Button2.ImageKey = "(none)"
         Me.Button2.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.Button2.Location = New System.Drawing.Point(358, 0)
+        Me.Button2.Location = New System.Drawing.Point(348, 0)
         Me.Button2.Margin = New System.Windows.Forms.Padding(0)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(16, 38)
+        Me.Button2.Size = New System.Drawing.Size(16, 53)
         Me.Button2.TabIndex = 4
         Me.Button2.Text = "*"
         Me.Button2.UseVisualStyleBackColor = True
@@ -91,10 +91,10 @@ Partial Class MainGUI
         Me.InputBGPanel.Controls.Add(Me.InputPaddingPanel)
         Me.InputBGPanel.Controls.Add(Me.Button2)
         Me.InputBGPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.InputBGPanel.Location = New System.Drawing.Point(0, 224)
+        Me.InputBGPanel.Location = New System.Drawing.Point(0, 219)
         Me.InputBGPanel.Margin = New System.Windows.Forms.Padding(4, 0, 4, 4)
         Me.InputBGPanel.Name = "InputBGPanel"
-        Me.InputBGPanel.Size = New System.Drawing.Size(374, 38)
+        Me.InputBGPanel.Size = New System.Drawing.Size(364, 53)
         Me.InputBGPanel.TabIndex = 1
         '
         'InputPaddingPanel
@@ -105,24 +105,8 @@ Partial Class MainGUI
         Me.InputPaddingPanel.Location = New System.Drawing.Point(0, 0)
         Me.InputPaddingPanel.Name = "InputPaddingPanel"
         Me.InputPaddingPanel.Padding = New System.Windows.Forms.Padding(3, 5, 0, 0)
-        Me.InputPaddingPanel.Size = New System.Drawing.Size(358, 38)
+        Me.InputPaddingPanel.Size = New System.Drawing.Size(348, 53)
         Me.InputPaddingPanel.TabIndex = 5
-        '
-        'Input
-        '
-        Me.Input.AcceptsTab = True
-        Me.Input.AllowDrop = True
-        Me.Input.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
-        Me.Input.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.Input.ContextMenuStrip = Me.InputContMenu
-        Me.Input.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Input.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel)
-        Me.Input.ForeColor = System.Drawing.Color.DarkGray
-        Me.Input.Location = New System.Drawing.Point(3, 5)
-        Me.Input.Multiline = True
-        Me.Input.Name = "Input"
-        Me.Input.Size = New System.Drawing.Size(355, 33)
-        Me.Input.TabIndex = 0
         '
         'InputContMenu
         '
@@ -229,7 +213,7 @@ Partial Class MainGUI
         Me.Output.MinimumSize = New System.Drawing.Size(20, 20)
         Me.Output.Name = "Output"
         Me.Output.ScrollBarsEnabled = False
-        Me.Output.Size = New System.Drawing.Size(374, 200)
+        Me.Output.Size = New System.Drawing.Size(364, 195)
         Me.Output.TabIndex = 12
         '
         'TS
@@ -242,7 +226,7 @@ Partial Class MainGUI
         Me.TS.Location = New System.Drawing.Point(0, 0)
         Me.TS.Name = "TS"
         Me.TS.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.TS.Size = New System.Drawing.Size(374, 24)
+        Me.TS.Size = New System.Drawing.Size(364, 24)
         Me.TS.TabIndex = 11
         '
         'TSTools
@@ -321,13 +305,29 @@ Partial Class MainGUI
         Me.PubPrivChSeparator.Name = "PubPrivChSeparator"
         Me.PubPrivChSeparator.Size = New System.Drawing.Size(122, 6)
         '
+        'Input
+        '
+        Me.Input.AcceptsTab = True
+        Me.Input.AllowDrop = True
+        Me.Input.BackColor = System.Drawing.Color.FromArgb(CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(24, Byte), Integer))
+        Me.Input.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.Input.ContextMenuStrip = Me.InputContMenu
+        Me.Input.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Input.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel)
+        Me.Input.ForeColor = System.Drawing.Color.DarkGray
+        Me.Input.Location = New System.Drawing.Point(3, 5)
+        Me.Input.Multiline = True
+        Me.Input.Name = "Input"
+        Me.Input.Size = New System.Drawing.Size(345, 48)
+        Me.Input.TabIndex = 0
+        '
         'MainGUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(374, 262)
+        Me.ClientSize = New System.Drawing.Size(364, 272)
         Me.Controls.Add(Me.Output)
         Me.Controls.Add(Me.TS)
         Me.Controls.Add(Me.InputBGPanel)

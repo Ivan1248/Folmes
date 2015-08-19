@@ -89,7 +89,7 @@ Public NotInheritable Class MainGUI
             If My.Settings.MinimizeToTray Then Me.ShowInTaskbar = False
             FlashIcon()
         End If
-        'Me.Size = My.Settings.WindowSize
+        Me.Size = My.Settings.WindowSize
         InputBGPanel.Height = My.Settings.InputHeight
     End Sub
 
@@ -172,10 +172,8 @@ Public NotInheritable Class MainGUI
                     End If
                 End If
             Case "status"
-
-            Case "irc.mynick"
                 Output.AddMessage("Your IRC nickname is: " & Users.MyUser.IrcNick & ".")
-            Case "irc.privmsg"
+            Case "ircpm"
                 If Input.Text.Length > 14 Then
                     Dim i As Integer = Input.Text.IndexOf(" ", 13)
                     If i = -1 Then Return False
@@ -225,7 +223,7 @@ Public NotInheritable Class MainGUI
 #Region "Resizing and minimizing"
 
     Private Sub Box_ResizeEnd(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
-        My.Settings.WindowSize = Me.Size '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        My.Settings.WindowSize = Me.Size
         If Me.WindowState <> FormWindowState.Minimized Then
             InputPaddingPanel_MouseUp(Nothing, Nothing)
         End If
@@ -245,7 +243,7 @@ Public NotInheritable Class MainGUI
         Dim modul As Integer = 8 - InputBGPanel.Height Mod 15
         InputBGPanel.Height += modul
         Cursor.Position = New Point(Cursor.Position.X, Cursor.Position.Y - modul)
-        My.Settings.InputHeight = InputBGPanel.Height '!!!!!!!!!!!!!!!!!!!!!!
+        My.Settings.InputHeight = InputBGPanel.Height
     End Sub
 
     Private Sub InputPaddingPanel_MouseMove(sender As Object, e As MouseEventArgs) Handles InputPaddingPanel.MouseMove

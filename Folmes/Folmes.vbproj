@@ -132,6 +132,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Functions\Converter.vb" />
+    <Compile Include="Modules\Time.vb" />
     <Compile Include="Users\UserFile.vb" />
     <Compile Include="TextProcessing\InputParser.vb" />
     <Compile Include="Modules\NewMessageQueues.vb" />

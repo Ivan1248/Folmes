@@ -315,7 +315,8 @@ Public NotInheritable Class MainGUI
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        ircci.SendMessage("Ivan__", New FolMessage With {.HtmlContent = Input.Text, .Sender = My.Settings.Username, .Time = Date.UtcNow.ToBinary})
+        'ircci.SendMessage("Ivan__", New FolMessage With {.HtmlContent = Input.Text, .Sender = My.Settings.Username, .Time = Date.UtcNow.ToBinary})
+        Time.GetNetworkTime()
     End Sub
 
 #End Region

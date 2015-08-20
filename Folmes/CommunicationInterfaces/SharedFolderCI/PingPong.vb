@@ -2,6 +2,11 @@
 
 Partial Public Class SharedFolderCI
 
+    Sub New()
+        Dirs.Create(Dirs.PingPong)
+        Dirs.Create(Path.Combine(Dirs.PingPong, My.Settings.Username))
+    End Sub
+
     Private WithEvents _timer As New Timer() With {.Interval = 10000}
 
     Private Class PingInProgress

@@ -53,7 +53,7 @@ Public MustInherit Class IrcMesage
             GetMessageFromCommand.Flags = CType(Integer.Parse(ircCommand.Substring(flagsi, contenti - flagsi - 1)), FolMessageFlags)
             GetMessageFromCommand.HtmlContent = ircCommand.Substring(contenti)
         Catch
-            GetMessageFromCommand.Time = Date.UtcNow.ToBinary()
+            GetMessageFromCommand.Time = Time.UtcNow.ToBinary()
             GetMessageFromCommand.Flags = FolMessageFlags.NonFolmesIrc
             GetMessageFromCommand.HtmlContent = ircCommand.Substring(timei)
         End Try

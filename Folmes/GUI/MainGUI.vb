@@ -12,32 +12,37 @@ Public NotInheritable Class MainGUI
 
     '//////// Učitavanje i zatvaranje, prijava i odjava /////////////////////////////////////
 
+    Sub New()
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Window settings
+        LoadWindowDimensionsSettings()
+        Me.Icon = New Icon(Assembly.GetExecutingAssembly.GetManifestResourceStream("Folmes.DBM.ico"))
+        TrayIcon.Icon = Me.Icon        'druge ikone
+
+        ' First run? and window text
+        If My.Settings.Username = Nothing AndAlso FirstRun.ShowDialog() <> DialogResult.OK Then
+            Application.Exit()
+            End
+        End If
+        Me.Text &= " - " & My.Settings.Username
+    End Sub
+
     Private Sub Box_Load(sender As Object, e As EventArgs) Handles Me.Load
         Try
-            'Postavke i još neke sitnice
-            LoadWindowDimensionsSettings()
-            Me.Icon = New Icon(Assembly.GetExecutingAssembly.GetManifestResourceStream("Folmes.DBM.ico"))
-            TrayIcon.Icon = Me.Icon        'druge ikone
-
-            'Stvaranje direktorija i učitavanje FSW
             Dirs.AssureMainDirectories()
+
+            ' UsersWatcher initialization
             UsersWatcher.Start()
             AddHandler UsersWatcher.Deleted, AddressOf UsersWatcher_Deleted
 
-            'Pokretenje CI
+            ' Communication interfaces initialization
             AddCIHandlers()
             sfci.Start(Me)
             ircci.Start(Me)
 
-            'Prvo pokretenje? i učitavanje kanala u izbornik
-            If My.Settings.Username = Nothing AndAlso FirstRun.ShowDialog() <> DialogResult.OK Then
-                Application.Exit()
-                End
-            End If
-            Me.Text &= " - " & My.Settings.Username
-            Dirs.Create(Path.Combine(Dirs.PrivateMessages, My.Settings.Username))
-
-            'Učitavanje datoteka i poruka
+            ' Učitavanje datoteka i poruka
             Users.Initialize()
             Users.MyUser.SetAndSaveStatus(UserFlags.Online_Folder)
             With Output
@@ -72,10 +77,10 @@ Public NotInheritable Class MainGUI
 
     Sub NewMessage(message As FolMessage)
         If (message.Flags And FolMessageFlags.Privat) = 0 Then
-            NewMessageQueues.AddCommon(message)
+            MessageQueues.AddCommon(message)
             Notify(NotificationType.PublicMessage, Nothing)
         Else
-            NewMessageQueues.AddPrivate(message.Sender, message)
+            MessageQueues.AddPrivate(message.Sender, message)
             Notify(NotificationType.PrivateMessage, message.Sender)
         End If
     End Sub
@@ -119,7 +124,7 @@ Public NotInheritable Class MainGUI
             Me.Output.CacheChannelHtml(Channels.Current)
             Channels.Switch(channel)
             If Output.LoadCachedChannelHtml(channel) Then
-                NewMessageQueues.LoadMessages(channel)
+                MessageQueues.LoadMessages(channel)
             Else
                 sfci.LoadOldMessages(channel, My.Settings.NofMsgs, AddressOf Output.AddMessage)
             End If
@@ -180,7 +185,10 @@ Public NotInheritable Class MainGUI
                     End If
                 End If
             Case "status"
-                Output.AddMessage("Your IRC nickname is: " & Users.MyUser.IrcNick & ".")
+                Dim message As String = "IRC nickname: " & Users.MyUser.IrcNick
+                message &= "<br>System time:" & Date.UtcNow.ToString()
+                message &= "<br>Network time:" & Time.UtcNow.ToString()
+                Output.AddMessage(message)
             Case "ircpm"
                 If Input.Text.Length > 14 Then
                     Dim i As Integer = Input.Text.IndexOf(" ", 13)
@@ -203,7 +211,7 @@ Public NotInheritable Class MainGUI
         Dim attachedFiles As New List(Of String)
         msg.Sender = My.Settings.Username
         msg.Flags = messageType
-        msg.Time = Date.UtcNow.ToBinary()
+        msg.Time = Time.UtcNow.ToBinary()
 
         If (messageType And FolMessageFlags.MeIs) = 0 Then
             msg.HtmlContent = HtmlConverter.HtmlizeInputAndGetFiles(Input.Text, attachedFiles)
@@ -316,7 +324,6 @@ Public NotInheritable Class MainGUI
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         'ircci.SendMessage("Ivan__", New FolMessage With {.HtmlContent = Input.Text, .Sender = My.Settings.Username, .Time = Date.UtcNow.ToBinary})
-        Time.GetNetworkTime()
     End Sub
 
 #End Region

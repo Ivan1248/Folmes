@@ -135,7 +135,7 @@
     <Compile Include="Modules\Time.vb" />
     <Compile Include="Users\UserFile.vb" />
     <Compile Include="TextProcessing\InputParser.vb" />
-    <Compile Include="Modules\NewMessageQueues.vb" />
+    <Compile Include="Modules\MessageQueues.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
     </Compile>

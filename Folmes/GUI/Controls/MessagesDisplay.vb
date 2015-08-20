@@ -231,7 +231,7 @@ Namespace GUI.Controls
 #Region "Message-adding"
         Public Sub AddMessage(declaration As String)
             Dim m As New FolMessage
-            m.Time = Date.UtcNow.ToBinary()
+            m.Time = Time.UtcNow.ToBinary()
             m.HtmlContent = declaration
             m.Flags = FolMessageFlags.FolmesSystemMessage
             AddMessage(m)

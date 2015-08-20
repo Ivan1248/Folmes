@@ -87,7 +87,7 @@ conn:   sock = New TcpClient
                         output.WriteLine(sendingQueue.Dequeue)
                         output.Flush()
                     End While
-                    Thread.Sleep(20)
+                    Thread.Sleep(100)
                 End While
 
                 buf = input.ReadLine()

@@ -1,7 +1,6 @@
 ﻿Imports System.IO
 
 Public MustInherit Class Dirs
-
     Public Shared Root As String = Application.StartupPath
     Public Shared Folmes As String = Root & "\.Folmes"
     Public Shared Messages As String = Folmes & "\Messages"
@@ -17,11 +16,19 @@ Public MustInherit Class Dirs
             Create(Folmes)
             HideFolmesFolder(True)
         End If
+        Create(Users)
+        AssureSfciDirectories()
+        Create(Attachments)
+        Create(Thumbnails)
+    End Sub
+
+    Private Shared Sub AssureSfciDirectories()
         Create(Messages)
         Create(CommonChannel)
         Create(PrivateMessages)
+        Create(Path.Combine(PrivateMessages, My.Settings.Username))
+        Create(PingPong)
         Create(Path.Combine(PingPong, My.Settings.Username))
-        Create(Users)
     End Sub
 
     Public Shared Sub HideFolmesFolder(hide As Boolean)

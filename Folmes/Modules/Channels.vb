@@ -12,13 +12,13 @@
         If My.Settings.LastReadTimes IsNot Nothing Then
             For Each lrt As ChannelLastReadTime In My.Settings.LastReadTimes
                 If lrt.Channel = Current Then
-                    lrt.Time = Date.UtcNow.ToBinary
+                    lrt.Time = Time.UtcNow.ToBinary
                     Exit Sub
                 End If
             Next
         End If
         My.Settings.LastReadTimes.Add(
-            New ChannelLastReadTime With {.Channel = Current, .Time = Date.UtcNow.ToBinary})
+            New ChannelLastReadTime With {.Channel = Current, .Time = Time.UtcNow.ToBinary})
     End Sub
 
     Public Shared Function AnyNewMessages(channel As String) As Boolean ' TODO prepraviti

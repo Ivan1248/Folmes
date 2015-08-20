@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 
-Public MustInherit Class NewMessageQueues
+Public MustInherit Class MessageQueues
     Private Shared CommonChannel As New MessageQueue(My.Settings.NofMsgs)
     Private Shared PrivateChannel As New List(Of MessageQueue)
 

@@ -32,11 +32,10 @@ Public MustInherit Class IrcMesage
     End Function
 
     Public Shared Function GetMessageFromCommand(ircCommand As String) As FolMessage
-        Dim sp As Integer() = {0, 0}
-        sp(0) = ircCommand.IndexOf(" "c)
-        sp(1) = ircCommand.IndexOf(" "c, sp(0) + 2)
+        Dim irccmdi As Integer = ircCommand.IndexOf(" "c)
+        Dim ircmsgi As Integer = ircCommand.IndexOf(" "c, irccmdi + 2)
 
-        If ircCommand.Substring(sp(0) + 1, sp(1) - sp(0) - 1) <> "PRIVMSG" Then
+        If ircCommand.Substring(irccmdi + 1, ircmsgi - irccmdi - 1) <> "PRIVMSG" Then
             Return Nothing
         End If
 
@@ -46,7 +45,7 @@ Public MustInherit Class IrcMesage
         Dim sender As User = Users.GetByIrcNick(senderNick)
         GetMessageFromCommand.Sender = If(sender Is Nothing, senderNick & "[IRC]", sender.Name)
 
-        Dim timei As Integer = ircCommand.IndexOf(":"c, sp(1) + 2) + 1
+        Dim timei As Integer = ircCommand.IndexOf(":"c, ircmsgi + 2) + 1
         Dim flagsi As Integer = timei + 13 + 1
         Try
             Dim contenti As Integer = ircCommand.IndexOf(" "c, flagsi + 1) + 1
@@ -54,7 +53,7 @@ Public MustInherit Class IrcMesage
             GetMessageFromCommand.Flags = CType(Integer.Parse(ircCommand.Substring(flagsi, contenti - flagsi - 1)), FolMessageFlags)
             GetMessageFromCommand.HtmlContent = ircCommand.Substring(contenti)
         Catch
-            GetMessageFromCommand.Time = Date.UtcNow.ToBinary
+            GetMessageFromCommand.Time = Date.UtcNow.ToBinary()
             GetMessageFromCommand.Flags = FolMessageFlags.NonFolmesIrc
             GetMessageFromCommand.HtmlContent = ircCommand.Substring(timei)
         End Try

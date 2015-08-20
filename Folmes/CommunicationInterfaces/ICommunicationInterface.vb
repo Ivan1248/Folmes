@@ -4,7 +4,7 @@
     Event PongTimeout(username As String)
     Event PingError(message As String)
 
-    Sub Start(SynchronizingObject As Form)
+    Sub Start(synchronizingObject As Form)
 
     Sub SendMessage(channel As String, message As FolMessage)
 

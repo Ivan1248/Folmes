@@ -14,7 +14,7 @@ Partial Public Class SharedFolderCI : Implements ICommunicationInterface
     Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
     Public Event PingError(message As String) Implements ICommunicationInterface.PingError
 
-    Public Sub Start(SynchronizingObject As Form) Implements ICommunicationInterface.Start
+    Public Sub Start(synchronizingObject As Form) Implements ICommunicationInterface.Start
         EnableFSWatchers(SynchronizingObject)
         CleanPing()
     End Sub

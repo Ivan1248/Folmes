@@ -17,7 +17,8 @@ Public MustInherit Class MessageFile
     End Sub
 
     Public Shared Function LoadMessage(fpath As String) As FolMessage
-        Dim m As New FolMessage() With {.Time = Converter.Base32StringToInt64(Path.GetFileNameWithoutExtension(fpath))}
+        Dim m As New FolMessage()
+        m.Time = Converter.Base32StringToInt64(Path.GetFileNameWithoutExtension(fpath))
         Using sr As New StreamReader(New FileStream(fpath, FileMode.Open, FileAccess.Read, FileShare.Read))
             m.Flags = CType(sr.Read(), FolMessageFlags)
             Dim username As String = sr.ReadLine()

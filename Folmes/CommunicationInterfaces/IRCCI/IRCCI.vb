@@ -12,8 +12,8 @@ Public Class IRCCI : Implements ICommunicationInterface
     Public Event Connected(IrcNick As String)
 
 
-    Public Sub Start(SynchronizingObject As Form) Implements ICommunicationInterface.Start
-        _client = New IrcClient()
+    Public Sub Start(synchronizingObject As Form) Implements ICommunicationInterface.Start
+        _client = New IrcClient(My.Settings.Username)
         _synchronizingObject = SynchronizingObject
         _client.Run()
     End Sub

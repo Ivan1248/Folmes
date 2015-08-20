@@ -11,6 +11,7 @@
     Public Shared Operator <>(message1 As FolMessage, message2 As FolMessage) As Boolean
         Return message1.Time <> message2.Time OrElse message1.Sender <> message2.Sender
     End Operator
+
 End Class
 
 Public Enum FolMessageFlags As Integer

@@ -17,9 +17,13 @@ Public Class IrcClient
     Dim output As TextWriter
 
     Dim channel As String = "#Folmes"
-    Dim username As String = "Ivan"
+    Dim username As String
 
     Dim thr As Thread
+
+    Sub New(username As String)
+        Me.username = username
+    End Sub
 
     Public Sub Run()
         thr = New Thread(New ThreadStart(Sub() RunLoop()))
@@ -33,7 +37,11 @@ Public Class IrcClient
         ' Connect to the irc server and get input and output text streams from TcpClient.
 conn:   sock = New TcpClient
         Using sock
-            sock.Connect(server, port)
+            Try
+                sock.Connect(server, port)
+            Catch
+                Exit Sub
+            End Try
             If Not sock.Connected Then
                 Console.WriteLine("Failed to connect.")
                 Return
@@ -96,13 +104,6 @@ conn:   sock = New TcpClient
                 If buf(0) <> ":"c Then
                     Continue While
                 End If
-
-                ' https://tools.ietf.org/html/rfc2812#page-5 / message format
-
-                'If buf.Contains("yo") Then
-                '    output.WriteLine("PRIVMSG " & username & " :" & "yo")
-                '    output.Flush()
-                'End If
 
                 Dim m As FolMessage = IrcMesage.GetMessageFromCommand(buf)
                 If m IsNot Nothing Then

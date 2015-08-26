@@ -3,7 +3,7 @@ Imports System.Net.Sockets
 
 Public MustInherit Class Time
 
-    Public Shared ReadOnly networkTimeSystemTimeDifference As Long = 0
+    Public Shared ReadOnly networkTimeSystemTimeDifference As Long
 
     Shared Sub New()
         Const ntpServer As String = "pool.ntp.org"

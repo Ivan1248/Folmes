@@ -185,10 +185,31 @@ Public NotInheritable Class MainGUI
                     End If
                 End If
             Case "status"
-                Dim message As String = "IRC nickname: " & Users.MyUser.IrcNick
-                message &= "<br>System time:" & Date.UtcNow.ToString()
-                message &= "<br>Network time:" & Time.UtcNow.ToString()
+                Dim message As String = String.Empty
+                If Users.MyUser.IrcNick IsNot Nothing Then
+                    message &= "IRC connected: " & Boolean.TrueString
+                    message &= "<br>IRC nickname: " & Users.MyUser.IrcNick
+                Else
+                    message &= "<br>IRC Connected: " & Boolean.FalseString
+                    message &= "<br>IRC Nickname: " & "-"
+                End If
+                Message &= "<br>System time: " & Date.UtcNow.ToString()
+                Message &= "<br>Network time: " & Time.UtcNow.ToString()
                 Output.AddMessage(message)
+            Case "userinfo"
+                If Input.Text.Length > 9 Then
+                    Dim username As String = Input.Text.Substring(9).TrimEnd()
+                    Dim usr As User = Users.GetByName(username)
+                    Dim message As String = "Username: " & username
+                    message &= "<br>Online: " & usr.IsOnline.ToString
+                    If usr.IrcNick IsNot Nothing Then
+                        message &= "<br>IRC Connected: " & Boolean.TrueString
+                        message &= "<br>IRC Nickname: " & usr.IrcNick
+                    Else
+                        message &= "<br>IRC Connected: " & Boolean.FalseString
+                        message &= "<br>IRC Nickname: " & "-"
+                    End If
+                End If
             Case "ircpm"
                 If Input.Text.Length > 14 Then
                     Dim i As Integer = Input.Text.IndexOf(" ", 13)

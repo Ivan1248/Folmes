@@ -1,2 +1,2 @@
 # Folmes
-A messaging program that uses shared folders and the IRC protocol.
+A messaging program written mainly in VB.NET that uses a shared folder as a base, IRC servers (irc.freenode.net) for low latency and NTP servers (pool.ntp.org) for message time synchronization.

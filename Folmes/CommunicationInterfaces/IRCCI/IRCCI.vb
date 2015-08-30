@@ -10,7 +10,7 @@ Public Class IRCCI : Implements ICommunicationInterface
     Public Event PongTimeout(username As String) Implements ICommunicationInterface.PongTimeout
 
     Public Event Connected(IrcNick As String)
-
+    Public Event LostConnection()
 
     Public Sub Start(synchronizingObject As Form) Implements ICommunicationInterface.Start
         _client = New IrcClient(My.Settings.Username)
@@ -40,6 +40,11 @@ Public Class IRCCI : Implements ICommunicationInterface
 
     Private Sub RaiseConnectedEvent(nick As String) Handles _client.Connected
         _synchronizingObject.BeginInvoke(Sub() RaiseEvent Connected(nick))
+    End Sub
+
+    Private Sub RaiseLostConnectionEvent() Handles _client.LostConnection
+        _synchronizingObject.BeginInvoke(Sub() RaiseEvent LostConnection())
+        _client.Run()
     End Sub
 
     Public Sub SendMessage(recipientNick As String, message As String)

@@ -73,6 +73,7 @@ Public NotInheritable Class MainGUI
         AddHandler ircci.NewMessage, AddressOf NewMessage
         AddHandler sfci.PongReceived, AddressOf sfci_PongReceived
         AddHandler ircci.Connected, AddressOf ircci_Connected
+        'AddHandler ircci.LostConnection, AddressOf ircci_LostConnection
     End Sub
 
     Sub NewMessage(message As FolMessage)
@@ -89,8 +90,14 @@ Public NotInheritable Class MainGUI
         Output.AddMessage("Ping-pong: File_RTT = " & rtt_in_ms & "ms")
     End Sub
 
-    Sub ircci_Connected(ircNick As String) Handles ircci.Connected
+    Sub ircci_Connected(ircNick As String)
         Users.MyUser.IrcNick = ircNick
+        Users.MyUser.Status = Users.MyUser.Status Or UserFlags.Online_IRC
+        Users.MyUser.SaveInfo()
+    End Sub
+
+    Sub ircci_LostConnection()
+        Users.MyUser.Status = Users.MyUser.Status And Not UserFlags.Online_IRC
         Users.MyUser.SaveInfo()
     End Sub
 
@@ -344,7 +351,7 @@ Public NotInheritable Class MainGUI
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        'ircci.SendMessage("Ivan__", New FolMessage With {.HtmlContent = Input.Text, .Sender = My.Settings.Username, .Time = Date.UtcNow.ToBinary})
+        ircci.Start(Me)
     End Sub
 
 #End Region

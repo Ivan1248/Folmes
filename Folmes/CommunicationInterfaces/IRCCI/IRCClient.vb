@@ -4,7 +4,6 @@ Imports System.Threading
 
 Public Class IrcClient
     Dim sendingQueue As New ThreadSafeQueue(Of String)
-    Dim rtt As Integer = 0
 
     Public Event Connected(nickName As String)
     Public Event LostConnection()
@@ -23,20 +22,17 @@ Public Class IrcClient
 
     Dim thr As Thread
 
-    Dim buf As String
-
-
     Sub New(username As String)
         Me.username = username
     End Sub
 
     Public Sub Run()
-        thr = New Thread(New ThreadStart(Sub() RunLoop()))
+        thr = New Thread(New ThreadStart(Sub() RunSub()))
         thr.IsBackground = True
         thr.Start()
     End Sub
 
-    Private Sub RunLoop()
+    Private Sub RunSub()
         ' Connect to the irc server and get input and output text streams from TcpClient.
         If Not Connect() Then
             Exit Sub
@@ -44,19 +40,61 @@ Public Class IrcClient
         RaiseEvent Connected(username)
 
         ' Process each line received from the server
-        While True
-            WaitForDataAndCheckConnection()
-            ProcessReceivedData()
-        End While
 
+        Dim buf As String
+        Dim sw As New Stopwatch
+
+        While True
+            Const sleepTime As Integer = 100 ' 100 ms
+            Const PingPeriod As Integer = sleepTime * 50 \ 100 ' 5 s / 100
+            Dim PingCounter As Integer = 0
+
+            While Not IsDataReceived()
+                While sendingQueue.Count > 0
+                    output.WriteLine(sendingQueue.Dequeue)
+                    output.Flush()
+                End While
+
+                Dim PongTimeoutCounter As Integer = 0
+
+                If PingCounter < PingPeriod Then
+                    PingCounter += 1
+                    Thread.Sleep(sleepTime)
+                Else
+                    output.WriteLine("PING irc.freenode.net")
+                    output.Flush()
+                    Debug.WriteLine("PING")
+                    sw.Restart()
+                    PongTimeoutCounter = 0
+                    While Not IsDataReceived()
+                        Thread.Sleep(10)
+                        PongTimeoutCounter += 1
+                        If PongTimeoutCounter > 300 Then
+                            RaiseEvent LostConnection()
+                            Exit Sub
+                        End If
+                    End While
+                    buf = input.ReadLine()
+                    sw.Stop()
+                    If IsPongCommand(buf) Then
+                        Debug.WriteLine(sw.ElapsedMilliseconds)
+                    Else
+                        ProcessReceivedCommand(input.ReadLine())
+                    End If
+                End If
+            End While
+            ProcessReceivedCommand(input.ReadLine())
+        End While
         sock.Close()
     End Sub
 
     Private Function Connect() As Boolean
 conn:   sock = New TcpClient
+        Dim buf As String
         Try
             sock.Connect(server, port)
-        Catch
+        Catch ex As Exception
+            MsgBox(ex.Message)
             sock.Close()
             Return False
         End Try
@@ -76,7 +114,7 @@ conn:   sock = New TcpClient
 
         ' Wait for welcome message
         While True
-            While Not stream.DataAvailable AndAlso input.Peek() = -1 ' strange bahaviour when one of conditions used
+            While Not IsDataReceived() ' strange bahaviour when one of conditions used
                 Thread.Sleep(10)
             End While
             buf = input.ReadLine()
@@ -100,49 +138,30 @@ conn:   sock = New TcpClient
         Return True
     End Function
 
-    Private Sub WaitForDataAndCheckConnection()
-        Const sleepTime As Integer = 100 ' 100 ms
-        Const PingPeriod As Integer = sleepTime * 50 \ 100 ' 5 s / 100
-        Static PingCounter As Integer = 0
+    Private Function IsPongCommand(command As String) As Boolean
+        Dim i As Integer = command.IndexOf(" "c)
+        Return command.Substring(i + 1, 4) = "PONG"
+    End Function
 
-        While Not stream.DataAvailable AndAlso input.Peek() = -1 ' strange bahaviour when one of conditions used
-            While sendingQueue.Count > 0
-                output.WriteLine(sendingQueue.Dequeue)
-                output.Flush()
-            End While
-            Thread.Sleep(sleepTime)
+    Private Function IsDataReceived() As Boolean
+        Return stream.DataAvailable OrElse input.Peek() <> -1 ' strange bahaviour when one of conditions used
+    End Function
 
-            If PingCounter < PingPeriod Then
-                PingCounter += 1
-            Else
-                PingCounter = 0
-                output.WriteLine("PING irc.freenode.net")
-                output.Flush()
-                Debug.WriteLine("PING")
-                Thread.Sleep(100)
-                buf = input.ReadLine()
-                Debug.WriteLine(buf)
-            End If
-        End While
-    End Sub
-
-    Private Sub ProcessReceivedData()
-        buf = input.ReadLine
-
-        Debug.WriteLine(buf)
+    Private Sub ProcessReceivedCommand(command As String)
+        Debug.WriteLine(command)
 
         ' Reply to ping messages
-        If buf.StartsWith("PING ") Then
-            output.WriteLine("PO" & buf.Substring(2))
+        If command.StartsWith("PING ") Then
+            output.WriteLine("PO" & command.Substring(2))
             output.Flush()
             Exit Sub
         End If
 
-        If buf(0) <> ":"c Then
+        If command(0) <> ":"c Then
             Exit Sub
         End If
 
-        Dim m As FolMessage = IrcMesage.GetMessageFromCommand(buf)
+        Dim m As FolMessage = IrcMesage.GetMessageFromCommand(command)
         If m IsNot Nothing Then
             RaiseEvent MessageReceived(m)
         End If

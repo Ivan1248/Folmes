@@ -127,7 +127,7 @@
     <Compile Include="CommunicationInterfaces\ICommunicationInterface.vb" />
     <Compile Include="Datatypes\Message.vb" />
     <Compile Include="Datatypes\MessageQueue.vb" />
-    <Compile Include="Datatypes\User.vb" />
+    <Compile Include="Users\User.vb" />
     <Compile Include="GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>

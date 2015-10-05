@@ -80,7 +80,7 @@ Partial Class AboutBox
         Me.LabelVersion.Name = "LabelVersion"
         Me.LabelVersion.Size = New System.Drawing.Size(96, 26)
         Me.LabelVersion.TabIndex = 3
-        Me.LabelVersion.Text = "FolderMessenger" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pre-alpha 0.0.3a" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.LabelVersion.Text = "FolderMessenger" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "alpha 0.0.3a" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'FlowLayoutPanel1
         '

@@ -7,7 +7,7 @@ Public MustInherit Class Users
 
     Public Shared Sub Initialize()
         For Each userDir As String In Directory.GetDirectories(Dirs.Users)
-            Dim user As New User(Path.GetFileName(userDir), UserKind.OldReal)
+            Dim user As New User(IO.Path.GetFileName(userDir), UserKind.OldReal)
             If user.Name <> My.Settings.Username Then
                 Others.Add(user)
             Else
@@ -37,19 +37,19 @@ Public MustInherit Class Users
     End Sub
 
     Public Shared Function Create(username As String) As User
-        Dirs.Create(Path.Combine(Dirs.PrivateMessages, username))
-        Dirs.Create(Path.Combine(Dirs.Users, username))
+        Dirs.Create(IO.Path.Combine(Dirs.PrivateMessages, username))
+        Dirs.Create(IO.Path.Combine(Dirs.Users, username))
         Return New User(My.Settings.Username, UserKind.NewReal)
 
     End Function
 
     Public Shared Sub Delete(username As String)
         Dim dirsToDelete As New List(Of String)
-        dirsToDelete.Add(Path.Combine(Dirs.Users, username))                        ' User folder
-        dirsToDelete.Add(Path.Combine(Dirs.PrivateMessages, username))              ' Private inbox
-        dirsToDelete.Add(Path.Combine(Dirs.CommonChannel, username))                ' Common outbox
+        dirsToDelete.Add(IO.Path.Combine(Dirs.Users, username))                        ' User folder
+        dirsToDelete.Add(IO.Path.Combine(Dirs.PrivateMessages, username))              ' Private inbox
+        dirsToDelete.Add(IO.Path.Combine(Dirs.CommonChannel, username))                ' Common outbox
         For Each userCh As String In Directory.GetDirectories(Dirs.PrivateMessages) ' Private outbox
-            dirsToDelete.Add(Path.Combine(userCh, username))
+            dirsToDelete.Add(IO.Path.Combine(userCh, username))
         Next
         For Each dir As String In dirsToDelete
             Try

@@ -1,4 +1,5 @@
 ﻿#Region "Imports"
+Imports System.Collections.Specialized
 Imports System.IO
 Imports System.Reflection
 Imports Folmes.GUI.Controls
@@ -7,8 +8,9 @@ Imports Folmes.GUI.Controls
 Public NotInheritable Class MainGUI
     'public = common (synonyms)
 
-    Dim WithEvents sfci As New SharedFolderCI
-    Dim WithEvents ircci As New IRCCI
+    Dim WithEvents sfcm As New SharedFolderCM
+    Dim WithEvents irccm As New IrcCm
+    Dim CommunicationModules As New List(Of ICommunicationModule)({sfcm, irccm})
 
     '//////// Učitavanje i zatvaranje, prijava i odjava /////////////////////////////////////
 
@@ -37,29 +39,25 @@ Public NotInheritable Class MainGUI
             UsersWatcher.Start()
             AddHandler UsersWatcher.Deleted, AddressOf UsersWatcher_Deleted
 
-            ' Communication interfaces initialization
-            AddCIHandlers()
-            sfci.Start(Me)
-            ircci.Start(Me)
+            ' Communication module initialization
+            InitializeCommunicationModules()
 
             ' Učitavanje datoteka i poruka
             Users.Initialize()
-            Users.MyUser.SetAndSaveStatus(UserFlags.Online_Folder)
-            With Output
-                Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
-                        Sub()
-                            RemoveHandler Output.Initialized, messagesLoad
-                            sfci.LoadOldMessages(Channels.Common, My.Settings.NofMsgs, AddressOf Output.AddMessage)
-                        End Sub
-                AddHandler .Initialized, messagesLoad
-                .Initialize({})
-            End With
+            Users.MyUser.SetAndSaveStatus(UserStatus.Online_Folder)
+            Dim messagesLoad As MessagesDisplay.InitializedEventHandler =
+                    Sub()
+                        RemoveHandler Output.Initialized, messagesLoad
+                        sfcm.LoadOldMessages(Channels.Common, My.Settings.MessageQueueCapacity, AddressOf Output.AddMessage)
+                    End Sub
+            AddHandler Output.Initialized, messagesLoad
+            Output.Initialize({})
         Catch ex As Exception
             Dim errorMessage As String = "Folmes failed to load completely." & vbNewLine & " Message: " & ex.Message
             MessageBox.Show(errorMessage, "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Try
                 Me.Output.AddMessage(
-                    New FolMessage With {.Flags = FolMessageFlags.FolmesSystemMessage,
+                    New Message With {.Flags = MessageFlags.FolmesSystemMessage,
                                         .HtmlContent = errorMessage & vbNewLine & vbNewLine & Environment.StackTrace})
                 Input.Enabled = False
             Catch
@@ -67,17 +65,19 @@ Public NotInheritable Class MainGUI
         End Try
     End Sub
 
-#Region "Communication interfaces"
-    Sub AddCIHandlers()
-        AddHandler sfci.NewMessage, AddressOf NewMessage
-        AddHandler ircci.NewMessage, AddressOf NewMessage
-        AddHandler sfci.PongReceived, AddressOf sfci_PongReceived
-        AddHandler ircci.Connected, AddressOf ircci_Connected
-        'AddHandler ircci.LostConnection, AddressOf ircci_LostConnection
+#Region "Communication modules"
+    Sub InitializeCommunicationModules()
+        For Each cm As ICommunicationModule In CommunicationModules
+            cm.Initialize(Me)
+            AddHandler cm.MessageReceived, AddressOf MessageReceived
+        Next
+        AddHandler sfcm.PongReceived, AddressOf sfci_PongReceived
+        AddHandler irccm.Connected, AddressOf ircci_Connected
+        AddHandler irccm.LostConnection, AddressOf ircci_LostConnection
     End Sub
 
-    Sub NewMessage(message As FolMessage)
-        If (message.Flags And FolMessageFlags.Privat) = 0 Then
+    Sub MessageReceived(message As Message)
+        If (message.Flags And MessageFlags.Privat) = 0 Then
             MessageQueues.AddCommon(message)
             Notify(NotificationType.PublicMessage, Nothing)
         Else
@@ -92,12 +92,12 @@ Public NotInheritable Class MainGUI
 
     Sub ircci_Connected(ircNick As String)
         Users.MyUser.IrcNick = ircNick
-        Users.MyUser.Status = Users.MyUser.Status Or UserFlags.Online_IRC
+        Users.MyUser.Status = Users.MyUser.Status Or UserStatus.Online_IRC
         Users.MyUser.SaveInfo()
     End Sub
 
     Sub ircci_LostConnection()
-        Users.MyUser.Status = Users.MyUser.Status And Not UserFlags.Online_IRC
+        Users.MyUser.Status = Users.MyUser.Status And Not UserStatus.Online_IRC
         Users.MyUser.SaveInfo()
     End Sub
 
@@ -133,7 +133,7 @@ Public NotInheritable Class MainGUI
             If Output.LoadCachedChannelHtml(channel) Then
                 MessageQueues.LoadMessages(channel)
             Else
-                sfci.LoadOldMessages(channel, My.Settings.NofMsgs, AddressOf Output.AddMessage)
+                sfcm.LoadOldMessages(channel, My.Settings.MessageQueueCapacity, AddressOf Output.AddMessage)
             End If
             TSChannels.Text = channel
         End If
@@ -144,7 +144,7 @@ Public NotInheritable Class MainGUI
     Private Shared Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Try
             If My.Settings.Username <> Nothing Then
-                Users.MyUser.SetAndSaveStatus(UserFlags.Offline)
+                Users.MyUser.SetAndSaveStatus(UserStatus.Offline)
                 Channels.SetLastRead()
             End If
         Catch ex As Exception
@@ -174,17 +174,17 @@ Public NotInheritable Class MainGUI
             Dim I As Integer = Input.Text.IndexOf(" "c)
             command = Input.Text.Substring(1, If(I <> -1, I, Input.Text.Length) - 1)
         Else
-            Return SendMessage(FolMessageFlags.None)
+            Return SendMessage(MessageFlags.None)
         End If
 
         Select Case command.ToLower
             Case "me"
-                Return SendMessage(FolMessageFlags.MeIs)
+                Return SendMessage(MessageFlags.MeIs)
             Case "ping"
                 If Input.Text.Length > 6 Then
                     Dim username As String = Input.Text.Substring(6).TrimEnd()
                     If Users.IsOnline(username) OrElse username = My.Settings.Username Then
-                        sfci.Ping(Input.Text.Substring(6).TrimEnd())
+                        sfcm.Ping(Input.Text.Substring(6).TrimEnd())
                         Return True
                     Else
                         Output.AddMessage("Cannot ping " & username & ". User is not online.")
@@ -200,8 +200,8 @@ Public NotInheritable Class MainGUI
                     message &= "<br>IRC Connected: " & Boolean.FalseString
                     message &= "<br>IRC Nickname: " & "-"
                 End If
-                Message &= "<br>System time: " & Date.UtcNow.ToString()
-                Message &= "<br>Network time: " & Time.UtcNow.ToString()
+                message &= "<br>System NetworkTime: " & Date.UtcNow.ToString()
+                message &= "<br>Network NetworkTime: " & NetworkTime.UtcNow.ToString()
                 Output.AddMessage(message)
             Case "userinfo"
                 If Input.Text.Length > 9 Then
@@ -232,23 +232,23 @@ Public NotInheritable Class MainGUI
         Return True
     End Function
 
-    Public Delegate Sub MessageLoadingSub(msg As FolMessage)
+    Public Delegate Sub MessageLoadingSub(msg As Message)
 
-    Friend Function SendMessage(messageType As FolMessageFlags) As Boolean
-        Dim msg As New FolMessage()
+    Friend Function SendMessage(messageType As MessageFlags) As Boolean
+        Dim msg As New Message()
         Dim attachedFiles As New List(Of String)
         msg.Sender = My.Settings.Username
         msg.Flags = messageType
-        msg.Time = Time.UtcNow.ToBinary()
+        msg.Time = NetworkTime.UtcNow.ToBinary()
 
-        If (messageType And FolMessageFlags.MeIs) = 0 Then
+        If (messageType And MessageFlags.MeIs) = 0 Then
             msg.HtmlContent = HtmlConverter.HtmlizeInputAndGetFiles(Input.Text, attachedFiles)
         Else
             msg.HtmlContent = HtmlConverter.HtmlizeInputAndGetFiles(My.Settings.Username & Input.Text.Substring(3), attachedFiles)
         End If
 
-        sfci.SendMessage(Channels.Current, msg)
-        ircci.SendMessage(Channels.Current, msg)
+        sfcm.SendMessage(Channels.Current, msg)
+        irccm.SendMessage(Channels.Current, msg)
 
         For Each af As String In attachedFiles
             Files.SendFile(af)
@@ -258,7 +258,7 @@ Public NotInheritable Class MainGUI
     End Function
 
     Friend Function SendIrcMessage(recipientNick As String, message As String) As Boolean
-        ircci.SendMessage(recipientNick, message)
+        irccm.SendMessage(recipientNick, message)
         Return True
     End Function
 
@@ -351,7 +351,7 @@ Public NotInheritable Class MainGUI
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        ircci.Start(Me)
+        irccm.Initialize(Me)
     End Sub
 
 #End Region

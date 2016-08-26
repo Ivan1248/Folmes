@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Net
 Imports System.Text
+Imports Path = Folmes.Common.Path
 
 Public MustInherit Class HtmlConverter
 
@@ -42,7 +43,7 @@ Public MustInherit Class HtmlConverter
     Private Shared Sub HtmlizeUri(text As String, span As InputParser.Span, ByRef sb As StringBuilder)
         Dim uri As String = text.Substring(span.Left, span.Right - span.Left + 1)
         sb.Append("<span class=""url"" OnClick=""linkClick('").Append(uri).Append("')"">")
-        If Files.IsImageFile(uri) OrElse IsImageUrl(uri) Then
+        If Path.IsImageFile(uri) OrElse IsImageUrl(uri) Then
             sb.Append("<img src=""").Append(uri)
             sb.Append(""" alt=""").Append(uri)
             sb.Append(""" onload=""refreshScroller()")
@@ -54,17 +55,17 @@ Public MustInherit Class HtmlConverter
     End Sub
 
     Private Shared Sub HtmlizeFileTag(str As String, span As InputParser.Span, ByRef sb As StringBuilder)
-        Dim fileName As String = Path.GetFileName(span.GetSubstring(str))
-        Dim isImage As Boolean = Files.IsImageFile(fileName)
+        Dim fileName As String = IO.Path.GetFileName(span.GetSubstring(str))
+        Dim isImage As Boolean = Path.IsImageFile(fileName)
 
         If isImage Then
-            sb.Append("<img src=""").Append(Path.Combine(Dirs.Thumbnails, fileName))
+            sb.Append("<img src=""").Append(IO.Path.Combine(Dirs.Thumbnails, fileName))
             sb.Append(""" alt=""").Append(fileName)
         Else
-            sb.Append("<span src=""").Append(Path.Combine(Dirs.Thumbnails, fileName))
+            sb.Append("<span src=""").Append(IO.Path.Combine(Dirs.Thumbnails, fileName))
         End If
         sb.Append(""" class=""file"" onclick=""linkClick('")
-        sb.Append(Replace(Path.Combine(Dirs.Attachments, fileName), "\", "\\"))
+        sb.Append(Replace(IO.Path.Combine(Dirs.Attachments, fileName), "\", "\\"))
         sb.Append("')"">")
         If isImage Then
             sb.Append("</img>")

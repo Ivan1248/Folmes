@@ -17,6 +17,7 @@ Namespace GUI.Controls
             ScrollBarsEnabled = False
             Url = New Uri("", UriKind.Relative)
             Document.Write(defaultHtml)
+            MyBase.ObjectForScripting = Me
         End Sub
 
 #Region "Called from Script.js"
@@ -28,7 +29,6 @@ Namespace GUI.Controls
             Try
                 Process.Start(data)
             Catch
-                Console.Beep()
             End Try
         End Sub
 #End Region
@@ -43,7 +43,7 @@ Namespace GUI.Controls
             AddHandler DocumentCompleted, setRefs
 
             With New StringBuilder() 'kapacitet
-                'HTML start
+                'HTML Initialize
                 .Append("<!DOCTYPE html><html><head>" &
                         "<meta name=""viewport"" content=""user-scalable=no, initial-scale=1"">" &
                         "<meta http-equiv=""X-UA-Compatible"" content=""IE=edge"">" &
@@ -65,7 +65,6 @@ Namespace GUI.Controls
                 .Append("</body></html>")
 
                 DocumentText = .ToString()
-                Me.ObjectForScripting = Me
             End With
         End Sub
 
@@ -92,12 +91,12 @@ Namespace GUI.Controls
             End Sub
         End Structure
 
-        Private Class HtmlMessageList ' Necessary for inserting messages ordered by time
+        Private Class HtmlMessageList ' Necessary for inserting messages ordered by NetworkTime
             Dim _newest As HtmlMessageListNode = Nothing
             Dim _oldest As HtmlMessageListNode = Nothing
             Public Count As Integer = 0
 
-            Sub InsertElement(message As FolMessage, container As HtmlElement)
+            Sub InsertElement(message As Message, container As HtmlElement)
                 Dim preceeding As HtmlMessageListNode = Nothing
                 Dim succeeding As HtmlMessageListNode = Nothing
                 Dim position As HtmlMessagePosition
@@ -162,10 +161,10 @@ Namespace GUI.Controls
                 In_between
             End Enum
 
-            Private Function CreateHtmlMessage(message As FolMessage, document As HtmlDocument) As HtmlElement
+            Private Function CreateHtmlMessage(message As Message, document As HtmlDocument) As HtmlElement
                 Dim messageElement As HtmlElement = document.CreateElement("DIV")
                 With messageElement.AppendChild(document.CreateElement("DIV"))
-                    .SetAttribute("className", "time")
+                    .SetAttribute("className", "NetworkTime")
 
                     Dim time As Date = Date.FromBinary(message.Time).ToLocalTime
                     If (Date.Now - time).TotalHours > 24 Then
@@ -175,8 +174,8 @@ Namespace GUI.Controls
                     End If
                 End With
                 messageElement.SetAttribute("className", "message")
-                If (message.Flags And FolMessageFlags.FolmesSystemMessage) = 0 Then
-                    If (message.Flags And FolMessageFlags.Highlighted) > 0 Then messageElement.SetAttribute("className", "hl message")
+                If (message.Flags And MessageFlags.FolmesSystemMessage) = 0 Then
+                    If (message.Flags And MessageFlags.Highlighted) > 0 Then messageElement.SetAttribute("className", "hl message")
                     With messageElement.AppendChild(document.CreateElement("SPAN"))
                         .SetAttribute("className", "name")
                         Dim user As User = Users.GetByName(message.Sender)
@@ -193,7 +192,7 @@ Namespace GUI.Controls
                 End If
                 With messageElement.AppendChild(document.CreateElement("SPAN"))
                     .SetAttribute("className", "content")
-                    .InnerHtml = If((message.Flags And FolMessageFlags.MeIs) > 0, "*", String.Empty) & message.HtmlContent
+                    .InnerHtml = If((message.Flags And MessageFlags.MeIs) > 0, "*", String.Empty) & message.HtmlContent
                 End With
                 Return messageElement
             End Function
@@ -220,7 +219,7 @@ Namespace GUI.Controls
 
             Private Class HtmlMessageListNode
                 Public MessageHtmlElement As HtmlElement
-                Public Message As FolMessage
+                Public Message As Message
                 Public Preceeding As HtmlMessageListNode = Nothing
                 Public Succeeding As HtmlMessageListNode = Nothing
             End Class
@@ -230,15 +229,15 @@ Namespace GUI.Controls
 
 #Region "Message-adding"
         Public Sub AddMessage(declaration As String)
-            Dim m As New FolMessage
-            m.Time = Time.UtcNow.ToBinary()
+            Dim m As New Message
+            m.Time = NetworkTime.UtcNow.ToBinary()
             m.HtmlContent = declaration
-            m.Flags = FolMessageFlags.FolmesSystemMessage
+            m.Flags = MessageFlags.FolmesSystemMessage
             AddMessage(m)
         End Sub
 
-        Public Sub AddMessage(message As FolMessage)
-            If _htmlMessages.Count >= My.Settings.NofMsgs Then
+        Public Sub AddMessage(message As Message)
+            If _htmlMessages.Count >= My.Settings.MessageQueueCapacity Then
                 RemoveOldestHtmlMessage()
             End If
             _htmlMessages.InsertElement(message, _msgContainer)

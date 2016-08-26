@@ -14,7 +14,7 @@
     <Setting Name="Channel" Type="System.String" Scope="User">
       <Value Profile="(Default)">public</Value>
     </Setting>
-    <Setting Name="NofMsgs" Type="System.Int32" Scope="User">
+    <Setting Name="MessageQueueCapacity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="WindowSize" Type="System.Drawing.Size" Scope="User">

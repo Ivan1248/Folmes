@@ -500,7 +500,7 @@ Partial Class Settings
         Me.nOfMsgsLabel.TabIndex = 12
         Me.nOfMsgsLabel.Text = "20"
         '
-        'nOfMsgs
+        'MessageQueueCapacity
         '
         Me.nOfMsgs.AutoSize = False
         Me.nOfMsgs.BackColor = System.Drawing.SystemColors.Window
@@ -790,7 +790,7 @@ Partial Class Settings
         Me.StartMinimized.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.StartMinimized.Size = New System.Drawing.Size(296, 17)
         Me.StartMinimized.TabIndex = 13
-        Me.StartMinimized.Text = "Start minimized"
+        Me.StartMinimized.Text = "Initialize minimized"
         Me.StartMinimized.UseVisualStyleBackColor = True
         '
         'MinimizeToNotificationArea

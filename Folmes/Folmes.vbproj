@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -13,7 +13,7 @@
     <AssemblyName>Folmes</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -116,26 +116,30 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommunicationInterfaces\IRCCI\FolmesIrcMesage.vb" />
-    <Compile Include="CommunicationInterfaces\IRCCI\IRCCI.vb" />
-    <Compile Include="CommunicationInterfaces\IRCCI\IrcClient.vb" />
-    <Compile Include="CommunicationInterfaces\IRCCI\ThreadSafeQueue.vb" />
-    <Compile Include="CommunicationInterfaces\SharedFolderCI\MessageFile.vb" />
-    <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPong.vb" />
-    <Compile Include="CommunicationInterfaces\SharedFolderCI\FSWatchers.vb" />
-    <Compile Include="CommunicationInterfaces\SharedFolderCI\SharedFolderCI.vb" />
-    <Compile Include="CommunicationInterfaces\ICommunicationInterface.vb" />
+    <Compile Include="Common\Path.vb" />
+    <Compile Include="CommunicationModules\IrcCM\FolmesIrcMesage.vb" />
+    <Compile Include="CommunicationModules\IrcCM\IrcCm.vb" />
+    <Compile Include="CommunicationModules\IrcCM\IrcClient.vb" />
+    <Compile Include="CommunicationModules\IrcCM\ThreadSafeQueue.vb" />
+    <Compile Include="CommunicationModules\SharedFolderCM\MessageFile.vb" />
+    <Compile Include="CommunicationModules\SharedFolderCM\SharedFolderCM_PingPong.vb" />
+    <Compile Include="CommunicationModules\SharedFolderCM\SharedFolderCM_FSWatchers.vb" />
+    <Compile Include="CommunicationModules\SharedFolderCM\SharedFolderCM.vb" />
+    <Compile Include="CommunicationModules\ICommunicationModule.vb" />
+    <Compile Include="Datatypes\ILeakyQueue.vb" />
     <Compile Include="Datatypes\Message.vb" />
+    <Compile Include="Datatypes\AbstractLeakyQueue.vb" />
     <Compile Include="Datatypes\MessageQueue.vb" />
+    <Compile Include="Settings.vb" />
     <Compile Include="Users\User.vb" />
     <Compile Include="GUI\Controls\InputTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Functions\Converter.vb" />
-    <Compile Include="Modules\Time.vb" />
+    <Compile Include="Common\Converter.vb" />
+    <Compile Include="Common\NetworkTime.vb" />
     <Compile Include="Users\UserFile.vb" />
     <Compile Include="TextProcessing\InputParser.vb" />
-    <Compile Include="Modules\MessageQueues.vb" />
+    <Compile Include="Common\MessageQueues.vb" />
     <Compile Include="GUI\GUIChannels.Designer.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -145,13 +149,13 @@
     <Compile Include="GUI\Controls\NFToolStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CommunicationInterfaces\SharedFolderCI\PingPongFile.vb" />
+    <Compile Include="CommunicationModules\SharedFolderCM\PingPongFile.vb" />
     <Compile Include="Users\Users.vb" />
     <Compile Include="GUI\Style\ToolStripColorTable.vb" />
-    <Compile Include="Modules\Channels.vb" />
+    <Compile Include="Common\Channels.vb" />
     <Compile Include="GUI\Notifications.vb" />
-    <Compile Include="CommunicationInterfaces\SharedFolderCI\Files.vb" />
-    <Compile Include="Modules\Dirs.vb" />
+    <Compile Include="CommunicationModules\SharedFolderCM\Files.vb" />
+    <Compile Include="Common\Dirs.vb" />
     <Compile Include="TextProcessing\HtmlConverter.vb" />
     <Compile Include="Users\UsersWatcher.vb" />
     <Compile Include="GUI\AboutBox.Designer.vb">

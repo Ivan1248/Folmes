@@ -122,11 +122,11 @@
 
 /me
  syntax: /me &lt;action&gt;
- result:  message of the form "* &lt;your username&gt; &lt;action&gt;"
+ result:  item of the form "* &lt;your username&gt; &lt;action&gt;"
 
 /ping
  syntax: /ping &lt;username&gt;
- result: measurement of the time a mesage takes to go to the user and back in a message of the form ""
+ result: measurement of the time a mesage takes to go to the user and back in a item of the form ""
 
 /exit
 Closes Folmes

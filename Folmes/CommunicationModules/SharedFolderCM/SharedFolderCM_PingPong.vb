@@ -1,12 +1,6 @@
 ﻿Imports System.IO
 
-Partial Public Class SharedFolderCI
-
-    Sub New()
-        Dirs.Create(Dirs.PingPong)
-        Dirs.Create(Path.Combine(Dirs.PingPong, My.Settings.Username))
-    End Sub
-
+Partial Public Class SharedFolderCM
     Private WithEvents _timer As New Timer() With {.Interval = 10000}
 
     Private Class PingInProgress
@@ -26,13 +20,13 @@ Partial Public Class SharedFolderCI
                 Exit Sub
             End If
         Next
-        PingPongFile.Create(Path.Combine(Dirs.PingPong, username), PingPongFile.Extension.Ping)
+        PingPongFile.Create(IO.Path.Combine(Dirs.PingPong, username), PingPongFile.Extension.Ping)
         _pingsInProgress.Add(New PingInProgress(username, Date.UtcNow.Ticks))
         _timer.Enabled = True
     End Sub
 
     Private Sub Pong(username As String)
-        PingPongFile.Create(Path.Combine(Dirs.PingPong, username), PingPongFile.Extension.Pong)
+        PingPongFile.Create(IO.Path.Combine(Dirs.PingPong, username), PingPongFile.Extension.Pong)
     End Sub
 
     Private Sub TimeoutCheck_Timer_Tick() Handles _timer.Tick
@@ -60,12 +54,13 @@ Partial Public Class SharedFolderCI
         Return -1
     End Function
 
-    Private Sub CleanPing()
+    Private Sub InitializePingPong()
+        Dirs.Create(Dirs.PingPong)
         Dim dirPath As String = Path.Combine(Dirs.PingPong, My.Settings.Username)
         If Directory.Exists(dirPath) Then
-            For Each pingFile As String In Directory.GetFiles(dirPath)
-                File.Delete(pingFile)
-            Next
+            Array.ForEach(Directory.GetFiles(dirPath), Sub(pingFile) File.Delete(pingFile))
+        Else
+            Dirs.Create(dirPath)
         End If
     End Sub
 End Class

@@ -13,26 +13,22 @@ Public MustInherit Class Files
         If img.Height > MaxImageHeight Then
             img = img.GetThumbnailImage(MaxImageHeight * img.Width \ img.Height, MaxImageHeight, callback, New IntPtr())
         End If
-        img.Save(Path.Combine(Dirs.Thumbnails, thumbName), StringToImageFormat(Path.GetExtension(imgPath)))
+        img.Save(Path.Combine(Dirs.Thumbnails, thumbName), StringToImageFormat(IO.Path.GetExtension(imgPath)))
     End Sub
 
     Public Shared Sub SendFile(filePath As String)
         Try
-            Dim fileName As String = Path.GetFileName(filePath)
+            Dim fileName As String = IO.Path.GetFileName(filePath)
             Directory.CreateDirectory(Dirs.Attachments)
 
-            File.Copy(filePath, Path.Combine(Dirs.Attachments, fileName), True)
-            If IsImageFile(fileName) Then
+            File.Copy(filePath, IO.Path.Combine(Dirs.Attachments, fileName), True)
+            If Common.Path.IsImageFile(fileName) Then
                 CreateThumbnail(filePath, fileName)
             End If
         Catch
             MsgBox("It seems like the file """ & filePath & """ doesn't exist.")
         End Try
     End Sub
-
-    Public Shared Function IsImageFile(fpath As String) As Boolean
-        Return {".jpg", ".png", ".bmp", ".jpeg", ".gif", ".tiff"}.Contains(Path.GetExtension(fpath).ToLower())
-    End Function
 
     Public Shared Function StringToImageFormat(ext As String) As ImageFormat
         Select Case ext.ToLower()

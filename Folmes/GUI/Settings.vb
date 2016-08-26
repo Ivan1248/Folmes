@@ -27,8 +27,8 @@ Public Class Settings
         ThumbnailHeight.Value = My.Settings.ThumbnailHeight \ 20
         ImageHeightLabel.Text = My.Settings.ThumbnailHeight & " px"
 
-        nOfMsgs.Value = My.Settings.NofMsgs \ 5
-        nOfMsgsLabel.Text = CStr(My.Settings.NofMsgs)
+        nOfMsgs.Value = My.Settings.MessageQueueCapacity \ 5
+        nOfMsgsLabel.Text = CStr(My.Settings.MessageQueueCapacity)
 
         'Notifications
         _notifChkBoxes = {ncb1, ncb2, ncb3, ncb4, ncb5, ncb6, ncb7, ncb8}
@@ -117,6 +117,7 @@ Public Class Settings
     Public Sub Apply()
         With My.Settings
             'General
+            Users.MyUser.Name = Username.Text
             Users.MyUser.Color = ColorTranslator.ToHtml(Username.ForeColor)
             Users.MyUser.SaveInfo()
             .MinimizeToTray = MinimizeToNotificationArea.Checked
@@ -128,7 +129,7 @@ Public Class Settings
             .FontSize = FontSize.Value
             MainGUI.Input.Font = New Font("Arial", FontSize.Value, FontStyle.Regular, GraphicsUnit.Pixel)
             .ThumbnailHeight = ThumbnailHeight.Value * 20
-            .NofMsgs = nOfMsgs.Value * 5
+            .MessageQueueCapacity = nOfMsgs.Value * 5
 
             'Notifications
             .Notifications = NotificationCheckboxesValue()
@@ -154,7 +155,7 @@ Public Class Settings
 
     Private Sub ResetButton_Click(sender As Object, e As EventArgs) Handles ResetButton.Click
         My.Settings.Reset()
-        Users.MyUser.SetAndSaveStatus(UserFlags.Offline)
+        Users.MyUser.SetAndSaveStatus(UserStatus.Offline)
         RunOnStartup(False)
         Application.Exit()
     End Sub

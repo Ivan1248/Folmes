@@ -43,11 +43,11 @@ Public Class Cleaner
     End Sub
 
     Public Sub DeleteFile(ByVal filename As String)
-        filename = Path.Combine(Dirs.Attachments, filename)
+        filename = IO.Path.Combine(Dirs.Attachments, filename)
         File.Delete(filename)
     End Sub
     Public Sub DeleteUser(ByVal username As String)
-        Dim userPth As String = Path.Combine(Dirs.PrivateMessages, username)
+        Dim userPth As String = IO.Path.Combine(Dirs.PrivateMessages, username)
         Directory.Delete(userPth, True)
         File.Delete(userPth & MessageFile.Extension)
         For Each dir As String In Dirs.GetUserDirs()
@@ -72,16 +72,16 @@ Public Class Cleaner
         With New StringBuilder()    'kapacitet
             If Me._selected = CleanerMode.Files Then
                 For Each file_date As String() In GetSentFilesWithDates()
-                    .Append("<div class=""item message""><div class=""time"">")
+                    .Append("<div class=""item message""><div class=""NetworkTime"">")
                     .Append(file_date(1)).Append("</div><span class=""file"" onclick=""linkClick('")
-                    .Append(Replace(Path.Combine(Dirs.Attachments, file_date(0)), "\", "\\")).Append("')"">")
+                    .Append(Replace(IO.Path.Combine(Dirs.Attachments, file_date(0)), "\", "\\")).Append("')"">")
                     .Append(file_date(0)).Append("</span></div>")
                 Next
             Else
                 For Each user As String In Dirs.GetUserDirs()
-                    user = Path.GetFileName(user)
+                    user = IO.Path.GetFileName(user)
                     'If user <> My.Settings.Username Then
-                    .Append("<div class=""item message""><div class=""time""></div><span class=""file"">")
+                    .Append("<div class=""item message""><div class=""NetworkTime""></div><span class=""file"">")
                     .Append(user).Append("</span></div>")
                     'End If
                 Next

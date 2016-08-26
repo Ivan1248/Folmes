@@ -26,9 +26,9 @@ Public MustInherit Class Dirs
         Create(Messages)
         Create(CommonChannel)
         Create(PrivateMessages)
-        Create(Path.Combine(PrivateMessages, My.Settings.Username))
+        Create(IO.Path.Combine(PrivateMessages, My.Settings.Username))
         Create(PingPong)
-        Create(Path.Combine(PingPong, My.Settings.Username))
+        Create(IO.Path.Combine(PingPong, My.Settings.Username))
     End Sub
 
     Public Shared Sub HideFolmesFolder(hide As Boolean)
